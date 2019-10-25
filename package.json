@@ -1,0 +1,41 @@
+{
+  "name": "septime",
+  "version": "0.0.1",
+  "description": "Outil de gestion de club d'escrime",
+  "productName": "Septime",
+  "cordovaId": "org.cordova.quasar.app",
+  "capacitorId": "",
+  "author": "Lucas Malandrino <lucas.malandrino@gmail.com>",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --fix --ext .js,.vue src",
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "build:pwa": "quasar build -m pwa"
+  },
+  "husky": {
+    "pre-commit": "npm run lint"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.0.0",
+    "axios": "^0.18.1",
+    "quasar": "^1.0.0"
+  },
+  "devDependencies": {
+    "@quasar/app": "^1.0.0",
+    "@vue/eslint-config-airbnb": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.10.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-vue": "^5.0.0",
+    "husky": "^3.0.9"
+  },
+  "engines": {
+    "node": ">= 8.9.0",
+    "npm": ">= 5.6.0",
+    "yarn": ">= 1.6.0"
+  },
+  "browserslist": [
+    "last 1 version, not dead, ie >= 11"
+  ]
+}
