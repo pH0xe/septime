@@ -14,7 +14,9 @@
     "build:pwa": "quasar build -m pwa"
   },
   "husky": {
-    "pre-commit": "npm run lint"
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0",
+    "@quasar/quasar-app-extension-icon-genie": "^1.1.1",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.10.0",
