@@ -1,14 +1,14 @@
 <template>
-  <QPage class="flex flex-center">
+  <q-page class="flex flex-center">
     <img
       alt="Quasar logo"
       src="~assets/quasar-logo-full.svg"
     >
-  </QPage>
+  </q-page>
 </template>
 
 <script>
 export default {
-  name: 'PageIndex',
+  name: 'LogoPage'
 };
 </script>

@@ -24,15 +24,16 @@ module.exports = {
 
   globals: {
     'ga': true, // Google Analytics
-    'cordova': true,
+    'cordova': false,
     '__statics': true,
     'process': true,
-    'Capacitor': true
+    'Capacitor': false
   },
 
   // add your custom rules here
   rules: {
     'no-param-reassign': 'off',
+    'comma-dangle': ['error', 'never'],
 
     'import/first': 'off',
     'import/named': 'error',
@@ -45,7 +46,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'prefer-promise-reject-errors': 'error',
 
-    'vue/component-name-in-template-casing': ['error', 'PascalCase', {
+    'vue/component-name-in-template-casing': ['error', 'kebab-case', {
       registeredComponentsOnly: false
     }],
     'vue/match-component-file-name': ['error', {
@@ -63,4 +64,4 @@ module.exports = {
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
-}
+};
