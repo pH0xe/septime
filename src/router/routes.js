@@ -4,10 +4,13 @@ import LogoPage from '../pages/LogoPage';
 const routes = [
   {
     path: '/',
-    name: 'home',
     component: DefaultLayout,
     children: [
-      { path: '', component: LogoPage }
+      {
+        path: '',
+        name: 'home',
+        component: LogoPage
+      }
     ]
   }, {
     path: '/admin',
