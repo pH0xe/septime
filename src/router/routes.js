@@ -1,5 +1,7 @@
 import DefaultLayout from '../layouts/DefaultLayout';
-import LogoPage from '../pages/LogoPage';
+import HomePage from '../pages/HomePage';
+import RegisterPage from '../pages/RegisterPage';
+
 
 const routes = [
   {
@@ -9,10 +11,16 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: LogoPage
+        component: HomePage
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: RegisterPage
       }
     ]
-  }, {
+  },
+  {
     path: '/admin',
     component: () => import('layouts/AdminLayout.vue'),
     children: [
