@@ -3,7 +3,7 @@
     <q-header
       reveal
       elevated
-      class="bg-teal-6 text-white"
+      class="bg-admin-primary text-white"
     >
       <q-toolbar>
         <q-btn
@@ -14,11 +14,6 @@
           @click="toggleDrawer"
         />
         <q-toolbar-title>
-          <q-avatar>
-            <img
-              src="~assets/appLogo.svg"
-            >
-          </q-avatar>
           Administration
         </q-toolbar-title>
       </q-toolbar>
@@ -41,6 +36,7 @@
             v-ripple
             :to="{ name: 'admin_members' }"
             clickable
+            active-class="text-admin-primary"
           >
             <q-item-section avatar>
               <q-icon name="mdi-account-group" />
@@ -56,6 +52,7 @@
             v-ripple
             :to="{ name: 'admin_equipment' }"
             clickable
+            active-class="text-admin-primary"
           >
             <q-item-section avatar>
               <q-icon name="mdi-tshirt-crew" />
@@ -71,6 +68,7 @@
             v-ripple
             :to="{ name: 'admin_events' }"
             clickable
+            active-class="text-admin-primary"
           >
             <q-item-section avatar>
               <q-icon name="mdi-calendar" />
@@ -86,6 +84,7 @@
             v-ripple
             :to="{ name: 'admin_news' }"
             clickable
+            active-class="text-admin-primary"
           >
             <q-item-section avatar>
               <q-icon name="mdi-newspaper-variant" />
@@ -101,6 +100,7 @@
             v-ripple
             :to="{ name: 'admin_settings' }"
             clickable
+            active-class="text-admin-primary"
           >
             <q-item-section avatar>
               <q-icon name="mdi-settings" />
