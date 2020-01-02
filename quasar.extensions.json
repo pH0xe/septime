@@ -11,9 +11,26 @@
       "dev": {
         "spa": {
           "iconHash": "7c5042a6601ce7785c907d55d43f2e2c"
+        },
+        "pwa": {
+          "iconHash": "7c5042a6601ce7785c907d55d43f2e2c"
         }
       },
-      "build": {}
+      "build": {
+        "spa": {
+          "iconHash": "7c5042a6601ce7785c907d55d43f2e2c"
+        },
+        "pwa": {
+          "iconHash": "7c5042a6601ce7785c907d55d43f2e2c"
+        }
+      }
     }
+  },
+  "@quasar/dotenv": {
+    "env_development": ".env.dev",
+    "env_production": ".env",
+    "common_root_object": "none",
+    "create_env_files": true,
+    "add_env_to_gitignore": true
   }
 }

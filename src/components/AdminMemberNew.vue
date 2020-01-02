@@ -290,7 +290,7 @@ import {
 } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import AdminMemberNewDate from './AdminMemberNewDate';
-import { Laterality } from '../Laterality';
+import { Laterality } from '../js/Laterality';
 
 export default {
   name: 'AdminMemberNew',

@@ -18,3 +18,10 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# Firebase
+.firebase
+
+# Env files
+.env
+.env.dev

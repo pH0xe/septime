@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import users from '../users';
+import users from '../js/users';
 import AdminMemberDetails from '../components/AdminMemberDetails';
 
 const columns = [

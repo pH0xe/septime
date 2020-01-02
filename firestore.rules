@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	function isAdmin() {
+    	return request.auth.uid != null
+      			&& get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+  	// Rules for querying/update user data
+    match /users/{userId} {
+
+    	// Allow an user to query its own information
+    	allow get: if request.auth.uid == userId;
+
+      // Allow an admin to query anyone
+      allow get: if isAdmin();
+
+    	// Allow self-creation of a normal, inactive, non-admin account
+    	allow create: if request.auth.uid == userId
+      					&& request.resource.data.isAdmin == false
+                && request.resource.data.isActive == false;
+
+    	// Allow the user to update itself as long as he doesn't update isAdmin nor isActive
+    	allow update: if request.auth.uid == userId
+      					&& request.resource.data.isAdmin == resource.data.isAdmin
+                && request.resource.data.isActive == resource.data.isActive;
+
+      // Allow admins to update and delete whatever they want
+      allow update, delete: if isAdmin();
+    }
+
+    // Fallback, explicitly disallow everything else
+    match /{document=**} {
+    	allow read, write: if false;
+    }
+  }
+}

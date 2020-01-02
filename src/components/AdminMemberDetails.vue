@@ -235,8 +235,8 @@
 
 <script>
 import { date } from 'quasar';
-import { Weapons } from '../Weapons';
-import { Gender } from '../Gender';
+import { Weapons } from '../js/Weapons';
+import { Gender } from '../js/Gender';
 
 
 export default {

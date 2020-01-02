@@ -1,6 +1,8 @@
-import DefaultLayout from '../layouts/DefaultLayout';
-import HomePage from '../pages/HomePage';
-import RegisterPage from '../pages/RegisterPage';
+import DefaultLayout from '../layouts/DefaultLayout.vue';
+import HomePage from '../pages/HomePage.vue';
+import RegisterPage from '../pages/RegisterPage.vue';
+import NewsPage from '../pages/NewsPage';
+import CalendarPage from '../pages/CalendarPage';
 
 
 const routes = [
@@ -14,6 +16,16 @@ const routes = [
         component: HomePage
       },
       {
+        path: 'news',
+        name: 'news',
+        component: NewsPage
+      },
+      {
+        path: 'calendar',
+        name: 'calendar',
+        component: CalendarPage
+      },
+      {
         path: 'register',
         name: 'register',
         component: RegisterPage
@@ -22,25 +34,25 @@ const routes = [
   },
   {
     path: '/admin',
-    component: () => import('layouts/AdminLayout.vue'),
+    component: () => import('../layouts/AdminLayout.vue'),
     children: [
       {
         path: '', redirect: { name: 'admin_members' }
       },
       {
-        path: 'member', name: 'admin_members', component: () => import('pages/AdminMemberPage.vue')
+        path: 'member', name: 'admin_members', component: () => import('../pages/AdminMemberPage.vue')
       },
       {
-        path: 'equipment', name: 'admin_equipment', component: () => import('pages/AdminEquipmentPage.vue')
+        path: 'equipment', name: 'admin_equipment', component: () => import('../pages/AdminEquipmentPage.vue')
       },
       {
-        path: 'events', name: 'admin_events', component: () => import('pages/AdminEventPage.vue')
+        path: 'events', name: 'admin_events', component: () => import('../pages/AdminEventPage.vue')
       },
       {
-        path: 'news', name: 'admin_news', component: () => import('pages/AdminNewsPage.vue')
+        path: 'news', name: 'admin_news', component: () => import('../pages/AdminNewsPage.vue')
       },
       {
-        path: 'settings', name: 'admin_settings', component: () => import('pages/AdminSettingPage.vue')
+        path: 'settings', name: 'admin_settings', component: () => import('../pages/AdminSettingPage.vue')
       }
     ]
   }
@@ -50,7 +62,7 @@ const routes = [
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
-    component: () => import('pages/Error404.vue')
+    component: () => import('../pages/Error404.vue')
   });
 }
 

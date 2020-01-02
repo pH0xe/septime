@@ -9,7 +9,8 @@ module.exports = function (ctx) {
     boot: [
       'axios',
       'firebase',
-      'vuelidate'
+      'vuelidate',
+      'filters'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -49,12 +50,14 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Dialog'
+        'Dialog',
+        'Notify',
+        'Loading'
       ]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
-    supportIE: true,
+    supportIE: false,
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
@@ -78,6 +81,18 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
         });
+
+        const mode = cfg.plugins.find((el) => el.constructor.name === 'DefinePlugin').definitions['process.env'].MODE;
+        if (mode === '"pwa"') {
+          cfg.module.rules.push({
+            test: /.*src-pwa\/firebase-messaging-sw\.js/,
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]'
+            }
+          });
+          cfg.entry.app.push(`${cfg.resolve.alias.app}/src-pwa/firebase-messaging-sw.js`);
+        }
       }
     },
 
@@ -100,7 +115,9 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
       // workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {}, // only for NON InjectManifest
+      workboxOptions: {
+        swDest: 'firebase-messaging-sw.js'
+      }, // only for NON InjectManifest
       manifest: {
         // name: 'Septime',
         // short_name: 'Septime',

@@ -15,36 +15,42 @@
           </router-link>
         </q-toolbar-title>
 
-        <q-tabs
-          shrink
-          stretch
-          :vertical="$q.platform.is.mobile"
-        >
-          <q-route-tab
-            :to="{ name: 'home' }"
-            exact
-            icon="mdi-home"
-          />
-          <q-route-tab
-            :to="{ name: 'news' }"
-            exact
-            icon="mdi-newspaper"
-          />
-          <q-route-tab
-            :to="{ name: 'home' }"
-            exact
-            icon="mdi-calendar"
-          />
-          <q-route-tab
-            :to="{ name: 'admin_members' }"
-            exact
-            icon="mdi-settings"
-          />
-        </q-tabs>
+        <navbar-links v-if="!$q.platform.is.mobile" />
 
-        <q-avatar>
-          <img src="https://picsum.photos/200">
-        </q-avatar>
+        <q-btn-dropdown
+          flat
+          unelevated
+          :ripple="false"
+        >
+          <template v-slot:label>
+            <q-avatar>
+              <img src="https://picsum.photos/200">
+            </q-avatar>
+          </template>
+
+          <q-list>
+            <q-item
+              v-close-popup
+              clickable
+              :to="{ name: 'admin_members' }"
+            >
+              <q-item-section>
+                <q-item-label>
+                  Admin
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </q-toolbar>
+
+      <q-toolbar
+        v-if="$q.platform.is.mobile"
+      >
+        <navbar-links
+          mobile
+          class="q-mx-auto"
+        />
       </q-toolbar>
     </q-header>
 
@@ -61,8 +67,11 @@
 </template>
 
 <script lang="js">
+import NavbarLinks from '../components/NavbarLinks.vue';
+
 export default {
   name: 'DefaultLayout',
+  components: { NavbarLinks },
   data: () => ({
     showNavigationLabel: true
   }),

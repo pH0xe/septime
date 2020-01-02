@@ -1,0 +1,15 @@
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /certificates/{userId} {
+    	allow read: if request.auth != null && request.auth.uid == userId;
+
+    	// Limit to 1Mio
+    	allow create, update: if request.auth != null && request.auth.uid == userId
+      							&& request.resource.size < 1048576
+    								&& (request.resource.contentType.matches('image/.*')
+                    		|| request.resource.contentType.matches('application/pdf'));
+
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

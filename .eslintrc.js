@@ -27,7 +27,8 @@ module.exports = {
     'cordova': false,
     '__statics': true,
     'process': true,
-    'Capacitor': false
+    'Capacitor': false,
+    'chrome': true
   },
 
   // add your custom rules here
@@ -41,7 +42,7 @@ module.exports = {
     'import/default': 'error',
     'import/export': 'error',
     'import/extensions': 'off',
-    'import/no-unresolved': 'on',
+    'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'off',
     'prefer-promise-reject-errors': 'error',
@@ -60,7 +61,7 @@ module.exports = {
     //'vue/valid-v-slot': 'error',
 
     // allow console.log during development only
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
