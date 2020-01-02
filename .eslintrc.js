@@ -35,6 +35,9 @@ module.exports = {
   rules: {
     'no-param-reassign': 'off',
     'comma-dangle': ['error', 'never'],
+    'no-unused-vars': ['error', {
+      argsIgnorePattern: '^_'
+    }],
 
     'import/first': 'off',
     'import/named': 'error',

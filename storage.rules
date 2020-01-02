@@ -11,5 +11,18 @@ service firebase.storage {
 
       allow delete: if request.auth != null && request.auth.uid == userId;
     }
+
+    match /profile_pics/{userId} {
+    	// Allow anyone to see profile pictures
+    	allow read: if true;
+
+      // Limit profile picture to images under 1Mio
+      allow create, update: if request.auth != null && request.auth.uid == userId
+      							&& request.resource.size < 1048576
+                    && request.resource.contentType.matches('image/.*');
+
+      // Can't be deleted
+      allow delete: if false;
+    }
   }
 }

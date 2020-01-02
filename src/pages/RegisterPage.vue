@@ -83,6 +83,15 @@ export default {
     }
   },
 
+  beforeRouteEnter(to, from, next) {
+    // Prevent this page from showing if we are already logged in
+    if (this.$store.getters.isLoggedIn) {
+      next(false);
+    } else {
+      next();
+    }
+  },
+
   methods: {
     next() {
       this.$refs.stepper.next();

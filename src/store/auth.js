@@ -1,20 +1,47 @@
 import { auth, db } from '../boot/firebase';
+import { Group } from '../js/Group';
 
 export default {
   namespaced: false,
   state: {
-    userData: null
+    currentUser: null
   },
 
   getters: {
-    isLoggedIn() {
-      return !!auth.currentUser;
+    isLoggedIn(state) {
+      return !!state.currentUser;
     }
   },
 
   mutations: {
-    setUserData(state, { userData }) {
-      state.userData = userData;
+    setCurrentUser(state, data) {
+      state.currentUser = data;
+    },
+
+    updateCurrentUser(state, data) {
+      // Prioritize the provided data over the old data
+      state.currentUser = {
+        ...state.currentUser,
+        ...data
+      };
+    },
+
+    updateCurrentUserWithFirebase(state) {
+      // Gather some information to keep in the store
+      const {
+        isAnonymous, emailVerified, refreshToken, tenantId, photoURL, uid, displayName
+      } = auth.currentUser;
+
+      state.currentUser = {
+        ...state.currentUser,
+        isAnonymous,
+        emailVerified,
+        refreshToken,
+        tenantId,
+        photoURL,
+        uid,
+        displayName
+      };
     }
   },
 
@@ -22,37 +49,40 @@ export default {
     /**
      * Create a firebase user, then upload the data of the user to firestore.
      */
-    async signup({ getters }, { email, password, ...data }) {
+    async signup({ state, getters, dispatch }, { email, password, ...data }) {
       if (getters.isLoggedIn) {
         await auth.signOut();
       }
 
-      console.log('Creating use with', email, password);
       const credentials = await auth.createUserWithEmailAndPassword(email, password);
-      console.log('Created with credentials', credentials);
 
       // Immediately login
-      console.log('Login into newly created account');
-      await auth.signInWithEmailAndPassword(email, password);
+      await dispatch('login', { email, password });
+      // Change display name to the actual name
+      await state.currentUser.updateProfile({ displayName: `${data.firstName} ${data.lastName}` });
 
-      console.log('Writing to document', `users/${credentials.user.uid}`);
-
+      // Initialize its user data
       await db.collection('users').doc(credentials.user.uid).set({
         isActive: false,
         isAdmin: false,
         ...data
       });
 
-      return auth.currentUser;
+      // Send verification email
+      await auth.currentUser.sendEmailVerification();
+
+      return state.currentUser;
     },
 
-    async login({ dispatch }, { email, password }) {
+    async login({ commit, dispatch }, { email, password }) {
       await auth.signInWithEmailAndPassword(email, password);
-      return dispatch('fetchCurrentUser');
+
+      commit('updateCurrentUserWithFirebase');
+      await dispatch('fetchCurrentUser');
     },
 
-    async fetchCurrentUser({ commit, getters }) {
-      if (getters.isLoggedIn) {
+    async fetchCurrentUser({ state, getters, commit }) {
+      if (!getters.isLoggedIn) {
         const err = Error('not-connected');
         err.code = 'not-connected';
         throw err;
@@ -60,27 +90,41 @@ export default {
 
       const querySnapshot = await db
         .collection('users')
-        .doc(auth.currentUser.uid)
+        .doc(state.currentUser.uid)
         .get();
 
-      commit('setUserData', { userData: querySnapshot.data() });
+      const data = querySnapshot.data();
+
+      const birthDate = data.birthDate.toDate();
+      const group = Group.from(birthDate);
+
+      commit('updateCurrentUser', {
+        ...data,
+        birthDate,
+        group
+      });
     },
 
-    updateCurrentUser(_, { data }) {
-      if (!auth.currentUser) {
+    async updateCurrentUserData({ state, getters, dispatch }, { data }) {
+      if (!getters.isLoggedIn) {
         const err = Error('not-connected');
         err.code = 'not-connected';
-        return Promise.reject(err);
+        throw err;
       }
 
-      return db.collection('users')
-        .doc(auth.currentUser.uid)
+      await db.collection('users')
+        .doc(state.currentUser.uid)
         .update(data);
+
+      return dispatch('fetchCurrentUser');
     },
 
     async logout({ commit }) {
       await auth.signOut();
-      commit('setUserData', { userData: null });
+      commit('setCurrentUser', null);
+
+      // Destroy messaging token if any
+      commit('setMessagingToken', { token: null });
     }
   }
 };

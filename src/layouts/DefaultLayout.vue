@@ -1,7 +1,16 @@
 <template lang="html">
   <q-layout view="hHh LpR lFr">
     <q-header elevated>
-      <q-toolbar class="">
+      <q-toolbar>
+        <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          @click="leftDrawerOpen = !leftDrawerOpen"
+        />
+
         <q-toolbar-title>
           <router-link
             tag="div"
@@ -17,31 +26,7 @@
 
         <navbar-links v-if="!$q.platform.is.mobile" />
 
-        <q-btn-dropdown
-          flat
-          unelevated
-          :ripple="false"
-        >
-          <template v-slot:label>
-            <q-avatar>
-              <img src="https://picsum.photos/200">
-            </q-avatar>
-          </template>
-
-          <q-list>
-            <q-item
-              v-close-popup
-              clickable
-              :to="{ name: 'admin_members' }"
-            >
-              <q-item-section>
-                <q-item-label>
-                  Admin
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+        <navbar-account :mobile="$q.platform.is.mobile" />
       </q-toolbar>
 
       <q-toolbar
@@ -68,17 +53,11 @@
 
 <script lang="js">
 import NavbarLinks from '../components/NavbarLinks.vue';
+import NavbarAccount from '../components/NavbarAccount';
 
 export default {
   name: 'DefaultLayout',
-  components: { NavbarLinks },
-  data: () => ({
-    showNavigationLabel: true
-  }),
-
-  onCreate() {
-    this.showNavigationLabel = !this.$q.platform.is.mobile;
-  }
+  components: { NavbarAccount, NavbarLinks }
 };
 </script>
 

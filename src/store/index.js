@@ -3,15 +3,15 @@ import Vuex from 'vuex';
 
 import members from './members';
 import auth from './auth';
+import messaging from './messaging';
 
 Vue.use(Vuex);
 
-export default function (/* { ssrContext } */) {
-  return new Vuex.Store({
-    modules: {
-      members,
-      auth
-    },
-    strict: process.env.DEV
-  });
-}
+export default new Vuex.Store({
+  modules: {
+    members,
+    auth,
+    messaging
+  },
+  strict: process.env.DEV
+});

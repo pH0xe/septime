@@ -29,30 +29,52 @@ const routes = [
         path: 'register',
         name: 'register',
         component: RegisterPage
+      },
+      {
+        path: 'login',
+        name: 'login',
+        redirect: {
+          name: 'home', query: { login: true }
+        }
       }
     ]
   },
   {
     path: '/admin',
     component: () => import('../layouts/AdminLayout.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true
+    },
     children: [
       {
-        path: '', redirect: { name: 'admin_members' }
+        path: '',
+        redirect: { name: 'admin_members' }
       },
       {
-        path: 'member', name: 'admin_members', component: () => import('../pages/AdminMemberPage.vue')
+        path: 'member',
+        name: 'admin_members',
+        component: () => import('../pages/AdminMemberPage.vue')
       },
       {
-        path: 'equipment', name: 'admin_equipment', component: () => import('../pages/AdminEquipmentPage.vue')
+        path: 'equipment',
+        name: 'admin_equipment',
+        component: () => import('../pages/AdminEquipmentPage.vue')
       },
       {
-        path: 'events', name: 'admin_events', component: () => import('../pages/AdminEventPage.vue')
+        path: 'events',
+        name: 'admin_events',
+        component: () => import('../pages/AdminEventPage.vue')
       },
       {
-        path: 'news', name: 'admin_news', component: () => import('../pages/AdminNewsPage.vue')
+        path: 'news',
+        name: 'admin_news',
+        component: () => import('../pages/AdminNewsPage.vue')
       },
       {
-        path: 'settings', name: 'admin_settings', component: () => import('../pages/AdminSettingPage.vue')
+        path: 'settings',
+        name: 'admin_settings',
+        component: () => import('../pages/AdminSettingPage.vue')
       }
     ]
   }

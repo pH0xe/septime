@@ -20,48 +20,11 @@ firebase.initializeApp({
 
 // Export modules
 
-// export const messaging = firebase.messaging();
 export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
+export const messaging = firebase.messaging();
 
 Vue.prototype.$firebase = firebase;
 
-// Setup Notifications
-
-// messaging.usePublicVapidKey(process.env.PUBLIC_VAPID_KEY);
-
-// Store token here
-/* let token = null;
-
-Notification.requestPermission()
-  .then((permission) => {
-    if (permission !== 'granted') {
-      throw Error('Permission denied');
-    }
-
-    return messaging.getToken();
-  })
-  .then((newToken) => {
-    token = newToken;
-    console.log(token);
-
-    // Register listener
-    messaging.onMessage((payload) => {
-      console.log(payload);
-    });
-  })
-  .catch((err) => {
-    console.error(err);
-  });
-
-// Listener for token refreshes
-messaging.onTokenRefresh(() => {
-  messaging.getToken()
-    .then((refreshedToken) => {
-      token = refreshedToken;
-      console.log('FCM token refresh', refreshedToken);
-    })
-    .catch((err) => console.error(err));
-});
-*/
+// Setup messaging in src-pwa/register-service-worker.js

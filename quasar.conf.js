@@ -81,18 +81,6 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
         });
-
-        const mode = cfg.plugins.find((el) => el.constructor.name === 'DefinePlugin').definitions['process.env'].MODE;
-        if (mode === '"pwa"') {
-          cfg.module.rules.push({
-            test: /.*src-pwa\/firebase-messaging-sw\.js/,
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }
-          });
-          cfg.entry.app.push(`${cfg.resolve.alias.app}/src-pwa/firebase-messaging-sw.js`);
-        }
       }
     },
 
@@ -114,10 +102,8 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
-      // workboxPluginMode: 'InjectManifest',
-      workboxOptions: {
-        swDest: 'firebase-messaging-sw.js'
-      }, // only for NON InjectManifest
+      workboxPluginMode: 'InjectManifest',
+      workboxOptions: {}, // only for NON InjectManifest
       manifest: {
         // name: 'Septime',
         // short_name: 'Septime',
