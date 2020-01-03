@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
   	function isAdmin() {
-    	return request.auth.uid != null
+    	return request.auth != null
       			&& get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
@@ -10,7 +10,7 @@ service cloud.firestore {
     match /users/{userId} {
 
     	// Allow an user to query its own information
-    	allow get: if request.auth.uid == userId;
+    	allow get: if request.auth !=null && request.auth.uid == userId;
 
       // Allow an admin to query anyone
       allow get: if isAdmin();

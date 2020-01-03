@@ -18,6 +18,7 @@
             type="email"
             label="E-Mail"
             required
+            autocomplete="email"
             error-message="Veuillez entrez un email valide"
             :error="$v.login.$error"
             @blur="$v.login.$touch"
@@ -29,6 +30,7 @@
             type="password"
             label="Mot de passe"
             required
+            autocomplete="current-password"
             error-message="Ce champ est requis"
             :error="$v.password.$error"
             @blur="$v.password.$touch"

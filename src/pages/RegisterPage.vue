@@ -61,6 +61,7 @@
 
 <script lang="js">
 import { Notify } from 'quasar';
+import store from '../store'; // Needed to access the store in beforeRouteEnter when the component hasn't been created yet
 import RegisterStepAccount from '../components/RegisterStepAccount';
 import RegisterStepCoordinates from '../components/RegisterStepCoordinates';
 import RegisterStepPractising from '../components/RegisterStepPractising';
@@ -85,7 +86,7 @@ export default {
 
   beforeRouteEnter(to, from, next) {
     // Prevent this page from showing if we are already logged in
-    if (this.$store.getters.isLoggedIn) {
+    if (store.getters.isLoggedIn) {
       next(false);
     } else {
       next();

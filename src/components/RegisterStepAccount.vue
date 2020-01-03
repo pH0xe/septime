@@ -7,6 +7,7 @@
           label="Nom"
           error-message="Ce champ est requis"
           required
+          autocomplete="family-name"
           :error="$v.lastName.$error"
           @blur="$v.lastName.$touch"
           @input="$v.lastName.$touch"
@@ -25,6 +26,7 @@
           label="Prénom"
           error-message="Ce champ est requis"
           required
+          autocomplete="given-name"
           :error="$v.firstName.$error"
           @blur="$v.firstName.$touch"
           @input="$v.firstName.$touch"
@@ -43,6 +45,7 @@
       label="E-mail"
       type="email"
       required
+      autocomplete="email"
       :error="$v.email.$error"
       error-message="Veuillez entrer un email valide"
       @blur="$v.email.$touch"
@@ -59,6 +62,7 @@
       label="Date de naissance"
       hint="JJ/MM/AAAA"
       required
+      autocomplete="bday"
       :error="$v.birthDate.$error"
       error-message="Veuillez entrer une date valide"
       @blur="$v.birthDate.$touch"
@@ -90,6 +94,7 @@
       label="Mot de passe"
       required
       minlengh="8"
+      autocomplete="new-password"
       error-message="Le mot de passe doit faire plus de 8 caractères"
       :error="$v.password.$error"
       @blur="$v.password.$touch"

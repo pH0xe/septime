@@ -4,6 +4,7 @@
       v-model="address.street"
       label="Addresse"
       required
+      autocomplete="address-line1"
       :error="$v.address.street.$error"
       error-message="Ce champ est requis"
       @blur="$v.address.street.$touch"
@@ -20,6 +21,7 @@
           v-model="address.city"
           label="Ville"
           required
+          autocomplete="address-level2"
           :error="$v.address.city.$error"
           error-message="Ce champ est requis"
           @blur="$v.address.city.$touch"
@@ -37,6 +39,7 @@
           label="Code Postal"
           mask="#####"
           required
+          autocomplete="postal-code"
           :error="$v.address.zip.$error"
           error-message="Veuillez entrer un code postal valide"
           @blur="$v.address.zip.$touch"
@@ -57,6 +60,7 @@
           mask="## ## ## ## ##"
           unmasked-value
           required
+          autocomplete="tel-national"
           :error="$v.phone.$error"
           error-message="Veuillez entrer un numéro de téléphone valide"
           @blur="$v.phone.$touch"
@@ -74,6 +78,7 @@
           mask="## ## ## ## ##"
           unmasked-value
           required
+          autocomplete="tel-national"
           :error="$v.phoneEmergency.$error"
           error-message="Veuillez entrer un numéro de téléphone valide"
           @blur="$v.phoneEmergency.$touch"
