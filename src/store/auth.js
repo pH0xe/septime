@@ -1,4 +1,6 @@
-import { auth, db } from '../boot/firebase';
+import {
+  auth, cloudFunctions, db, storage
+} from '../boot/firebase';
 import { Group } from '../js/Group';
 
 export default {
@@ -54,19 +56,32 @@ export default {
         await auth.signOut();
       }
 
-      const credentials = await auth.createUserWithEmailAndPassword(email, password);
+      // Pass all of the information to a cloud function
+      const toData = {
+        ...data,
+        email,
+        password,
+        birthDate: data.birthDate.toJSON(),
+        certificateDate: data.certificateDate.toJSON()
+      };
+
+      const responseData = (await cloudFunctions.adminCreateMember(toData)).data;
+      if (responseData.error) {
+        throw responseData;
+      }
+
+      const { uid } = responseData;
 
       // Immediately login
-      await dispatch('login', { email, password });
-      // Change display name to the actual name
-      await state.currentUser.updateProfile({ displayName: `${data.firstName} ${data.lastName}` });
-
-      // Initialize its user data
-      await db.collection('users').doc(credentials.user.uid).set({
-        isActive: false,
-        isAdmin: false,
-        ...data
+      await dispatch('login', {
+        email,
+        password
       });
+
+      // Sanity check, ensure we are the same user
+      if (state.currentUser.uid !== uid) {
+        console.error('Not the same uid', state.currentUser.uid, uid);
+      }
 
       // Send verification email
       await auth.currentUser.sendEmailVerification();
@@ -98,10 +113,26 @@ export default {
       const birthDate = data.birthDate.toDate();
       const group = Group.from(birthDate);
 
+      let photoURL;
+
+      try {
+        photoURL = await storage.ref()
+          .child('profile_pics')
+          .child(state.currentUser.uid)
+          .getDownloadURL();
+      } catch (err) {
+        if (err.code === 'storage/object-not-found') {
+          console.warn('No profile picture found');
+        } else {
+          console.error(err);
+        }
+      }
+
       commit('updateCurrentUser', {
         ...data,
         birthDate,
-        group
+        group,
+        photoURL
       });
     },
 

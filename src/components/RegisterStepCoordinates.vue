@@ -97,6 +97,7 @@
         type="submit"
         unelevated
         color="primary"
+        class="on-left"
       />
       <q-btn
         label="Précédent"
@@ -116,6 +117,7 @@ import { length } from '../js/vuelidate-custom-validators';
 export default {
   name: 'RegisterStepCoordinates',
   mixins: [validationMixin],
+
   data: () => ({
     address: {
       street: null,

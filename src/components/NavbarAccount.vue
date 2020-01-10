@@ -194,12 +194,24 @@ export default {
             });
           })
           .catch((err) => {
-            console.error(err);
             this.connecting = false;
-            this.$q.notify({
-              message: 'Une erreur est survenue pendant la connexion !',
-              icon: 'mdi-alert'
-            });
+
+            if (err.code === 'auth/invalid-email'
+                || err.code === 'auth/wrong-password'
+                || err.code === 'auth/user-not-found') {
+              this.$q.notify({
+                message: 'Email ou mot de passe incorrect !',
+                icon: 'mdi-alert',
+                color: 'negative'
+              });
+            } else {
+              console.error(err);
+              this.$q.notify({
+                message: 'Connexion échouée, veuillez vérifier vos identifiants !',
+                icon: 'mdi-alert',
+                color: 'negative'
+              });
+            }
           });
       });
     },

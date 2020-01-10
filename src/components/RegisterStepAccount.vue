@@ -112,6 +112,11 @@
       </template>
     </q-input>
 
+    <q-checkbox
+      v-model="isReferent"
+      :label="isReferent ? 'Je suis un parent référent' : 'Je ne suis pas un parent référent'"
+    />
+
     <q-stepper-navigation>
       <q-btn
         label="Suivant"
@@ -175,14 +180,12 @@ export default {
         const {
           // email est déjà utilisé dans les import
           // eslint-disable-next-line no-shadow
-          firstName, lastName, email, password, birthDateParsed: birthDate
+          firstName, lastName, email, password, birthDateParsed: birthDate, isReferent
         } = this;
 
         this.$emit('submit', {
-          firstName, lastName, email, password, birthDate
+          firstName, lastName, email, password, birthDate, isReferent
         });
-      } else {
-        console.log(this.$v);
       }
     }
   }

@@ -5,6 +5,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/messaging';
 import 'firebase/storage';
+import 'firebase/functions';
 
 // Initialization
 
@@ -24,6 +25,13 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const messaging = firebase.messaging();
+
+// Functions
+
+const functions = firebase.functions();
+export const cloudFunctions = {
+  adminCreateMember: functions.httpsCallable('adminCreateMember')
+};
 
 Vue.prototype.$firebase = firebase;
 

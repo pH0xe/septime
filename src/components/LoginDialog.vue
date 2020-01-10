@@ -36,6 +36,11 @@
             @blur="$v.password.$touch"
             @input="$v.password.$touch"
           />
+
+          <a
+            class="text-subtitle1 link"
+            @click.prevent="onClickResetPassword"
+          >Réinitialiser mon mot de passe</a>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -60,6 +65,7 @@
 <script lang="js">
 import { validationMixin } from 'vuelidate';
 import { required, email } from 'vuelidate/lib/validators';
+import { auth } from '../boot/firebase';
 
 export default {
   name: 'LoginDialog',
@@ -90,6 +96,52 @@ export default {
 
     onDialogHide() {
       this.$emit('hide');
+    },
+
+    onClickResetPassword() {
+      this.$q.dialog({
+        title: 'Réinitialisation de mot de passe',
+        message: 'Veuillez entrez votre addresse email',
+        prompt: {
+          model: this.login,
+          type: 'email'
+        },
+        cancel: true,
+        persistent: true
+      })
+        .onOk((emailReset) => {
+          this.$q.notify({
+            message: 'Envoi du mail en cours...'
+          });
+
+          auth.sendPasswordResetEmail(emailReset)
+            .then(() => {
+              this.$q.notify({
+                message: 'Mail de réinitialisation de mot de passe envoyé',
+                icon: 'mdi-check',
+                color: 'positive'
+              });
+            })
+            .catch((err) => {
+              switch (err.code) {
+                case 'auth/invalid-email':
+                case 'auth/user-not-found':
+                  this.$q.notify({
+                    message: 'Email invalide !',
+                    icon: 'mdi-alert',
+                    color: 'negative'
+                  });
+                  break;
+                default:
+                  this.$q.notify({
+                    message: `Erreur inconnue: ${err.code}`,
+                    icon: 'mdi-alert',
+                    color: 'positive'
+                  });
+                  break;
+              }
+            });
+        });
     },
 
     onClickOk() {

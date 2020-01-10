@@ -19,6 +19,23 @@
     </q-banner>
 
     <div class="text-body2 q-my-md">
+      Veuillez fournir une photo récente du nouvel adhérent.
+    </div>
+
+    <firebase-uploader
+      ref="photoUploader"
+      label="Photo d'identité (image, maximum 1Mio)"
+      accept="image/*"
+      path="profile_pics"
+      :max-total-size="1048576"
+      :auto-upload="false"
+      hide-upload-btn
+      flat
+      bordered
+      class="full-width"
+    />
+
+    <div class="text-body2 q-my-md">
       <span class="text-bold">Nouveaux inscrits: </span>
       Veuillez consulter un médecin et fournir un certificat médical.
       <br><br>
@@ -39,8 +56,8 @@
       <div class="col-12 col-md-6">
         <!-- Max 1Mio -->
         <firebase-uploader
-          ref="uploader"
-          label="Certificat médical (image, ou PDF; maximum 1Mio)"
+          ref="certificateUploader"
+          label="Certificat médical (image ou PDF, maximum 1Mio)"
           accept="image/*, application/pdf"
           path="certificates"
           :max-total-size="1048576"
@@ -109,10 +126,11 @@
 
     <q-stepper-navigation>
       <q-btn
-        label="Terminer"
+        label="Suivant"
         type="submit"
         unelevated
         color="primary"
+        class="on-left"
       />
       <q-btn
         label="Précédent"
@@ -192,7 +210,8 @@ export default {
         this.$emit('submit', {
           certificateDate,
           laterality,
-          uploader: this.$refs.uploader
+          photoUploader: this.$refs.photoUploader,
+          certificateUploader: this.$refs.certificateUploader
         });
       }
     }

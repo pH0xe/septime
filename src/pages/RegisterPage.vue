@@ -44,13 +44,45 @@
               title="Pratiquant"
               icon="mdi-sword"
               :done="step > 2"
+              :disable="data.isReferent"
             >
               <register-step-practising
                 :birth-date="data.birthDate"
                 @go-back="previous"
                 @goto="goto"
-                @submit="onLastStepSubmit"
+                @submit="onStepSubmit"
               />
+            </q-step>
+
+            <q-step
+              :name="3"
+              title="Paiment"
+              icon="mdi-currency-eur"
+              :done="step > 3"
+            >
+              <q-banner
+                rounded
+                class="q-ma-lg bg-warning"
+              >
+                Intégration HelloAsso ici
+              </q-banner>
+
+              <q-stepper-navigation>
+                <q-btn
+                  label="Terminer"
+                  icon="mdi-check"
+                  unelevated
+                  color="primary"
+                  class="on-left"
+                  @click="onStepSubmit({})"
+                />
+                <q-btn
+                  label="Précédent"
+                  flat
+                  color="primary"
+                  @click="previous"
+                />
+              </q-stepper-navigation>
             </q-step>
           </q-stepper>
         </div>
@@ -73,9 +105,16 @@ export default {
   data: () => ({
     step: 0,
     data: {
-      birthDate: null // Initialize birthDate for it to be reactive
+      birthDate: null, // Initialize birthDate for it to be reactive,
+      isReferent: false
     }
   }),
+
+  computed: {
+    isLastStep() {
+      return this.step === 3;
+    }
+  },
 
   beforeDestroy() {
     if (this.timer) {
@@ -113,13 +152,16 @@ export default {
         ...data
       };
 
-      // Goto the next step
-      this.next();
+      // If not the last step
+      if (this.isLastStep) {
+        this.onLastStepSubmit();
+      } else {
+        // Goto the next step
+        this.next();
+      }
     },
 
-    onLastStepSubmit(data) {
-      this.onStepSubmit(data);
-
+    onLastStepSubmit() {
       // Prepare data
       const {
         firstName, lastName, email, password, phone, phoneEmergency,
@@ -155,13 +197,27 @@ export default {
 
       // Signup on firebase
       this.$store.dispatch('signup', { ...userData })
+        .then(async (currentUser) => {
+          this.$q.loading.show({
+            message: 'Upload de la photo de profil'
+          });
+
+          const { photoUploader } = this.data;
+
+          photoUploader.extra.filename = currentUser.uid;
+          await photoUploader.upload();
+
+          return currentUser;
+        }) // Upload profile picture
         .then((currentUser) => {
           this.$q.loading.show({
             message: 'Upload du certificat médical...'
           });
 
-          data.uploader.extra.filename = currentUser.uid;
-          return data.uploader.upload();
+          const { certificateUploader } = this.data;
+
+          certificateUploader.extra.filename = currentUser.uid;
+          return certificateUploader.upload();
         }) // Upload certificate
         .then(() => {
           this.$q.loading.hide();

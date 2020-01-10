@@ -37,6 +37,29 @@
           class="q-mx-auto"
         />
       </q-toolbar>
+
+      <q-banner
+        v-if="canShowBannerMail"
+        inline-actions
+        class="bg-secondary"
+      >
+        Voter compte n'est pas vérifié. Vérifiez votre boîte mail pour un lien de vérification.
+        <template v-slot:avatar>
+          <q-icon name="mdi-email" />
+        </template>
+        <template v-slot:action>
+          <q-btn
+            flat
+            label="Renvoyer le mail"
+            @click="onClickBannerMailResend"
+          />
+          <q-btn
+            flat
+            icon="mdi-close"
+            @click="onClickBannerMailDismiss"
+          />
+        </template>
+      </q-banner>
     </q-header>
 
     <q-page-container id="page-container">
@@ -52,12 +75,57 @@
 </template>
 
 <script lang="js">
+import { auth } from '../boot/firebase';
 import NavbarLinks from '../components/NavbarLinks.vue';
 import NavbarAccount from '../components/NavbarAccount';
 
 export default {
   name: 'DefaultLayout',
-  components: { NavbarAccount, NavbarLinks }
+  components: {
+    NavbarAccount,
+    NavbarLinks
+  },
+  data: () => ({
+    bannerMail: {
+      show: true,
+      isResending: false
+    }
+  }),
+
+  computed: {
+    canShowBannerMail() {
+      return this.$store.getters.isLoggedIn
+          && !this.$store.state.auth.currentUser.emailVerified
+          && this.bannerMail.show;
+    }
+  },
+
+  methods: {
+    onClickBannerMailDismiss() {
+      this.showBannerMail = false;
+    },
+
+    onClickBannerMailResend() {
+      this.bannerMail.isResending = true;
+      auth.currentUser.sendEmailVerification()
+        .then(() => {
+          this.bannerMail.isResending = false;
+          this.$q.notify({
+            message: 'Email de confirmation envoyé',
+            icon: 'mdi-email'
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          this.bannerMail.isResending = false;
+          this.$q.notify({
+            message: `Une erreur est survenue en envoyant le mail de confirmation: ${err.code}`,
+            icon: 'mdi-alert',
+            color: 'negative'
+          });
+        });
+    }
+  }
 };
 </script>
 
