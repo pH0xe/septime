@@ -93,20 +93,45 @@
           </q-item>
 
           <!-- News -->
-          <q-item
-            v-ripple
-            :to="{ name: 'admin_news' }"
-            clickable
+          <q-expansion-item
+            icon="mdi-newspaper-variant"
+            label="Actualités"
             active-class="text-admin-primary"
           >
-            <q-item-section avatar>
-              <q-icon name="mdi-newspaper-variant" />
-            </q-item-section>
+            <q-item
+              v-ripple
+              clickable
+              :to="{name: 'admin_news'}"
+              exact
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-animation-outline" />
+              </q-item-section>
 
-            <q-item-section>
-              Actualités
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                Liste des actualités
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              v-ripple
+              clickable
+              :to="{name: 'admin_news_create'}"
+              exact
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-pencil" />
+              </q-item-section>
+
+              <q-item-section>
+                Créer une actualité
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
 
           <!-- Settings -->
           <q-item

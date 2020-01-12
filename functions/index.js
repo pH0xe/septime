@@ -125,6 +125,10 @@ exports.validateStorageProfilePics = functions.storage.object().onFinalize(async
   return undefined;
 });
 
+async function newsExists(id) {
+  return (await admin.firestore().collection('news').doc(id).get()).exists;
+}
+
 exports.validateStorageNews = functions.storage.object().onFinalize(async (object, context) => {
   const filename = path.basename(object.name);
   const directory = object.name.substring(0, object.name.length - filename.length - 1);
@@ -132,7 +136,7 @@ exports.validateStorageNews = functions.storage.object().onFinalize(async (objec
   const bucket = admin.storage().bucket();
 
   if (directory === 'news/public_temp') {
-    if (await userExists(context.auth.uid) && !(await bucket.file(`news/${filename}`).exists())[0]) {
+    if (await newsExists(filename) && !(await bucket.file(`news/${filename}`).exists())[0]) {
       return bucket.file(object.name).move(`news/${filename}`);
     } else {
       return bucket.file(object.name).delete();

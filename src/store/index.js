@@ -8,6 +8,7 @@ import equipments from './equipments';
 import events from './events';
 import equipmentsType from './equipmentsTypes';
 import trainings from './trainings';
+import news from './news';
 
 Vue.use(Vuex);
 
@@ -19,7 +20,8 @@ export default new Vuex.Store({
     equipments,
     events,
     equipmentsType,
-    trainings
+    trainings,
+    news
   },
   strict: process.env.DEV
 });

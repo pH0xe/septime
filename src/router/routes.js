@@ -110,6 +110,12 @@ const routes = [
         path: 'settings',
         name: 'admin_settings',
         component: () => import('../pages/AdminSettingPage.vue')
+      },
+      {
+        path: 'news/create', name: 'admin_news_create', component: () => import('pages/AdminNewsCreatePage.vue')
+      },
+      {
+        path: 'news/modify', name: 'admin_news_modify', component: () => import('pages/AdminNewsModifyPage.vue')
       }
     ]
   }
