@@ -26,22 +26,32 @@
     </div>
     <admin-member-table
       :filter-input="searchQuery"
+      :users="members"
     />
   </q-page>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import AdminMemberTable from '../components/AdminMemberTable';
 import AdminMemberNew from '../components/AdminMemberNew';
 
-
 export default {
-  name: 'MemberPage',
+  name: 'AdminMemberPage',
   components: { AdminMemberTable },
   data: () => ({
     searchQuery: ''
   }),
+
+  computed: mapState({ members: (state) => state.members.members }),
+
+  beforeMount() {
+    this.fetchMembers();
+  },
+
   methods: {
+    ...mapActions(['fetchMembers']),
+
     openDialogMemberNew() {
       this.$q.dialog({
         component: AdminMemberNew,

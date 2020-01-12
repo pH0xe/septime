@@ -1,12 +1,12 @@
 <template lang="html">
   <div class="row items-center justify-center">
     <q-img
-      src="https://source.unsplash.com/random/1000x200"
+      src="statics/banner.png"
       :ratio="ratioMainImage"
     >
       <div class="absolute-full flex flex-center column">
         <div class="text-h3 text-uppercase text-weight-light">
-          Main title
+          Cercle d'escrime de moirans
         </div>
         <div class="text-subtitle1 text-center">
           A falsis, nutrix superbus orgia. Noster mineralis una apertos victrix est.

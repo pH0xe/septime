@@ -15,6 +15,9 @@ service cloud.firestore {
       // Allow an admin to query anyone
       allow get: if isAdmin();
 
+      // Allow an Admin to query all users
+      allow list: if isAdmin();
+
     	// Allow self-creation of a normal, inactive, non-admin account
     	allow create: if request.auth.uid == userId
       					&& request.resource.data.isAdmin == false

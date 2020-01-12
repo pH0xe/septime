@@ -25,29 +25,29 @@ const from = (birth) => {
 
   const years = date.getDateDiff(now, birth, 'years');
 
-  if (years < 5) {
+  if (years <= 5) {
     return Group.M5;
-  } if (years < 7) {
+  } if (years <= 7) {
     return Group.M7;
-  } if (years < 9) {
+  } if (years <= 9) {
     return Group.M9;
-  } if (years < 11) {
+  } if (years <= 11) {
     return Group.M11;
-  } if (years < 13) {
+  } if (years <= 13) {
     return Group.M13;
-  } if (years < 15) {
+  } if (years <= 15) {
     return Group.M15;
-  } if (years < 17) {
+  } if (years <= 17) {
     return Group.M17;
-  } if (years < 20) {
+  } if (years <= 20) {
     return Group.M20;
-  } if (years < 40) {
+  } if (years <= 40) {
     return Group.SENIORS;
-  } if (years < 50) {
+  } if (years <= 50) {
     return Group.VETERANS1;
-  } if (years < 60) {
+  } if (years <= 60) {
     return Group.VETERANS2;
-  } if (years < 70) {
+  } if (years <= 70) {
     return Group.VETERANS3;
   }
   return Group.VETERANS4;

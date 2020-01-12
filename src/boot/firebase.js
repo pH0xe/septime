@@ -7,6 +7,7 @@ import 'firebase/messaging';
 import 'firebase/storage';
 import 'firebase/functions';
 
+
 // Initialization
 
 firebase.initializeApp({
@@ -25,6 +26,7 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const messaging = firebase.messaging();
+export const adminCreateMember = firebase.functions().httpsCallable('adminCreateMember');
 
 // Functions
 

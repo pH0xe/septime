@@ -10,17 +10,21 @@ export default [
     isAdmin: true,
     firstName: 'Julien',
     lastName: 'Reig',
-    birth: new Date(2000, 3, 6),
+    birthDate: new Date(2000, 3, 6),
     phone: '01 23 45 67 89',
     emergencyPhone: '01 23 45 67 89',
-    mail: 'mail@mail.com',
-    medicalCertificat: 'ici',
-    cerfa: '',
-    paid: true,
+    email: 'email@email.com',
+    medicalCertificate: 'ici',
+    cerfa: false,
     gender: Gender.MALE,
     weapons: [Weapons.FOIL, Weapons.EPEE],
     group: Group.M20,
-    isChild: false
+    isChild: false,
+    payment: {
+      paid: true,
+      amount: 200,
+      deposit: true
+    }
   },
   {
     uid: '2',
@@ -29,17 +33,21 @@ export default [
     isAdmin: false,
     firstName: 'Thomas',
     lastName: 'Durand',
-    birth: new Date(1999, 3, 6),
+    birthDate: new Date(1999, 3, 6),
     phone: '01 23 45 67 89',
     emergencyPhone: '01 23 45 67 89',
-    mail: 'mail@mail.com',
-    medicalCertificat: '',
-    cerfa: 'là',
-    paid: true,
+    email: 'email@email.com',
+    medicalCertificate: '',
+    cerfa: true,
     gender: Gender.MALE,
     weapons: [Weapons.EPEE],
     group: Group.SENIORS,
-    isChild: false
+    isChild: false,
+    payment: {
+      paid: true,
+      amount: 200,
+      deposit: true
+    }
   },
   {
     uid: '4',
@@ -48,17 +56,21 @@ export default [
     isAdmin: false,
     firstName: 'Sandrine',
     lastName: 'Tale',
-    birth: new Date(1990, 7, 5),
+    birthDate: new Date(1990, 7, 5),
     phone: '01 23 45 67 89',
     emergencyPhone: '01 23 45 67 89',
-    mail: 'mail@mail.com',
-    medicalCertificat: 'ici',
-    cerfa: 'là',
-    paid: true,
+    email: 'email@email.com',
+    medicalCertificate: 'ici',
+    cerfa: true,
     gender: Gender.FEMALE,
     weapons: [Weapons.EPEE],
     group: Group.SENIORS,
-    isChild: false
+    isChild: false,
+    payment: {
+      paid: true,
+      amount: 200,
+      deposit: true
+    }
   },
   {
     uid: '5',
@@ -67,17 +79,21 @@ export default [
     isAdmin: false,
     firstName: 'Julie',
     lastName: 'Wat',
-    birth: new Date(1951, 7, 5),
+    birthDate: new Date(1951, 7, 5),
     phone: '01 23 45 67 89',
     emergencyPhone: '01 23 45 67 89',
-    mail: 'mail@mail.com',
-    medicalCertificat: 'ici',
-    cerfa: 'là',
-    paid: true,
+    email: 'email@email.com',
+    medicalCertificate: 'ici',
+    cerfa: true,
     gender: Gender.FEMALE,
     weapons: [Weapons.SABRE],
     group: Group.VETERANS3,
-    isChild: false
+    isChild: false,
+    payment: {
+      paid: true,
+      amount: 200,
+      deposit: true
+    }
   },
   {
     uid: '6',
@@ -86,17 +102,21 @@ export default [
     isAdmin: false,
     firstName: 'Jean',
     lastName: 'Tale',
-    birth: new Date(1970, 3, 6),
+    birthDate: new Date(1970, 3, 6),
     phone: '01 23 45 67 89',
     emergencyPhone: '01 23 45 67 89',
-    mail: 'mail@mail.com',
-    medicalCertificat: 'ici',
-    cerfa: 'là',
-    paid: true,
+    email: 'email@email.com',
+    medicalCertificate: 'ici',
+    cerfa: true,
     gender: Gender.MALE,
     weapons: [Weapons.EPEE],
     group: Group.VETERANS2,
-    isChild: false
+    isChild: false,
+    payment: {
+      paid: true,
+      amount: 200,
+      deposit: true
+    }
   },
   {
     uid: '6',
@@ -105,17 +125,21 @@ export default [
     isAdmin: false,
     firstName: 'Jean',
     lastName: 'Petit',
-    birth: new Date(2008, 3, 6),
+    birthDate: new Date(2008, 3, 6),
     phone: '01 23 45 67 89',
     emergencyPhone: '01 23 45 67 89',
-    mail: 'mail@mail.com',
-    medicalCertificat: 'ici',
-    cerfa: 'là',
-    paid: true,
+    email: 'email@email.com',
+    medicalCertificate: 'ici',
+    cerfa: true,
     gender: Gender.MALE,
     weapons: [Weapons.FOIL],
     group: Group.M11,
-    isChild: true
+    isChild: true,
+    payment: {
+      paid: true,
+      amount: 200,
+      deposit: true
+    }
   },
   {
     uid: '7',
@@ -124,16 +148,20 @@ export default [
     isAdmin: false,
     firstName: 'Marie',
     lastName: 'Poppins',
-    birth: new Date(2012, 3, 6),
+    birthDate: new Date(2012, 3, 6),
     phone: '01 23 45 67 89',
     emergencyPhone: '01 23 45 67 89',
-    mail: 'mail@mail.com',
-    medicalCertificat: 'ici',
-    cerfa: 'là',
-    paid: false,
+    email: 'email@email.com',
+    medicalCertificate: 'ici',
+    cerfa: true,
     gender: Gender.FEMALE,
     weapons: [Weapons.FOIL],
     group: Group.M7,
-    isChild: true
+    isChild: true,
+    payment: {
+      paid: false,
+      amount: 200,
+      deposit: true
+    }
   }
 ];

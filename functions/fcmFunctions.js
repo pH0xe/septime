@@ -36,7 +36,7 @@ exports.subscribeToTopic = functions.https.onCall(async (data, context) => {
 
   // If no tokens, ignore
   if (!fcmTokens) {
-    return;
+    return {};
   }
 
   try {
@@ -47,6 +47,11 @@ exports.subscribeToTopic = functions.https.onCall(async (data, context) => {
     if (res.failureCount > 0) {
       throw res.errors[0].error;
     }
+
+    // If we reach this, everything is good
+    await admin.firestore().collection('users').doc(context.auth.uid).update({
+      fcmTopics: firebase.firestore.FieldValue.arrayUnion(topic)
+    });
 
     // Return a positive response
     return { success: true };
@@ -83,7 +88,7 @@ exports.unsubscribeFromTopic = functions.https.onCall(async (data, context) => {
 
   // If no tokens, ignore
   if (!fcmTokens) {
-    return;
+    return {};
   }
 
   try {
@@ -94,6 +99,11 @@ exports.unsubscribeFromTopic = functions.https.onCall(async (data, context) => {
     if (res.failureCount > 0) {
       throw res.errors[0].error;
     }
+
+    // If we reach this, everything is good
+    await admin.firestore().collection('users').doc(context.auth.uid).update({
+      fcmTopics: firebase.firestore.FieldValue.arrayRemove(topic)
+    });
 
     // Return a positive response
     return { success: true };
@@ -107,10 +117,10 @@ exports.unsubscribeFromTopic = functions.https.onCall(async (data, context) => {
 
 exports.onNewsPublished = functions.firestore
   .document('news/{newsId}')
-  .onCreate(((snapshot, context) => {
+  .onCreate(async (snapshot, context) => {
     const data = snapshot.data();
 
-    admin.messaging()
+    await admin.messaging()
       .send({
         notification: {
           title: data.title,
@@ -120,7 +130,7 @@ exports.onNewsPublished = functions.firestore
           newsId: context.params.newsId
         },
         fcmOptions: {
-          link: `https://septime-dev.web.app/news/${context.params.newsId}`
+          link: `https://${firebase.app().name}.web.app/news/${context.params.newsId}`
         }
       });
-  }));
+  });

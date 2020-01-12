@@ -62,9 +62,19 @@ const routes = [
         component: () => import('../pages/AdminEquipmentPage.vue')
       },
       {
+        path: 'equipment/create',
+        name: 'admin_equipment_create',
+        component: () => import('../pages/AdminEquipmentNewTypePage')
+      },
+      {
         path: 'events',
         name: 'admin_events',
         component: () => import('../pages/AdminEventPage.vue')
+      },
+      {
+        path: 'equipments/add',
+        name: 'admin_equipment_add',
+        component: () => import('../pages/AdminEquipmentNewPage')
       },
       {
         path: 'news',

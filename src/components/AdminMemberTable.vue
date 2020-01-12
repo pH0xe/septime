@@ -1,9 +1,9 @@
 <template>
   <div>
     <q-table
-      v-if="true"
+      v-if="inactiveUsers.length"
       title="Comptes en attente de validation"
-      :data="users"
+      :data="inactiveUsers"
       :filter="filterInput"
       :filter-method="filterUsers"
       :columns="columns"
@@ -15,13 +15,20 @@
       bordered
       @row-click="toggleDialogMemberDetails"
     >
-      <template v-slot:body-cell-member-avatar="props">
+      <template v-slot:body-cell-memberAvatar="props">
         <q-td
           :props="props"
           auto-width
         >
           <q-avatar>
-            <img :src="props.row.memberAvatar">
+            <img
+              v-if="props.row.memberAvatar"
+              :src="props.row.memberAvatar"
+            >
+            <img
+              v-else
+              src="~assets/sad.svg"
+            >
           </q-avatar>
         </q-td>
       </template>
@@ -36,10 +43,28 @@
           </q-badge>
         </q-td>
       </template>
+      <template v-slot:body-cell-paid="props">
+        <q-td
+          :props="props"
+        >
+          <q-badge
+            v-if="props.row.payment ? props.row.payment.paid : false"
+            color="positive"
+          >
+            oui
+          </q-badge>
+          <q-badge
+            v-else
+            color="negative"
+          >
+            non
+          </q-badge>
+        </q-td>
+      </template>
     </q-table>
     <q-table
       title="Comptes activé"
-      :data="users"
+      :data="activeUsers"
       :filter="filterInput"
       :filter-method="filterUsers"
       :columns="columns"
@@ -51,13 +76,20 @@
       bordered
       @row-click="toggleDialogMemberDetails"
     >
-      <template v-slot:body-cell-member-avatar="props">
+      <template v-slot:body-cell-memberAvatar="props">
         <q-td
           :props="props"
           auto-width
         >
           <q-avatar>
-            <img :src="props.row.memberAvatar">
+            <img
+              v-if="props.row.memberAvatar"
+              :src="props.row.memberAvatar"
+            >
+            <img
+              v-else
+              src="~assets/sad.svg"
+            >
           </q-avatar>
         </q-td>
       </template>
@@ -72,22 +104,39 @@
           </q-badge>
         </q-td>
       </template>
+      <template v-slot:body-cell-paid="props">
+        <q-td
+          :props="props"
+        >
+          <q-badge
+            v-if="props.row.payment ? props.row.payment.paid : false"
+            color="positive"
+          >
+            oui
+          </q-badge>
+          <q-badge
+            v-else
+            color="negative"
+          >
+            non
+          </q-badge>
+        </q-td>
+      </template>
     </q-table>
   </div>
 </template>
 
 <script>
-import users from '../js/users';
 import AdminMemberDetails from '../components/AdminMemberDetails';
+import { Group } from '../js/Group';
 
 const columns = [
   {
-    name: 'member-avatar',
+    name: 'memberAvatar',
     label: 'Photo',
     align: 'left',
     field: 'memberAvatar',
     sortable: false
-
   },
   {
     name: 'firstName',
@@ -109,6 +158,13 @@ const columns = [
     align: 'left',
     field: 'group',
     sortable: true
+  },
+  {
+    name: 'paid',
+    label: 'Cotisation',
+    align: 'left',
+    field: 'payment.paid',
+    sortable: true
   }
 ];
 export default {
@@ -117,6 +173,10 @@ export default {
     filterInput: {
       type: String,
       default: ''
+    },
+    users: {
+      type: Array,
+      required: true
     }
   },
   data: () => ({
@@ -127,11 +187,14 @@ export default {
   }),
 
   computed: {
-    users() {
-      return users;
-    },
     columns() {
       return columns;
+    },
+    activeUsers() {
+      return this.users.filter((user) => user.isActive);
+    },
+    inactiveUsers() {
+      return this.users.filter((user) => !user.isActive);
     }
   },
 
@@ -171,25 +234,28 @@ export default {
     getBadgeColorFor(group) {
       group = group.toLowerCase();
       switch (group) {
-        case 'm5':
+        case Group.M5:
           return 'red';
-        case 'm7':
+        case Group.M7:
           return 'purple';
-        case 'm9':
+        case Group.M9:
           return 'indigo';
-        case 'm11':
+        case Group.M11:
           return 'light-blue';
-        case 'm13':
+        case Group.M13:
           return 'teal';
-        case 'm15':
+        case Group.M15:
           return 'orange';
-        case 'm17':
+        case Group.M17:
           return 'brown';
-        case 'm20':
+        case Group.M20:
           return 'blue-grey';
-        case 'senior':
+        case Group.SENIORS:
           return 'cyan';
-        case group.includes('vétérans'):
+        case Group.VETERANS1:
+        case Group.VETERANS2:
+        case Group.VETERANS3:
+        case Group.VETERANS4:
           return 'grey';
         default:
           return 'null';
@@ -198,7 +264,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-
-</style>

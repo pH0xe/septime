@@ -18,7 +18,7 @@
             class="cursor-pointer"
           >
             <q-avatar>
-              <img src="~assets/quasar-logo.svg">
+              <img src="~assets/appLogo.svg">
             </q-avatar>
             Septime
           </router-link>
@@ -102,7 +102,7 @@ export default {
 
   methods: {
     onClickBannerMailDismiss() {
-      this.showBannerMail = false;
+      this.bannerMail.show = false;
     },
 
     onClickBannerMailResend() {

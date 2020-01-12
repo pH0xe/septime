@@ -2,6 +2,7 @@
   <q-dialog
     ref="dialog"
     :maximized="$q.platform.is.mobile"
+    class="q-dialog-plugin"
     @hide="onDialogHide"
   >
     <q-card>
@@ -38,7 +39,7 @@
             <q-item-section>
               <q-item-label>Date de naissance :</q-item-label>
               <q-item-label caption>
-                {{ date.formatDate(user.birth, 'DD/MM/YYYY') }}
+                {{ user.birthDate | dateDMY }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -65,7 +66,7 @@
             <q-item-section>
               <q-item-label>E-mail :</q-item-label>
               <q-item-label caption>
-                {{ user.mail }}
+                {{ user.email }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -119,7 +120,7 @@
               <q-item-label>Certificat médical :</q-item-label>
               <div class="row justify-between">
                 <q-checkbox
-                  :value="!!user.medicalCertificat"
+                  :value="!!user.medicalCertificate"
                   disable
                   color="positive"
                   label="Fournis"
@@ -128,9 +129,9 @@
                   label="Télécharger"
                   icon="mdi-download"
                   color="admin-primary"
-                  :disable="!user.medicalCertificat"
+                  :disable="!user.medicalCertificate"
+                  @click="downloadCertificate"
                 />
-                <!-- TODO telecharger le certificat-->
               </div>
             </q-item-section>
           </q-item>
@@ -145,13 +146,6 @@
                   color="positive"
                   label="Fournis"
                 />
-                <q-btn
-                  label="Télécharger"
-                  icon="mdi-download"
-                  color="admin-primary"
-                  :disable="!user.cerfa"
-                />
-                <!-- TODO  telecherger le cerfa-->
               </div>
             </q-item-section>
           </q-item>
@@ -161,7 +155,7 @@
               <q-item-label>Cotisation :</q-item-label>
               <div class="row justify-between">
                 <q-checkbox
-                  v-model="user.paid"
+                  v-model="user.payment.paid"
                   disable
                   color="positive"
                   label="Fournis"
@@ -185,15 +179,15 @@
                   label="Mettre en administrateur"
                   icon="mdi-plus"
                   color="admin-primary"
+                  @click="setAsAdmin"
                 />
-                <!-- TODO ajouter le membre en admin-->
                 <q-btn
                   v-else
                   label="Enlever des administrateurs"
                   icon="mdi-minus"
                   color="negative"
+                  @click="removeFromAdmin"
                 />
-                <!-- TODO enlever le membre en administrateur-->
               </div>
             </q-item-section>
           </q-item>
@@ -213,8 +207,8 @@
                   label="Activer le compte (irréversible)"
                   icon="mdi-plus"
                   color="admin-primary"
+                  @click="activateMember"
                 />
-                <!-- TODO activer le compte-->
               </div>
             </q-item-section>
           </q-item>
@@ -234,10 +228,10 @@
 </template>
 
 <script>
-import { date } from 'quasar';
+import { openURL } from 'quasar';
+import { mapActions } from 'vuex';
 import { Weapons } from '../js/Weapons';
 import { Gender } from '../js/Gender';
-
 
 export default {
   name: 'AdminMemberDetails',
@@ -248,8 +242,7 @@ export default {
     }
   },
   data: () => ({
-    dialogDetails: false,
-    date
+    dialogDetails: false
   }),
   computed: {
     Gender() {
@@ -260,6 +253,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount']),
     show() {
       this.$refs.dialog.show();
     },
@@ -272,6 +266,19 @@ export default {
     onClickOk() {
       this.$emit('ok');
       this.hide();
+    },
+    downloadCertificate() {
+      openURL(this.user.medicalCertificate);
+    },
+    setAsAdmin() {
+      this.setAdmin({ member: this.user });
+    },
+    removeFromAdmin() {
+      this.removeAdmin({ member: this.user });
+    },
+    activateMember() {
+      this.activateAccount({ member: this.user });
+      console.log('activer le compte a faire');
     }
   }
 };

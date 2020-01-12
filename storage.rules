@@ -1,15 +1,31 @@
 service firebase.storage {
   match /b/{bucket}/o {
+  	function isValidCertificateContentType() {
+    		return request.resource.contentType.matches('image/.*')
+        		|| request.resource.contentType.matches('application/pdf');
+    }
+
+  	// Allow users to upload their certificate
     match /certificates/{userId} {
     	allow read: if request.auth != null && request.auth.uid == userId;
 
     	// Limit to 1Mio
     	allow create, update: if request.auth != null && request.auth.uid == userId
       							&& request.resource.size < 1048576
-    								&& (request.resource.contentType.matches('image/.*')
-                    		|| request.resource.contentType.matches('application/pdf'));
+    								&& isValidCertificateContentType();
 
       allow delete: if request.auth != null && request.auth.uid == userId;
+
+      allow read, create: if isAdmin();
+    }
+
+    // Allow upload to public directory to be moved by a cloud function
+    match /certificates/public_temp/{allFiles=*} {
+    	allow create: if request.auth != null
+      							&& request.resource.size < 1048576
+                    && isValidCertificateContentType();
+
+      allow read, update, delete: if false;
     }
 
     match /profile_pics/{userId} {
@@ -23,6 +39,29 @@ service firebase.storage {
 
       // Can't be deleted
       allow delete: if false;
+    }
+
+    match /profile_pics/public_temp/{allFiles=*} {
+    	allow create: if request.auth != null
+      							&& request.resource.size < 1048576
+                    && request.resource.contentType.matches('image/.*');
+
+      allow read, update, delete: if false;
+    }
+
+    match /news/{newsId} {
+    	// Allow anyone to see news
+    	allow read: if true;
+
+      allow write: if false;
+    }
+
+    match /news/public_temp/{allFiles=*} {
+    	allow create: if request.auth != null
+      							&& request.resource.size < 1048576
+                    && request.resource.contentType.matches('image/.*');
+
+      allow read, update, delete: if false;
     }
   }
 }
