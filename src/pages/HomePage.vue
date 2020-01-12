@@ -8,9 +8,6 @@
         <div class="text-h3 text-uppercase text-weight-light">
           Cercle d'escrime de moirans
         </div>
-        <div class="text-subtitle1 text-center">
-          A falsis, nutrix superbus orgia. Noster mineralis una apertos victrix est.
-        </div>
       </div>
     </q-img>
 
@@ -22,6 +19,7 @@
             <q-btn
               flat
               icon="mdi-dots-horizontal"
+              :to="{ name: 'news' }"
             />
           </h5>
           <q-separator class="separator-margin" />
@@ -30,94 +28,53 @@
 
       <div class="row q-col-gutter-md">
         <div
-          v-for="i in [1, 2, 3]"
-          :key="i"
+          v-for="news in orderedNews"
+          :key="news.uid"
           class="col-12 col-md-4"
         >
           <news-card
-            title="Grandis etiam aonides est."
-            content="Luba de peritus guttus, vitare fides!"
-            img-src="https://source.unsplash.com/random"
-            :date="new Date()"
+            :title="news.title"
+            :content="news.text"
+            :date="news.date"
+            :img-src="news.imgURL"
           />
         </div>
       </div>
 
-      <div class="row">
-        <div class="col">
-          <h5 class="text-h5">
-            Prochain cours
-            <q-btn
-              flat
-              icon="mdi-dots-horizontal"
-            />
-          </h5>
-          <q-separator class="separator-margin" />
-        </div>
-      </div>
-
-      <div class="row q-col-gutter-md">
-        <div class="col-12 col-md-4">
-          <lesson-card />
+      <template v-if="isLoggedIn">
+        <div class="row">
+          <div class="col">
+            <h5 class="text-h5">
+              Prochains cours
+              <q-btn
+                flat
+                icon="mdi-dots-horizontal"
+                :to="{ name: 'calendar' }"
+              />
+            </h5>
+            <q-separator class="separator-margin" />
+          </div>
         </div>
 
-        <div class="col-12 col-md-4">
-          <q-card
-            flat
-            bordered
+        <div class="row q-col-gutter-md">
+          <div
+            v-for="training in upcomingTrainings"
+            :key="training.uid"
+            class="col-12 col-md-4"
           >
-            <q-card-section class="text-h5">
-              Le 19/11 à 15h
-            </q-card-section>
-            <q-card-section>
-              Avec Mr. X
-            </q-card-section>
-
-            <q-card-actions align="right">
-              <q-btn
-                flat
-                icon="mdi-check"
-              />
-              <q-btn
-                flat
-                icon="mdi-close"
-              />
-            </q-card-actions>
-          </q-card>
+            <lesson-card :training="training" />
+          </div>
         </div>
-
-        <div class="col-12 col-md-4">
-          <q-card
-            flat
-            bordered
-          >
-            <q-card-section class="text-h5">
-              Le 3/12 à 17h
-            </q-card-section>
-            <q-card-section>
-              Avec Mr. X
-            </q-card-section>
-            <q-card-actions align="right">
-              <q-btn
-                flat
-                icon="mdi-check"
-              />
-              <q-btn
-                flat
-                icon="mdi-close"
-              />
-            </q-card-actions>
-          </q-card>
-        </div>
-      </div>
+      </template>
 
       <div class="row">
         <div class="col">
           <h5 class="text-h5">
-            Prochain événements
+            Prochains événements
             <q-btn
               flat
               icon="mdi-dots-horizontal"
+              :to="{ name: 'calendar' }"
             />
           </h5>
           <q-separator class="separator-margin" />
@@ -126,16 +83,11 @@
 
       <div class="row q-col-gutter-md">
         <div
-          v-for="i in [1, 2, 3]"
-          :key="i"
+          v-for="event in upcomingEvents"
+          :key="event.uid"
           class="col-12 col-md-4"
         >
-          <event-card
-            title="Ubi est peritus bromium?"
-            :categories="['M20', 'M17']"
-            :date="new Date()"
-            :time-range="[13, 17]"
-          />
+          <event-card :event="event" />
         </div>
       </div>
     </div>
@@ -143,6 +95,8 @@
 </template>
 
 <script lang="js">
+import { mapState, mapGetters, mapActions } from 'vuex';
+
 import NewsCard from '../components/NewsCard';
 import LessonCard from '../components/LessonCard';
 import EventCard from '../components/EventCard';
@@ -150,10 +104,75 @@ import EventCard from '../components/EventCard';
 export default {
   name: 'HomePage',
   components: { EventCard, LessonCard, NewsCard },
+
   computed: {
+    ...mapState({
+      currentUser: (state) => state.auth.currentUser,
+      news: (state) => state.news.news,
+      trainings: (state) => state.trainings.trainings,
+      events: (state) => state.events.events
+    }),
+
+    ...mapGetters(['isLoggedIn']),
+
+    orderedNews() {
+      const newsCopy = Array.from(this.news);
+      newsCopy.sort((news1, news2) => {
+        if (news1.date < news2.date) {
+          return -1;
+        }
+        return 1;
+      });
+
+      return newsCopy.slice(0, 3);
+    },
+
+    upcomingTrainings() {
+      if (!this.isLoggedIn) {
+        return [];
+      }
+
+      let filtered = Array.from(this.trainings);
+
+      filtered = filtered
+        .filter((training) => training.group.includes(this.currentUser.group));
+
+      filtered.sort((t1, t2) => {
+        if (t1.startDate < t2.startDate) {
+          return -1;
+        }
+        return 1;
+      });
+
+      return filtered.slice(0, 3);
+    },
+
+    upcomingEvents() {
+      const copy = Array.from(this.events);
+
+      copy.sort((e1, e2) => {
+        if (e1.startDate < e2.startDate) {
+          return -1;
+        }
+        return 1;
+      });
+
+      return copy.slice(0, 3);
+    },
+
     ratioMainImage() {
       return this.$q.platform.is.mobile ? 4 / 3 : 1000 / 200;
     }
+  },
+
+  methods: {
+    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents'])
+  },
+
+  async beforeMount() {
+    this.fetchNews();
+    this.fetchTrainings();
+    this.fetchEvents();
   }
 };
 </script>

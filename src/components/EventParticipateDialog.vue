@@ -6,7 +6,6 @@
     <q-card>
       <q-card-section>
         <div class="text-h6">
-          field: 'group',
           Participer à l'évenement {{ title }}
         </div>
       </q-card-section>
@@ -14,7 +13,7 @@
       <q-card-section>
         <q-select
           v-model="selectedRole"
-          :options="roles"
+          :options="processedRoles"
           label="Rôle"
         >
           <template v-slot:prepend>
@@ -26,17 +25,18 @@
       <q-card-actions align="right">
         <q-btn
           v-if="selectedRole !== undefined"
-          flat
+          unelevated
           icon="mdi-check"
           label="Ok"
+          color="primary"
           @click="onClickOk"
         />
         <q-btn
           v-else
-          flat
+          unelevated
           disable
           icon="mdi-close"
-          label="Selectionner"
+          label="Ok"
         />
       </q-card-actions>
     </q-card>
@@ -50,25 +50,25 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    roles: {
+      type: Array,
+      required: true
     }
   },
   data: () => ({
-    selectedRole: undefined,
-    roles: [
-      {
-        label: 'Spectateur',
-        value: 'spec'
-      },
-      {
-        label: 'Tireur (3 manquants)',
-        value: 'fencer'
-      },
-      {
-        label: 'Arbitre (2 manquants)',
-        value: 'arbiter'
-      }
-    ]
+    selectedRole: undefined
   }),
+
+  computed: {
+    processedRoles() {
+      return this.roles.map((role) => ({
+        label: `${role.name} (${role.require} requis)`,
+        value: role.name
+      }));
+    }
+  },
+
   methods: {
     show() {
       this.$refs.dialog.show();

@@ -2,15 +2,6 @@
   <q-layout view="hHh LpR lFr">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
-
         <q-toolbar-title>
           <router-link
             tag="div"
@@ -40,7 +31,7 @@
 
       <q-banner
         v-if="canShowBannerMail"
-        inline-actions
+        :inline-actions="!$q.platform.is.mobile"
         class="bg-secondary"
       >
         Voter compte n'est pas vérifié. Vérifiez votre boîte mail pour un lien de vérification.
@@ -66,11 +57,13 @@
       <router-view />
     </q-page-container>
 
+    <!--
     <q-footer>
       <div class="text-subtitle1">
         Sponsors ?
       </div>
     </q-footer>
+    -->
   </q-layout>
 </template>
 
@@ -143,5 +136,6 @@ export default {
   /* Define class available to inner components */
   #page-container /deep/ .page-padded {
     padding-top: 2rem;
+    padding-bottom: 2rem;
   }
 </style>

@@ -9,7 +9,7 @@
       :to="{ name: 'home' }"
       exact
       icon="mdi-home"
-      :label="mobile ? undefined : 'Acceuil'"
+      :label="mobile ? undefined : 'Accueil'"
     />
     <q-route-tab
       :to="{ name: 'news' }"

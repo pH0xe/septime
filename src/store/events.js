@@ -1,5 +1,6 @@
 import { Notify } from 'quasar';
-import { db } from '../boot/firebase';
+import * as firebase from 'firebase/app';
+import { db, auth } from '../boot/firebase';
 
 export default {
   state: {
@@ -46,6 +47,16 @@ export default {
             color: 'negative',
             position: 'bottom'
           });
+        });
+    },
+
+    subscribeToEvent(_, { id, role }) {
+      return db.collection('events').doc(id)
+        .update({
+          registerMember: firebase.firestore.FieldValue.arrayUnion({
+            uid: auth.currentUser.uid,
+            role
+          })
         });
     },
 

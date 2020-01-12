@@ -13,9 +13,10 @@
         <div class="text-h6">
           {{ title }}
         </div>
-        <div class="text-subtitle1 ellipsis">
-          {{ content }}
-        </div>
+        <div
+          class="text-subtitle1 ellipsis"
+          v-html="content"
+        />
       </div>
     </q-img>
   </q-card>
@@ -37,7 +38,8 @@ export default {
     },
     imgSrc: {
       type: String,
-      required: true
+      required: false,
+      default: 'https://source.unsplash.com/random/400x200'
     },
     date: {
       type: Date,

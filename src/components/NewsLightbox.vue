@@ -2,9 +2,13 @@
   <q-dialog
     ref="dialog"
     :maximized="maximized"
+    class="q-dialog-plugin"
     @hide="onDialogHide"
   >
-    <q-card v-touch-swipe.down="handleSwipeDown">
+    <q-card
+      v-touch-swipe.down="handleSwipeDown"
+      :class="maximized ? '' : 'w-40'"
+    >
       <q-card-section class="row items-center">
         <div class="text-h6">
           {{ title }}
@@ -33,9 +37,7 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
-        {{ content }}
-      </q-card-section>
+      <q-card-section v-html="content" />
     </q-card>
   </q-dialog>
 </template>
@@ -74,6 +76,7 @@ export default {
       });
     }
   },
+
   methods: {
     show() {
       this.$refs.dialog.show();
@@ -90,3 +93,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  .w-40 {
+    width: 40%;
+  }
+</style>

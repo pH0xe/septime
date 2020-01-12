@@ -42,6 +42,17 @@ export default {
           item.date = item.date.toDate();
           return item;
         }))
+        .then((news) => Promise.all(news.map(async (item) => {
+          try {
+            item.imgURL = await storage.ref()
+              .child('news')
+              .child(item.uid)
+              .getDownloadURL();
+          } catch (_e) {
+            // Ignore
+          }
+          return item;
+        })))
         .then((news) => {
           commit('setNews', { news });
         })
@@ -50,7 +61,7 @@ export default {
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
-            position: 'top-left'
+            position: 'bottom'
           });
         });
     },
