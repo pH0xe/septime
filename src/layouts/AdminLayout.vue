@@ -23,7 +23,6 @@
       v-model="drawer"
       show-if-above
       :mini="miniState"
-
       bordered
       content-class="bg-grey-3"
       @mouseover="toggleMini"
@@ -46,7 +45,21 @@
               Membres
             </q-item-section>
           </q-item>
+          <!-- Attendance -->
+          <q-item
+            v-ripple
+            :to="{ name: 'admin_presence' }"
+            clickable
+            active-class="text-admin-primary"
+          >
+            <q-item-section avatar>
+              <q-icon name="mdi-sword" />
+            </q-item-section>
 
+            <q-item-section>
+              Entraînements
+            </q-item-section>
+          </q-item>
           <!-- Equipment -->
           <q-item
             v-ripple

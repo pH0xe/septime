@@ -96,7 +96,7 @@ export default [
     }
   },
   {
-    uid: '6',
+    uid: '3',
     memberAvatar: 'https://picsum.photos/200',
     isActive: true,
     isAdmin: false,

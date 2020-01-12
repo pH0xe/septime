@@ -62,6 +62,26 @@ const routes = [
         component: () => import('../pages/AdminEquipmentPage.vue')
       },
       {
+        path: 'presence',
+        name: 'admin_presence',
+        component: () => import('../pages/AdminPresencePage.vue')
+      },
+      {
+        path: 'presence/create',
+        name: 'admin_presence_create',
+        component: () => import('../pages/AdminPresenceCreatePage.vue')
+      },
+      {
+        path: 'presence/result',
+        name: 'admin_presence_result',
+        component: () => import('../pages/AdminPresenceResultPage.vue')
+      },
+      {
+        path: 'presence/list',
+        name: 'admin_presence_list',
+        component: () => import('../pages/AdminPresenceListPage.vue')
+      },
+      {
         path: 'equipment/create',
         name: 'admin_equipment_create',
         component: () => import('../pages/AdminEquipmentNewTypePage')
