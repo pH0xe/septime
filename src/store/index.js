@@ -5,10 +5,11 @@ import members from './members';
 import auth from './auth';
 import messaging from './messaging';
 import equipments from './equipments';
-import events from './events';
 import equipmentsType from './equipmentsTypes';
-import trainings from './trainings';
 import news from './news';
+import trainings from './trainings';
+import events from './events';
+import calendar from './calendar';
 
 Vue.use(Vuex);
 
@@ -21,7 +22,8 @@ export default new Vuex.Store({
     events,
     equipmentsType,
     trainings,
-    news
+    news,
+    calendar
   },
   strict: process.env.DEV
 });
