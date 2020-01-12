@@ -2,10 +2,9 @@
   <q-layout view="hHh LpR Lfr">
     <q-header
       reveal
-      elevated
       class="bg-admin-primary text-white"
     >
-      <q-toolbar>
+      <q-toolbar flat>
         <q-btn
           dense
           flat
@@ -134,6 +133,7 @@
           </q-expansion-item>
 
           <!-- Settings -->
+          <!--
           <q-item
             v-ripple
             :to="{ name: 'admin_settings' }"
@@ -148,6 +148,7 @@
               Paramètres
             </q-item-section>
           </q-item>
+          -->
 
           <!-- Button back to home page -->
           <div class="fixed-bottom">

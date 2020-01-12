@@ -3,6 +3,7 @@ import HomePage from '../pages/HomePage.vue';
 import RegisterPage from '../pages/RegisterPage.vue';
 import NewsPage from '../pages/NewsPage';
 import CalendarPage from '../pages/CalendarPage';
+import NewsArticlePage from '../pages/NewsArticlePage';
 
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
         path: 'news',
         name: 'news',
         component: NewsPage
+      },
+      {
+        path: 'news/:id',
+        name: 'news_details',
+        component: NewsArticlePage
       },
       {
         path: 'calendar',

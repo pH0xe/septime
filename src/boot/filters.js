@@ -11,5 +11,5 @@ export default ({ Vue }) => {
 
   Vue.filter('dateDMY', (value) => date.formatDate(value, 'DD/MM/YYYY'));
 
-  Vue.filter('dateHM', (value) => date.formatDate(value, 'HH:MM'));
+  Vue.filter('dateHM', (value) => date.formatDate(value, 'HH:mm'));
 };

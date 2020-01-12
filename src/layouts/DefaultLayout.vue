@@ -1,6 +1,6 @@
 <template lang="html">
   <q-layout view="hHh LpR lFr">
-    <q-header elevated>
+    <q-header>
       <q-toolbar>
         <q-toolbar-title>
           <router-link
