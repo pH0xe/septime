@@ -27,6 +27,11 @@ register(process.env.SERVICE_WORKER_FILE, {
     // Setup message listener
     messaging.onMessage((payload) => {
       console.log('Received message', payload);
+
+      // eslint-disable-next-line no-unused-vars
+      const notif = new Notification(payload.notification.title, {
+        body: payload.notification.body
+      });
     });
 
     store.commit('setServiceWorkerReady', { ready: true });

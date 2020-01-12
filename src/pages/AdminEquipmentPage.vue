@@ -74,11 +74,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchEquipments', 'fetchEquipmentsType']),
-
-    test() {
-      console.log(this.equipmentType);
-    }
+    ...mapActions(['fetchEquipments', 'fetchEquipmentsType'])
   }
 
 };

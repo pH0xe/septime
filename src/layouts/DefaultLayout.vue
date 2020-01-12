@@ -42,12 +42,37 @@
           <q-btn
             flat
             label="Renvoyer le mail"
+            :loading="bannerMail.isResending"
             @click="onClickBannerMailResend"
           />
           <q-btn
             flat
             icon="mdi-close"
             @click="onClickBannerMailDismiss"
+          />
+        </template>
+      </q-banner>
+
+      <q-banner
+        v-if="canShowBannerNotification"
+        inline-actions
+        class="bg-orange-10 text-white"
+      >
+        Veuillez pouvez activer les notifications pour profiter de plus de fonctionnalités !
+        <template v-slot:avatar>
+          <q-icon name="mdi-bell" />
+        </template>
+        <template v-slot:action>
+          <q-btn
+            flat
+            label="Activer"
+            :loading="bannerNotification.isActivating"
+            @click="onClickBannerActivateNotification"
+          />
+          <q-btn
+            flat
+            icon="mdi-close"
+            @click="onClickBannerDismiss"
           />
         </template>
       </q-banner>
@@ -68,6 +93,7 @@
 </template>
 
 <script lang="js">
+import { mapGetters } from 'vuex';
 import { auth } from '../boot/firebase';
 import NavbarLinks from '../components/NavbarLinks.vue';
 import NavbarAccount from '../components/NavbarAccount';
@@ -82,14 +108,26 @@ export default {
     bannerMail: {
       show: true,
       isResending: false
+    },
+    bannerNotification: {
+      show: true,
+      isActivating: false
     }
   }),
 
   computed: {
+    ...mapGetters(['isLoggedIn', 'isMessagingPossible', 'isMessagingReady']),
+
     canShowBannerMail() {
-      return this.$store.getters.isLoggedIn
+      return this.isLoggedIn
           && !this.$store.state.auth.currentUser.emailVerified
           && this.bannerMail.show;
+    },
+
+    canShowBannerNotification() {
+      return this.isMessagingPossible
+          && !this.isMessagingReady
+          && this.bannerNotification.show;
     }
   },
 
@@ -113,6 +151,31 @@ export default {
           this.bannerMail.isResending = false;
           this.$q.notify({
             message: `Une erreur est survenue en envoyant le mail de confirmation: ${err.code}`,
+            icon: 'mdi-alert',
+            color: 'negative'
+          });
+        });
+    },
+
+    onClickBannerDismiss() {
+      this.bannerNotification.show = false;
+    },
+
+    onClickBannerActivateNotification() {
+      this.bannerNotification.isActivating = true;
+      this.$store.dispatch('setupMessagingRoutine')
+        .then(() => {
+          this.bannerNotification.isActivating = false;
+          this.$q.notify({
+            message: 'Notification activées !',
+            icon: 'mdi-bell'
+          });
+        })
+        .catch((err) => {
+          this.bannerNotification.isActivating = false;
+          console.error(err);
+          this.$q.notify({
+            message: `Une erreur est survenur: ${err.code}`,
             icon: 'mdi-alert',
             color: 'negative'
           });

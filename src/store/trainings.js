@@ -53,7 +53,7 @@ export default {
           commit('updateStudent', { training });
         })
         .catch((err) => {
-          console.log('Error while updating presence: ', err);
+          console.error('Error while updating presence: ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
@@ -78,7 +78,7 @@ export default {
           });
         })
         .catch((err) => {
-          console.log('Error while creating training: ', err);
+          console.error('Error while creating training: ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',

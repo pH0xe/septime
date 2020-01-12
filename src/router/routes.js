@@ -4,6 +4,8 @@ import RegisterPage from '../pages/RegisterPage.vue';
 import NewsPage from '../pages/NewsPage';
 import CalendarPage from '../pages/CalendarPage';
 import NewsArticlePage from '../pages/NewsArticlePage';
+import ProfilPage from '../pages/ProfilPage';
+import ProfilUpdatePage from '../pages/ProfilUpdatePage';
 
 
 const routes = [
@@ -41,6 +43,22 @@ const routes = [
         name: 'login',
         redirect: {
           name: 'home', query: { login: true }
+        }
+      },
+      {
+        path: 'profil',
+        name: 'profil',
+        component: ProfilPage,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: 'profil/update',
+        name: 'profil_update',
+        component: ProfilUpdatePage,
+        meta: {
+          requiresAuth: true
         }
       }
     ]

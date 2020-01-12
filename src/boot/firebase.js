@@ -32,7 +32,10 @@ export const adminCreateMember = firebase.functions().httpsCallable('adminCreate
 
 const functions = firebase.functions();
 export const cloudFunctions = {
-  adminCreateMember: functions.httpsCallable('adminCreateMember')
+  adminCreateMember: functions.httpsCallable('adminCreateMember'),
+  getTopics: functions.httpsCallable('getTopics'),
+  subscribeToTopic: functions.httpsCallable('subscribeToTopic'),
+  unsubscribeFromTopic: functions.httpsCallable('unsubscribeFromTopic')
 };
 
 Vue.prototype.$firebase = firebase;

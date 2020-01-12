@@ -26,7 +26,10 @@
           </div>
           <q-separator class="q-my-md" />
 
-          <div class="text-capitalize" v-html="currentNews.text" />
+          <div
+            class="text-capitalize"
+            v-html="currentNews.text"
+          />
         </template>
       </div>
     </div>

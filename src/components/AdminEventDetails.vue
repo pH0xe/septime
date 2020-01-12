@@ -294,7 +294,7 @@ export default {
           this.fetchEvents();
         })
         .catch((err) => {
-          console.log('Error while deleting : ', err);
+          console.error('Error while deleting : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',

@@ -57,7 +57,7 @@ export default {
           commit('setNews', { news });
         })
         .catch((err) => {
-          console.log('Error while fetching news list : ', err);
+          console.error('Error while fetching news list : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',

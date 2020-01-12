@@ -31,7 +31,7 @@ export default {
     updateCurrentUserWithFirebase(state) {
       // Gather some information to keep in the store
       const {
-        isAnonymous, emailVerified, refreshToken, tenantId, photoURL, uid, displayName
+        isAnonymous, emailVerified, refreshToken, tenantId, photoURL, uid, displayName, email
       } = auth.currentUser;
 
       state.currentUser = {
@@ -42,7 +42,8 @@ export default {
         tenantId,
         photoURL,
         uid,
-        displayName
+        displayName,
+        email
       };
     }
   },

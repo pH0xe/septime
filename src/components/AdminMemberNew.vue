@@ -433,8 +433,6 @@ export default {
     onClickOk() {
       this.$v.$touch();
 
-      debugger;
-
       if (!this.$v.$error) {
         const userData = {
           address: { ...this.address },
@@ -493,7 +491,7 @@ export default {
             this.hide();
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$q.notify({
               message: `Unexpected error: ${err.code}`,
               icon: 'mdi-alert',

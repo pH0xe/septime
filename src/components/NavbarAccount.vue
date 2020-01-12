@@ -69,6 +69,7 @@
         v-close-popup
         v-ripple
         clickable
+        :to="{name: 'profil'}"
       >
         <q-item-section avatar>
           <q-avatar v-if="currentUser.photoURL">

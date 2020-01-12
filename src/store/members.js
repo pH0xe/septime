@@ -1,5 +1,5 @@
 import { Notify } from 'quasar';
-import { db, storage } from '../boot/firebase';
+import { auth, db, storage } from '../boot/firebase';
 import { Group } from '../js/Group';
 
 
@@ -39,7 +39,8 @@ export default {
             collector.push({ uid: item.id, ...item.data() });
           });
           return collector;
-        }).then((members) => members.map((member) => {
+        })
+        .then((members) => members.map((member) => {
           member.birthDate = member.birthDate.toDate();
           member.group = Group.from(member.birthDate);
           return member;
@@ -72,7 +73,9 @@ export default {
     },
 
     setAdmin({ commit }, { member }) {
-      db.collection('users').doc(member.uid).update({ isAdmin: true })
+      db.collection('users')
+        .doc(member.uid)
+        .update({ isAdmin: true })
         .then(() => {
           commit('setMemberAdmin', member);
         })
@@ -87,7 +90,9 @@ export default {
     },
 
     removeAdmin({ commit }, { member }) {
-      db.collection('users').doc(member.uid).update({ isAdmin: false })
+      db.collection('users')
+        .doc(member.uid)
+        .update({ isAdmin: false })
         .then(() => {
           commit('removeMemberAdmin', member);
         })
@@ -102,12 +107,176 @@ export default {
     },
 
     activateAccount({ commit }, { member }) {
-      db.collection('users').doc(member.uid).update({ isActive: true })
+      db.collection('users')
+        .doc(member.uid)
+        .update({ isActive: true })
         .then(() => {
           commit('activateMember', member);
         })
         .catch((err) => {
           console.log('Error while activating account : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    changePassword({ commit }, { newPassword }) {
+      const user = auth.currentUser;
+      user.updatePassword(newPassword)
+        .then(() => {
+          Notify.create({
+            message: 'Le mot de passe a été mis à jours',
+            color: 'positive',
+            position: 'top'
+          });
+        })
+        .catch((err) => {
+          switch (err.code) {
+            case 'auth/invalid-user-token':
+            case 'auth/requires-recent-login':
+              Notify.create({
+                message: 'Vous n\'êtes pas connecté',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/network-request-failed':
+              Notify.create({
+                message: 'Problème de réseau, vérifier votre connexion',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/too-many-requests':
+              Notify.create({
+                message: 'Erreur : trop de requête',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/user-token-expired':
+              Notify.create({
+                message: 'Erreur : reconnectez-vous',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/operation-not-allowed':
+              Notify.create({
+                message: 'Erreur : Opération interdite, contactez un administrateur',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'Thrown if a method is called with incorrect arguments.':
+              Notify.create({
+                message: 'Erreur : Le mot de passe saisie est invalide',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            default:
+              Notify.create({
+                message: 'Une erreur inconnu est survenue',
+                color: 'negative',
+                position: 'top'
+              });
+          }
+        });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    changeEmail({ commit }, { newEmail }) {
+      const user = auth.currentUser;
+      user.updateEmail(newEmail)
+        .then(() => {
+          Notify.create({
+            message: 'L\'email a été changer',
+            color: 'positive',
+            position: 'top'
+          });
+        })
+        .catch((err) => {
+          switch (err.code) {
+            case 'auth/invalid-user-token':
+            case 'auth/requires-recent-login':
+              Notify.create({
+                message: 'Vous n\'êtes pas connecté',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/network-request-failed':
+              Notify.create({
+                message: 'Problème de réseau, vérifier votre connexion',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/too-many-requests':
+              Notify.create({
+                message: 'Erreur : trop de requête',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/user-token-expired':
+              Notify.create({
+                message: 'Erreur : reconnectez-vous',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/operation-not-allowed':
+              Notify.create({
+                message: 'Erreur : Opération interdite, contactez un administrateur',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'Thrown if a method is called with incorrect arguments.':
+              Notify.create({
+                message: 'Erreur : Le mot de passe saisie est invalide',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            default:
+              Notify.create({
+                message: 'Une erreur inconnu est survenue',
+                color: 'negative',
+                position: 'top'
+              });
+          }
+        });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    changeAddress({ commit }, { member, newAddress }) {
+      db.collection('users')
+        .doc(member.uid)
+        .update({ address: newAddress })
+        .catch((err) => {
+          console.log('Error while updating address: ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    changePhone({ commit }, { member, newPhone, newPhoneEmergency }) {
+      db.collection('users')
+        .doc(member.uid)
+        .update({ phone: newPhone, phoneEmergency: newPhoneEmergency })
+        .catch((err) => {
+          console.log('Error while updating phone : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
