@@ -44,7 +44,7 @@ export default {
 
   actions: {
     fetchEquipments({ commit }) {
-      db.collection('equipments').get()
+      return db.collection('equipments').get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((doc) => {
@@ -72,7 +72,7 @@ export default {
     },
 
     postNewEquipment({ commit }, { equipment }) {
-      db.collection('equipments').add(equipment)
+      return db.collection('equipments').add(equipment)
         .then((docReference) => {
           equipment.uid = docReference.id;
           commit('addEquipment', { equipment });
@@ -88,7 +88,7 @@ export default {
     },
 
     rentEquipment({ commit }, { uid, equipment }) {
-      db.collection('equipments').doc(equipment.uid).update({ renterId: uid })
+      return db.collection('equipments').doc(equipment.uid).update({ renterId: uid })
         .then(() => {
           commit('setMember', { uid, equipment });
         })
@@ -103,7 +103,7 @@ export default {
     },
 
     stopRentEquipment({ commit }, { equipment }) {
-      db.collection('equipments').doc(equipment.uid)
+      return db.collection('equipments').doc(equipment.uid)
         .update({ renterId: firebase.firestore.FieldValue.delete() })
         .then(() => {
           commit('resetMember', { equipment });
@@ -119,7 +119,7 @@ export default {
     },
 
     updateControlEquipment({ commit }, { equipment }) {
-      db.collection('equipments').doc(equipment.uid)
+      return db.collection('equipments').doc(equipment.uid)
         .update({ 'informationDate.control': new Date() })
         .then(() => {
           commit('updateControlDate', { equipment });
@@ -135,7 +135,7 @@ export default {
     },
 
     updateStateEquipment({ commit }, { equipment, newState }) {
-      db.collection('equipments').doc(equipment.uid)
+      return db.collection('equipments').doc(equipment.uid)
         .update({ state: newState })
         .then(() => {
           commit('changeState', { equipment });
@@ -151,7 +151,7 @@ export default {
     },
 
     deleteThisEquipment({ commit }, { equipment }) {
-      db.collection('equipments').doc(equipment.uid)
+      return db.collection('equipments').doc(equipment.uid)
         .delete()
         .then(() => {
           console.log('Equipment succesfully deleted');

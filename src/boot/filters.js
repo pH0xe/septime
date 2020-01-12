@@ -10,4 +10,6 @@ export default ({ Vue }) => {
   Vue.filter('date', (value, format) => date.formatDate(value, format));
 
   Vue.filter('dateDMY', (value) => date.formatDate(value, 'DD/MM/YYYY'));
+
+  Vue.filter('dateHM', (value) => date.formatDate(value, 'HH:MM'));
 };

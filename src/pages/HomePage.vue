@@ -114,7 +114,7 @@
       <div class="row">
         <div class="col">
           <h5 class="text-h5">
-            Prochain évenements
+            Prochain événements
             <q-btn
               flat
               icon="mdi-dots-horizontal"

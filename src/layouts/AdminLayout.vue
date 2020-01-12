@@ -75,7 +75,7 @@
             </q-item-section>
 
             <q-item-section>
-              Évènements
+              Événements
             </q-item-section>
           </q-item>
 

@@ -69,7 +69,12 @@ const routes = [
       {
         path: 'events',
         name: 'admin_events',
-        component: () => import('../pages/AdminEventPage.vue')
+        component: () => import('../pages/AdminEventsPage.vue')
+      },
+      {
+        path: 'newEvent',
+        name: 'admin_events_new',
+        component: () => import('../pages/AdminEventNewPage.vue')
       },
       {
         path: 'equipments/add',

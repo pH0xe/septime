@@ -9,12 +9,21 @@ export default {
   mutations: {
     setEvents(state, { events }) {
       state.events = events;
+    },
+
+    addEvent(state, { event }) {
+      state.events = [...state.events, event];
+    },
+
+    deleteEventState(state, { event }) {
+      const index = state.events.indexOf(event);
+      state.events.splice(index, 1);
     }
   },
 
   actions: {
     fetchEvents({ commit }) {
-      db.collection('events').get()
+      return db.collection('events').get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((doc) => {
@@ -22,6 +31,11 @@ export default {
           });
           return collector;
         })
+        .then((events) => events.map((event) => {
+          event.startDate = event.startDate.toDate();
+          event.endDate = event.endDate.toDate();
+          return event;
+        }))
         .then((events) => {
           commit('setEvents', { events });
         })
@@ -30,8 +44,24 @@ export default {
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
-            position: 'top-left'
+            position: 'bottom'
           });
+        });
+    },
+
+    postNewEvent({ commit }, { event }) {
+      return db.collection('events').add(event)
+        .then((docReference) => {
+          event.id = docReference.id;
+          commit('addEvent', { event });
+        });
+    },
+
+    deleteEvent({ commit }, { event }) {
+      return db.collection('events').doc(event.id)
+        .delete()
+        .then(() => {
+          commit('deleteEventState', { event });
         });
     }
   }

@@ -203,7 +203,6 @@ export default {
       this.$q.dialog({
         component: AdminMemberDetails,
         parent: this,
-
         user: row
       });
     },
