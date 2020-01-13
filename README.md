@@ -42,6 +42,7 @@ npm install --only=prod
 3. Activer le module Database (Firestore)
 4. Activer le module Storage
     * Créer cette hierarchie de dossiers:
+
 ```
 +-- certificates/       Contient les certificats par l'id de l'utilisateur
 |   +-- public_temp/    Dossier temporaire où sont uploader les fichiers avant d'être deplacer
@@ -50,6 +51,7 @@ npm install --only=prod
 +-- profile_pics/       Contient les images de profil par l'id de l'utilisateur
 |   +-- public_temp/    Dossier d'upload temporaire
 ```
+
 5. Activer le module Hosting (optionel)
     * Necessaire pour publier l'application sur Firebase
 6. Activer le module Functions
