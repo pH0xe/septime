@@ -15,4 +15,4 @@ jobs:
     - name: ESLint
       run: npx eslint src/
     - name: Build
-      run: npm run buid:pwa
+      run: npm run build:pwa
