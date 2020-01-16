@@ -13,8 +13,6 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: ESLint
-      uses: hallee/eslint-action@1.0.1
-      with:
-        files: src/
+      run: npx eslint src/
     - name: Build
       run: npm run buid:pwa
