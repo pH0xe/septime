@@ -1,0 +1,20 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2.0.0
+    - name: Install dependencies
+      run: npm install
+    - name: ESLint
+      uses: hallee/eslint-action@1.0.1
+      with:
+        files: src/
+    - name: Build
+      run: npm run buid:pwa
