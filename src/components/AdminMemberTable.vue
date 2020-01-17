@@ -48,7 +48,7 @@
           :props="props"
         >
           <q-badge
-            v-if="props.row.payment ? props.row.payment.paid : false"
+            v-if="props.row.payments ? props.row.payments.paid : false"
             color="positive"
           >
             oui

@@ -57,7 +57,7 @@
             <q-item-section>
               <q-item-label>Numéro de téléphone d'urgence :</q-item-label>
               <q-item-label caption>
-                {{ user.emergencyPhone }}
+                {{ user.phoneEmergency }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -155,7 +155,7 @@
               <q-item-label>Cotisation :</q-item-label>
               <div class="row justify-between">
                 <q-checkbox
-                  v-model="user.payment.paid"
+                  v-model="user.payments.paid"
                   disable
                   color="positive"
                   label="Fournis"

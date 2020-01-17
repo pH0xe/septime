@@ -174,6 +174,7 @@ export default {
         zip: this.data.address.zip
       };
 
+      // todo wesh manque plein de truc
       const userData = {
         firstName,
         lastName,
@@ -184,7 +185,11 @@ export default {
         birthDate,
         address,
         laterality,
-        certificateDate
+        certificateDate,
+        cerfa: true,
+        gender: 'N/A',
+        payments: {},
+        weapons: ['foil']
       };
 
       // Debug

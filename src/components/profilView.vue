@@ -81,12 +81,12 @@
         </q-tab-panel>
 
         <q-tab-panel name="payment">
-          <div v-if="currentUser.payment">
+          <div v-if="currentUser.payments">
             <div class="text-h6 q-mb-none">
               Cotisation fournis ?
             </div>
             <q-badge
-              v-if="currentUser.payment.paid"
+              v-if="currentUser.payments.paid"
               color="positive"
               label="Oui"
             />
@@ -101,7 +101,7 @@
             <div class="text-h6 q-mb-none">
               Montant :
             </div>
-            <p>{{ currentUser.payment.amount }}€</p>
+            <p>{{ currentUser.payments.amount }}€</p>
 
             <q-separator />
 
@@ -109,7 +109,7 @@
               Caution fournis ?
             </div>
             <q-badge
-              v-if="currentUser.payment.deposit"
+              v-if="currentUser.payments.deposit"
               color="positive"
               label="Oui"
             />
@@ -125,7 +125,7 @@
               Assurance + :
             </div>
             <q-badge
-              v-if="currentUser.payment.assurance"
+              v-if="currentUser.payments.assurance"
               color="positive"
               label="Oui"
             />
@@ -159,14 +159,14 @@
 
           <q-separator />
 
-          <div v-if="currentUser.payment">
+          <div v-if="currentUser.payments">
             <div
               class="text-h6 q-mb-none"
             >
               Pass compétition :
             </div>
             <q-badge
-              v-if="currentUser.payment.competition"
+              v-if="currentUser.payments.competition"
               color="positive"
               label="Oui"
             />
