@@ -32,6 +32,45 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    match /equipments/{equipmentId} {
+      // Allow an admin to query equipment
+      allow get, list: if isAdmin();
+
+      // Allow admins to create, update and delete whatever they want
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /equipmentsType/{equipmentTypeId} {
+      // Allow an admin to query equipmentsType
+      allow get, list: if isAdmin();
+
+      // Allow admins to create, update and delete whatever they want
+      allow create, update, delete: if isAdmin();
+    }
+
+     match /news/{newsID} {
+      // Allow everybody to query news
+      allow get, list: if true;
+
+      // Allow admins to create, update and delete news
+      allow create, update, delete: if isAdmin();
+    }
+
+     match /events/{evnetsID} {
+      // Allow everybody to query events
+      allow get, list: if true;
+
+      // Allow admins to create, update and delete news
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /trainings/{trainingId} {
+
+    	allow read: if true;
+    	// allow every things to admin
+      allow write: if isAdmin();
+    }
+
     // Fallback, explicitly disallow everything else
     match /{document=**} {
     	allow read, write: if false;
