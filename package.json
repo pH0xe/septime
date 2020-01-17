@@ -2,7 +2,7 @@
   "name": "septime",
   "version": "0.0.1",
   "description": "Outil de gestion de club d'escrime",
-  "productName": "Septime",
+  "productName": "Cercle d'escrime de Moirans",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Lucas Malandrino <lucas.malandrino@gmail.com>",

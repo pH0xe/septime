@@ -16,10 +16,10 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
 // Setup firebase messaging
 
 firebase.initializeApp({
-  projectId: 'septime-dev',
-  apiKey: 'AIzaSyDOQqwP1k9ZRz43v2LY2OpV3SnwHEUCONo',
-  messagingSenderId: '172397126842',
-  appId: '1:172397126842:web:676260a3ad9eab19c44e83'
+  projectId: 'escrime-moirans',
+  apiKey: 'AIzaSyCJj0bOoUj6rKqNMGxL8wRCLbOAxsBiUB8',
+  messagingSenderId: '228008217062',
+  appId: '1:228008217062:web:9499c475fe821c71eb2e27'
 });
 
 const messaging = firebase.messaging();
