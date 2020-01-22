@@ -5,7 +5,7 @@
       :ratio="ratioMainImage"
     >
       <div class="absolute-full flex flex-center column">
-        <h1 class="text-h1 text-uppercase text-weight-light">
+        <h1 class="text-h3 text-uppercase text-weight-light">
           Cercle d'escrime de moirans
         </h1>
       </div>

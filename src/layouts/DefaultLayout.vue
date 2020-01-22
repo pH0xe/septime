@@ -11,7 +11,7 @@
             <q-avatar>
               <img src="~assets/appLogo.svg">
             </q-avatar>
-            Cercle d'escrime de Moirans
+            CEM
           </router-link>
         </q-toolbar-title>
 
