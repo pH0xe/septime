@@ -11,7 +11,7 @@
             <q-avatar>
               <img src="~assets/appLogo.svg">
             </q-avatar>
-            Septime
+            Cercle d'escrime de Moirans
           </router-link>
         </q-toolbar-title>
 
@@ -34,7 +34,7 @@
         :inline-actions="!$q.platform.is.mobile"
         class="bg-secondary"
       >
-        Voter compte n'est pas vérifié. Vérifiez votre boîte mail pour un lien de vérification.
+        Votre compte n'est pas vérifié. Vérifiez votre boîte mail pour un lien de vérification.
         <template v-slot:avatar>
           <q-icon name="mdi-email" />
         </template>
