@@ -253,6 +253,18 @@ export default {
               });
           }
         });
+
+      db.collection('users')
+        .doc(user.uid)
+        .update({ email: newEmail })
+        .catch((err) => {
+          console.log('Error while updating email: ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
     },
 
     // eslint-disable-next-line no-unused-vars
