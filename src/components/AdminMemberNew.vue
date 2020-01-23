@@ -468,14 +468,19 @@ export default {
             this.$refs.certificateUploader.extra.filename = uid;
             this.$refs.profileUploader.extra.filename = uid;
 
-            return this.$refs.certificateUploader.upload();
+            return this.$refs.certificateUploader.upload().catch(() => {
+              console.error('Certificate not uploaded');
+            });
           })
           .then(() => {
             this.$q.loading.show({
               message: 'Upload de la photo...'
             });
 
-            return this.$refs.profileUploader.upload();
+            return this.$refs.profileUploader.upload()
+              .catch(() => {
+                console.error('Profil pic not uploaded');
+              });
           })
           .then(() => {
             this.$q.notify({
