@@ -118,7 +118,7 @@ export default {
     orderedNews() {
       const newsCopy = Array.from(this.news);
       newsCopy.sort((news1, news2) => {
-        if (news1.date < news2.date) {
+        if (news1.date > news2.date) {
           return -1;
         }
         return 1;
@@ -133,6 +133,7 @@ export default {
       }
 
       let filtered = Array.from(this.trainings);
+      filtered = filtered.filter((t) => t.endDate > new Date());
 
       filtered = filtered
         .filter((training) => training.group.includes(this.currentUser.group));
@@ -144,11 +145,15 @@ export default {
         return 1;
       });
 
+      filtered = filtered.filter((t) => t.students.find((s) => s.uid === this.currentUser.uid));
+
       return filtered.slice(0, 3);
     },
 
     upcomingEvents() {
-      const copy = Array.from(this.events);
+      let copy = Array.from(this.events);
+
+      copy = copy.filter((t) => t.endDate > new Date());
 
       copy.sort((e1, e2) => {
         if (e1.startDate < e2.startDate) {

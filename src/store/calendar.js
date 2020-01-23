@@ -4,14 +4,17 @@ import { Weapons } from '../js/Weapons';
 
 export default {
   state: {
-    calendar: []
+    events: [],
+    trainings: []
   },
 
   mutations: {
-    setCalendar(state, { events }) {
-      events.forEach((event) => {
-        if (!state.calendar.find((fEvent) => fEvent.id === event.id)) state.calendar.push(event);
-      });
+    setEvents(state, { events }) {
+      state.events = events;
+    },
+
+    setTrainings(state, { trainings }) {
+      state.trainings = trainings;
     }
 
   },
@@ -60,7 +63,7 @@ export default {
           return event;
         }))
         .then((events) => {
-          commit('setCalendar', { events });
+          commit('setEvents', { events });
         })
         .catch((err) => {
           console.error('Error while fetching event calendar list', err);
@@ -98,13 +101,12 @@ export default {
           training.group.forEach((group) => {
             training.attendees.push({ id: parseInt(group, 36), displayName: group });
           });
-          delete training.students;
           delete training.group;
 
           return training;
         }))
         .then((trainings) => {
-          commit('setCalendar', { events: trainings });
+          commit('setTrainings', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainingsEvent list', err);

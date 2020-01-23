@@ -41,9 +41,8 @@ export default {
 
     sortedNews() {
       const newsCopy = Array.from(this.news);
-
-      newsCopy.sort((n1, n2) => {
-        if (n1.date < n2.date) {
+      newsCopy.sort((news1, news2) => {
+        if (news1.date > news2.date) {
           return -1;
         }
         return 1;
