@@ -82,13 +82,17 @@
       <router-view />
     </q-page-container>
 
-    <!--
     <q-footer>
-      <div class="text-subtitle1">
-        Sponsors ?
-      </div>
+      <q-toolbar>
+        <img
+          src="~assets/sad.svg"
+          class="image-footer"
+        >
+        link to legal
+        link to contact
+        link to ???
+      </q-toolbar>
     </q-footer>
-    -->
   </q-layout>
 </template>
 
@@ -190,7 +194,7 @@ export default {
     /* We want it to be like a col-8 */
     /* So 8/12 */
     /* So 2/12 on each side */
-    $padding: percentage(2/12);
+    $padding: percentage(1/12);
 
     padding-left: $padding;
     padding-right: $padding;
@@ -200,5 +204,10 @@ export default {
   #page-container /deep/ .page-padded {
     padding-top: 2rem;
     padding-bottom: 2rem;
+  }
+
+  .image-footer{
+    $size: percentage(1/24);
+    width: $size;
   }
 </style>
