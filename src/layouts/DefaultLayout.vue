@@ -83,15 +83,64 @@
     </q-page-container>
 
     <q-footer>
-      <q-toolbar>
-        <img
-          src="~assets/sad.svg"
-          class="image-footer"
+      <div>
+        <footer-image
+          link="http://www.isere.gouv.fr/Services-de-l-Etat/Sante-et-cohesion-sociale/Direction-Departementale-de-la-Cohesion-Sociale-D.D.C.S/DDCS-presentation-et-organigramme"
+          image-link="prefet.png"
+        />
+        <footer-image
+          link="https://www.isere.fr/"
+          image-link="isere.png"
+        />
+        <footer-image
+          link="http://www.escrime-ffe.fr/"
+          image-link="ffe.png"
+        />
+        <footer-image
+          link="http://escrime.ds.free.fr/joomla/index.php"
+          image-link="ligue.jpeg"
+        />
+        <footer-image
+          link="https://escrime38.wordpress.com/"
+          image-link="comite.png"
+        />
+        <footer-image
+          link="http://www.ville-moirans.fr/"
+          image-link="moirans.jpg"
+        />
+        <footer-image
+          link="https://www.voiron.fr/"
+          image-link="voiron.jpg"
+        />
+        <footer-image
+          link="https://www.auvergnerhonealpes.fr/"
+          image-link="AURA.png"
+        />
+        <router-link
+          tag="div"
+          :to="{name: 'legal_notice'}"
+          class="cursor-pointer"
         >
-        link to legal
+          Mentions légales
+        </router-link>
+
+        <router-link
+          tag="div"
+          :to="{name: 'contact', params: {to: 'webmaster'}}"
+          class="cursor-pointer"
+        >
+          Contact webmaster
+        </router-link>
+        <router-link
+          tag="div"
+          :to="{name: 'contact', params: {to: 'CEM'}}"
+          class="cursor-pointer"
+        >
+          Contact Cercle d'escrime de Moirans
+        </router-link>
         link to contact
         link to ???
-      </q-toolbar>
+      </div>
     </q-footer>
   </q-layout>
 </template>
@@ -101,10 +150,12 @@ import { mapGetters } from 'vuex';
 import { auth } from '../boot/firebase';
 import NavbarLinks from '../components/NavbarLinks.vue';
 import NavbarAccount from '../components/NavbarAccount';
+import FooterImage from '../components/footerImage';
 
 export default {
   name: 'DefaultLayout',
   components: {
+    FooterImage,
     NavbarAccount,
     NavbarLinks
   },
@@ -204,10 +255,5 @@ export default {
   #page-container /deep/ .page-padded {
     padding-top: 2rem;
     padding-bottom: 2rem;
-  }
-
-  .image-footer{
-    $size: percentage(1/24);
-    width: $size;
   }
 </style>
