@@ -126,14 +126,14 @@
 
         <router-link
           tag="div"
-          :to="{name: 'contact', params: {to: 'webmaster'}}"
+          :to="{name: 'contact', query: {to: 'webmaster'}}"
           class="cursor-pointer"
         >
           Contact webmaster
         </router-link>
         <router-link
           tag="div"
-          :to="{name: 'contact', params: {to: 'CEM'}}"
+          :to="{name: 'contact', query: {to: 'cem'}}"
           class="cursor-pointer"
         >
           Contact Cercle d'escrime de Moirans
