@@ -1,5 +1,5 @@
 <template lang="html">
-  <q-layout view="hHh LpR lFr">
+  <q-layout view="hHh LpR fff">
     <q-header>
       <q-toolbar>
         <q-toolbar-title>
@@ -83,63 +83,68 @@
     </q-page-container>
 
     <q-footer>
-      <div>
-        <footer-image
-          link="http://www.isere.gouv.fr/Services-de-l-Etat/Sante-et-cohesion-sociale/Direction-Departementale-de-la-Cohesion-Sociale-D.D.C.S/DDCS-presentation-et-organigramme"
-          image-link="prefet.png"
-        />
-        <footer-image
-          link="https://www.isere.fr/"
-          image-link="isere.png"
-        />
-        <footer-image
-          link="http://www.escrime-ffe.fr/"
-          image-link="ffe.png"
-        />
-        <footer-image
-          link="http://escrime.ds.free.fr/joomla/index.php"
-          image-link="ligue.jpeg"
-        />
-        <footer-image
-          link="https://escrime38.wordpress.com/"
-          image-link="comite.png"
-        />
-        <footer-image
-          link="http://www.ville-moirans.fr/"
-          image-link="moirans.jpg"
-        />
-        <footer-image
-          link="https://www.voiron.fr/"
-          image-link="voiron.jpg"
-        />
-        <footer-image
-          link="https://www.auvergnerhonealpes.fr/"
-          image-link="AURA.png"
-        />
-        <router-link
-          tag="div"
-          :to="{name: 'legal_notice'}"
-          class="cursor-pointer"
-        >
-          Mentions légales
-        </router-link>
+      <div align="center">
+        <div class="q-py-sm">
+          <footer-image
+            link="http://www.isere.gouv.fr/Services-de-l-Etat/Sante-et-cohesion-sociale/Direction-Departementale-de-la-Cohesion-Sociale-D.D.C.S/DDCS-presentation-et-organigramme"
+            image-link="prefet.png"
+          />
+          <footer-image
+            link="https://www.isere.fr/"
+            image-link="isere.png"
+          />
+          <footer-image
+            link="http://www.escrime-ffe.fr/"
+            image-link="ffe.png"
+          />
+          <footer-image
+            link="http://escrime.ds.free.fr/joomla/index.php"
+            image-link="ligue.jpeg"
+          />
+          <footer-image
+            link="https://escrime38.wordpress.com/"
+            image-link="comite.png"
+          />
+          <footer-image
+            link="http://www.ville-moirans.fr/"
+            image-link="moirans.jpg"
+          />
+          <footer-image
+            link="https://www.voiron.fr/"
+            image-link="voiron.jpg"
+          />
+          <footer-image
+            link="https://www.auvergnerhonealpes.fr/"
+            image-link="AURA.png"
+          />
+        </div>
+        <div class="q-py-sm">
+          <router-link
+            :to="{name: 'contact', query: {to: 'legalNotice'}}"
+            class="cursor-pointer simple-link"
+          >
+            Mentions légales
+          </router-link>
 
-        <router-link
-          tag="div"
-          :to="{name: 'contact', query: {to: 'webmaster'}}"
-          class="cursor-pointer"
-        >
-          Contact webmaster
-        </router-link>
-        <router-link
-          tag="div"
-          :to="{name: 'contact', query: {to: 'cem'}}"
-          class="cursor-pointer"
-        >
-          Contact Cercle d'escrime de Moirans
-        </router-link>
-        link to contact
-        link to ???
+          <router-link
+            :to="{name: 'contact', query: {to: 'webmasterContact'}}"
+            class="cursor-pointer simple-link"
+          >
+            ● Contact webmaster
+          </router-link>
+          <router-link
+            :to="{name: 'contact', query: {to: 'clubContact'}}"
+            class="cursor-pointer simple-link"
+          >
+            ● Contact Cercle d'escrime de Moirans
+          </router-link>
+          <router-link
+            :to="{name: 'contact', query: {to: 'access'}}"
+            class="cursor-pointer simple-link"
+          >
+            ● Accès Cercle d'escrime de Moirans
+          </router-link>
+        </div>
       </div>
     </q-footer>
   </q-layout>
@@ -255,5 +260,10 @@ export default {
   #page-container /deep/ .page-padded {
     padding-top: 2rem;
     padding-bottom: 2rem;
+  }
+
+  .simple-link {
+    color: white;
+    text-decoration: none;
   }
 </style>

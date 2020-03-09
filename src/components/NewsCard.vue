@@ -14,9 +14,10 @@
           {{ title }}
         </div>
         <div
-          class="text-subtitle1 ellipsis"
-          v-html="content"
-        />
+          class="ellipsis"
+        >
+          {{ firstLine }}...
+        </div>
       </div>
     </q-img>
   </q-card>
@@ -46,6 +47,13 @@ export default {
       required: true
     }
   },
+
+  computed: {
+    firstLine() {
+      return this.content.split('<div>')[0];
+    }
+  },
+
   methods: {
     openDialog() {
       this.$q.dialog({
