@@ -118,6 +118,23 @@
     />
 
     <div class="text-body2 q-mt-md">
+      Veuillez sélectionner votre arme :
+    </div>
+    <q-option-group
+      v-model="weaponsChoice"
+      :options="weaponsOpt"
+      color="primary"
+      type="checkbox"
+      inline
+    />
+    <div
+      v-if="$v.weaponsChoice.$error"
+      class="text-body2 text-negative q-mt-none"
+    >
+      Veuillez sélectionner au moins une arme
+    </div>
+
+    <div class="text-body2 q-mt-md">
       Considérant votre date de naissance vous serez classé en
       <q-badge color="primary">
         {{ group | uppercase }}
@@ -150,6 +167,22 @@ import { isLaterality, length } from '../js/vuelidate-custom-validators';
 import { Laterality } from '../js/Laterality';
 import { Group } from '../js/Group';
 import FirebaseUploader from './FirebaseUploader';
+import { Weapons } from '../js/Weapons';
+
+const weaponsOpt = [
+  {
+    label: 'Fleuret',
+    value: Weapons.FOIL
+  },
+  {
+    label: 'Epée',
+    value: Weapons.EPEE
+  },
+  {
+    label: 'Sabre',
+    value: Weapons.SABRE
+  }
+];
 
 export default {
   name: 'RegisterStepPractising',
@@ -165,7 +198,8 @@ export default {
 
   data: () => ({
     certificateDate: null,
-    laterality: Laterality.RIGHT
+    laterality: Laterality.RIGHT,
+    weaponsChoice: []
   }),
 
   validations: {
@@ -176,6 +210,9 @@ export default {
     laterality: {
       required,
       isLaterality
+    },
+    weaponsChoice: {
+      required
     }
   },
 
@@ -190,6 +227,10 @@ export default {
 
     group() {
       return Group.from(this.birthDate);
+    },
+
+    weaponsOpt() {
+      return weaponsOpt;
     }
   },
 
@@ -206,12 +247,13 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        const { certificateDateParsed: certificateDate, laterality } = this;
+        const { certificateDateParsed: certificateDate, laterality, weaponsChoice } = this;
         this.$emit('submit', {
           certificateDate,
           laterality,
           photoUploader: this.$refs.photoUploader,
-          certificateUploader: this.$refs.certificateUploader
+          certificateUploader: this.$refs.certificateUploader,
+          weaponsChoice
         });
       }
     }

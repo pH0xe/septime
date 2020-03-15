@@ -62,7 +62,8 @@ exports.adminCreateMember = functions.https.onCall(async (data, context) => {
       cerfa: data.cerfa,
       gender: data.gender,
       payments: data.payments,
-      weapons: data.weapons
+      weapons: data.weapons,
+      laterality: data.laterality
     };
 
     await admin.firestore()

@@ -165,7 +165,7 @@ export default {
       // Prepare data
       const {
         firstName, lastName, email, password, phone, phoneEmergency,
-        birthDate, laterality, certificateDate
+        birthDate, laterality, certificateDate, gender, weaponsChoice
       } = this.data;
 
       const address = {
@@ -174,7 +174,6 @@ export default {
         zip: this.data.address.zip
       };
 
-      // todo wesh manque plein de truc
       const userData = {
         firstName,
         lastName,
@@ -186,10 +185,10 @@ export default {
         address,
         laterality,
         certificateDate,
-        cerfa: true,
-        gender: 'N/A',
+        cerfa: false,
+        gender,
         payments: {},
-        weapons: ['foil']
+        weapons: weaponsChoice
       };
 
       // Debug

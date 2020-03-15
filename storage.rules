@@ -63,6 +63,11 @@ service firebase.storage {
 
       allow read, update, delete: if false;
     }
+
+    match /important/{docId} {
+        	allow write : if false;
+          allow read: if true;
+    }
   }
 }
 

@@ -71,6 +71,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /settings/{settingsId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Fallback, explicitly disallow everything else
     match /{document=**} {
     	allow read, write: if false;
