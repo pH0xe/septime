@@ -34,6 +34,7 @@
     "@quasar/app": "^1.4.2",
     "@quasar/quasar-app-extension-dotenv": "^1.0.0",
     "@quasar/quasar-app-extension-icon-genie": "^1.1.2",
+    "@quasar/quasar-app-extension-qpdfviewer": "^1.0.0-beta.5",
     "@vue/eslint-config-airbnb": "^5.0.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.1",

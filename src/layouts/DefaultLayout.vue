@@ -1,5 +1,5 @@
 <template lang="html">
-  <q-layout view="hHh LpR lFr">
+  <q-layout view="hHh LpR fff">
     <q-header>
       <q-toolbar>
         <q-toolbar-title>
@@ -82,13 +82,71 @@
       <router-view />
     </q-page-container>
 
-    <!--
     <q-footer>
-      <div class="text-subtitle1">
-        Sponsors ?
+      <div align="center">
+        <div class="q-py-sm">
+          <footer-image
+            link="http://www.isere.gouv.fr/Services-de-l-Etat/Sante-et-cohesion-sociale/Direction-Departementale-de-la-Cohesion-Sociale-D.D.C.S/DDCS-presentation-et-organigramme"
+            image-link="prefet.png"
+          />
+          <footer-image
+            link="https://www.isere.fr/"
+            image-link="isere.png"
+          />
+          <footer-image
+            link="http://www.escrime-ffe.fr/"
+            image-link="ffe.png"
+          />
+          <footer-image
+            link="http://escrime.ds.free.fr/joomla/index.php"
+            image-link="ligue.jpeg"
+          />
+          <footer-image
+            link="https://escrime38.wordpress.com/"
+            image-link="comite.png"
+          />
+          <footer-image
+            link="http://www.ville-moirans.fr/"
+            image-link="moirans.jpg"
+          />
+          <footer-image
+            link="https://www.voiron.fr/"
+            image-link="voiron.jpg"
+          />
+          <footer-image
+            link="https://www.auvergnerhonealpes.fr/"
+            image-link="AURA.png"
+          />
+        </div>
+        <div class="q-py-sm">
+          <router-link
+            :to="{name: 'contact', query: {to: 'legalNotice'}}"
+            class="cursor-pointer simple-link"
+          >
+            Mentions légales
+          </router-link>
+
+          <router-link
+            :to="{name: 'contact', query: {to: 'webmasterContact'}}"
+            class="cursor-pointer simple-link"
+          >
+            ● Contact webmaster
+          </router-link>
+          <router-link
+            :to="{name: 'contact', query: {to: 'clubContact'}}"
+            class="cursor-pointer simple-link"
+          >
+            ● Contact Cercle d'escrime de Moirans
+          </router-link>
+          <router-link
+            :to="{name: 'contact', query: {to: 'access'}}"
+            class="cursor-pointer simple-link"
+          >
+            ● Accès Cercle d'escrime de Moirans
+          </router-link>
+        </div>
       </div>
     </q-footer>
-    -->
   </q-layout>
 </template>
 
@@ -97,10 +155,12 @@ import { mapGetters } from 'vuex';
 import { auth } from '../boot/firebase';
 import NavbarLinks from '../components/NavbarLinks.vue';
 import NavbarAccount from '../components/NavbarAccount';
+import FooterImage from '../components/footerImage';
 
 export default {
   name: 'DefaultLayout',
   components: {
+    FooterImage,
     NavbarAccount,
     NavbarLinks
   },
@@ -190,7 +250,7 @@ export default {
     /* We want it to be like a col-8 */
     /* So 8/12 */
     /* So 2/12 on each side */
-    $padding: percentage(2/12);
+    $padding: percentage(1/12);
 
     padding-left: $padding;
     padding-right: $padding;
@@ -200,5 +260,10 @@ export default {
   #page-container /deep/ .page-padded {
     padding-top: 2rem;
     padding-bottom: 2rem;
+  }
+
+  .simple-link {
+    color: white;
+    text-decoration: none;
   }
 </style>

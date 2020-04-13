@@ -10,6 +10,7 @@ import news from './news';
 import trainings from './trainings';
 import events from './events';
 import calendar from './calendar';
+import settings from './settings';
 
 Vue.use(Vuex);
 
@@ -23,7 +24,8 @@ export default new Vuex.Store({
     equipmentsType,
     trainings,
     news,
-    calendar
+    calendar,
+    settings
   },
   strict: process.env.DEV
 });

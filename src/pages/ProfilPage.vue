@@ -4,6 +4,7 @@
       <div class="page-padded col-12 col-md-8">
         <q-splitter
           :value="20"
+          :horizontal="$q.platform.is.mobile"
         >
           <template v-slot:before>
             <div align="center">

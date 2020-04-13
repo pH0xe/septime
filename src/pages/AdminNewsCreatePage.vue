@@ -11,7 +11,7 @@
         <div class="col q-ml-lg">
           <q-input
             v-model="newsTitle"
-            label="Nom de l'actualitée"
+            label="Nom de l'actualité"
             error-message="Champ requis"
             color="admin-primary"
             :error="$v.newsTitle.$error"
@@ -145,6 +145,7 @@
 import { required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import { mapState, mapActions } from 'vuex';
+import { Notify } from 'quasar';
 import FirebaseUploader from '../components/FirebaseUploader';
 
 
@@ -183,11 +184,24 @@ export default {
             this.$q.loading.show({ message: 'Upload de l\'image' });
             this.$refs.newsUploader.extra.filename = id;
 
-            return this.$refs.newsUploader.upload();
+            return this.$refs.newsUploader.upload().catch((err) => {
+              Notify.create({
+                message: `Une erreur s'est produite: ${err}`,
+                color: 'negative',
+                position: 'bottom'
+              });
+            });
           })
           .then(() => {
             this.$q.loading.hide();
             this.$router.replace({ name: 'admin_news' });
+          })
+          .catch((err) => {
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'bottom'
+            });
           });
       }
     }

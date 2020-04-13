@@ -6,6 +6,7 @@ import CalendarPage from '../pages/CalendarPage';
 import NewsArticlePage from '../pages/NewsArticlePage';
 import ProfilPage from '../pages/ProfilPage';
 import ProfilUpdatePage from '../pages/ProfilUpdatePage';
+import ContactPage from '../pages/ContactPage';
 
 
 const routes = [
@@ -64,6 +65,11 @@ const routes = [
         meta: {
           requiresAuth: true
         }
+      },
+      {
+        path: 'contact',
+        name: 'contact',
+        component: ContactPage
       }
     ]
   },
