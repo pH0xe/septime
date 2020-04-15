@@ -18,12 +18,13 @@ export default {
   mutations: {
     setSettings(state, { settings }) {
       state.settings = settings;
-    },
-
-    updateIsOpen(state, { settings }) {
       const set = Array.from(settings);
       const registerSet = set.find((s) => s.type === 'registerSettings');
       state.isOpen = registerSet.isOpen;
+    },
+
+    updateIsOpen(state, { isOpen }) {
+      state.isOpen = isOpen;
     },
 
     updateClubState(state, {
@@ -49,7 +50,6 @@ export default {
         })
         .then((settings) => {
           commit('setSettings', { settings });
-          commit('updateIsOpen', { settings });
         })
         .catch((err) => {
           console.error('Error while fetching settings list', err);
@@ -81,7 +81,25 @@ export default {
           });
         })
         .catch((err) => {
-          console.log('Error while updating news : ', err);
+          console.log('Error while updating club settings : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    updateRegisterOpened({ commit }, {
+      setting, value
+    }) {
+      db.collection('settings').doc(setting.id)
+        .update({ isOpen: value })
+        .then(() => {
+          commit('updateIsOpen', { isOpen: value });
+        })
+        .catch((err) => {
+          console.log('Error while updating registration open : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
