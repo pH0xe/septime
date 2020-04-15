@@ -5,12 +5,25 @@ import { db } from '../boot/firebase';
 export default {
   namespaced: false,
   state: {
-    settings: []
+    settings: [],
+    isOpen: false
+  },
+
+  getters: {
+    isRegisterOpen(state) {
+      return !!state.isOpen;
+    }
   },
 
   mutations: {
     setSettings(state, { settings }) {
       state.settings = settings;
+    },
+
+    updateIsOpen(state, { settings }) {
+      const set = Array.from(settings);
+      const registerSet = set.find((s) => s.type === 'registerSettings');
+      state.isOpen = registerSet.isOpen;
     },
 
     updateClubState(state, {
@@ -36,6 +49,7 @@ export default {
         })
         .then((settings) => {
           commit('setSettings', { settings });
+          commit('updateIsOpen', { settings });
         })
         .catch((err) => {
           console.error('Error while fetching settings list', err);

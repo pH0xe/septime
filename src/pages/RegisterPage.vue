@@ -64,8 +64,16 @@
                 rounded
                 class="q-ma-lg bg-warning"
               >
-                Intégration HelloAsso ici
+                Payement via HelloAsso. <br>
+                Merci de correctement renseigner le formulaire puis cochez la case suivante. <br>
+                Une vérification du payement sera effectué avant que votre compte soit validé.
               </q-banner>
+              <iframe :src="link" />
+              <q-checkbox
+                v-model="hasCheckPaid"
+                label="J'ai payé via HelloAsso"
+                color="primary"
+              />
 
               <q-stepper-navigation>
                 <q-btn
@@ -107,7 +115,9 @@ export default {
     data: {
       birthDate: null, // Initialize birthDate for it to be reactive,
       isReferent: false
-    }
+    },
+    link: '',
+    hasCheckPaid: false
   }),
 
   computed: {
@@ -154,7 +164,9 @@ export default {
 
       // If not the last step
       if (this.isLastStep) {
-        this.onLastStepSubmit();
+        if (this.hasCheckPaid) {
+          this.onLastStepSubmit();
+        }
       } else {
         // Goto the next step
         this.next();
@@ -192,7 +204,7 @@ export default {
       };
 
       // Debug
-      console.log(userData);
+      // console.log(userData);
 
       // Create user
       this.$q.loading.show({
@@ -296,6 +308,7 @@ export default {
                 color: 'negative',
                 icon: 'mdi-alert'
               });
+              this.$router.replace({ name: 'home' });
           }
 
           this.$q.loading.hide();
@@ -304,3 +317,13 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  iframe {
+    border: solid 1px black;
+    height: 40em;
+    width: 100%;
+    display: block;
+    margin: auto;
+  }
+</style>
