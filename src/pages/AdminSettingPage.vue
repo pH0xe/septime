@@ -26,7 +26,7 @@
         <admin-setting-club />
       </q-tab-panel>
       <q-tab-panel name="register">
-        <admin-setting-register/>
+        <admin-setting-register />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
