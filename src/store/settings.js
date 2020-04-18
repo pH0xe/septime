@@ -5,7 +5,8 @@ import { db } from '../boot/firebase';
 export default {
   namespaced: false,
   state: {
-    settings: [],
+    settingsClub: [],
+    settingsRegister: [],
     isOpen: false
   },
 
@@ -17,10 +18,9 @@ export default {
 
   mutations: {
     setSettings(state, { settings }) {
-      state.settings = settings;
-      const set = Array.from(settings);
-      const registerSet = set.find((s) => s.type === 'registerSettings');
-      state.isOpen = registerSet.isOpen;
+      state.settingsClub = settings.find((s) => s.type === 'clubSettings');
+      state.settingsRegister = settings.find((s) => s.type === 'registerSettings');
+      state.isOpen = state.settingsRegister.isOpen;
     },
 
     updateIsOpen(state, { isOpen }) {
@@ -28,13 +28,12 @@ export default {
     },
 
     updateClubState(state, {
-      setting, president, treasurer, master, secretary
+      president, treasurer, master, secretary
     }) {
-      const index = state.settings.indexOf(setting);
-      state.settings[index].president = president;
-      state.settings[index].treasurer = treasurer;
-      state.settings[index].master = master;
-      state.settings[index].secretary = secretary;
+      state.settingsClub.president = president;
+      state.settingsClub.treasurer = treasurer;
+      state.settingsClub.master = master;
+      state.settingsClub.secretary = secretary;
     }
   },
 
@@ -73,7 +72,6 @@ export default {
         })
         .then(() => {
           commit('updateClubState', {
-            setting,
             president: presidentInfo,
             treasurer: treasurerInfo,
             master: masterInfo,

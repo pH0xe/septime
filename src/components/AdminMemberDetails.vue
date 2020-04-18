@@ -1,13 +1,12 @@
 <template>
   <q-dialog
     ref="dialog"
-    :maximized="$q.platform.is.mobile"
+    maximized
     class="q-dialog-plugin"
     @hide="onDialogHide"
   >
     <q-card>
       <q-bar
-        v-if="$q.platform.is.mobile"
         class="bg-admin-primary"
       >
         <q-space />
@@ -20,7 +19,7 @@
         />
       </q-bar>
 
-      <q-card-section class="text-h5">
+      <q-card-section class="text-h5 text-center">
         {{ user.lastName }} {{ user.firstName }}
       </q-card-section>
       <q-separator />
@@ -160,6 +159,13 @@
                   color="positive"
                   label="Fournis"
                 />
+                <q-btn
+                  v-if="!user.payments.paid"
+                  label="Payement vérifié"
+                  icon="mdi-plus"
+                  color="positive"
+                  @click="setAsPaid"
+                />
               </div>
             </q-item-section>
           </q-item>
@@ -265,6 +271,7 @@ import { mapActions } from 'vuex';
 import { Weapons } from '../js/Weapons';
 import { Gender } from '../js/Gender';
 import { cloudFunctions } from '../boot/firebase';
+import AdminMemberPromptPaid from './AdminMemberPromptPaid';
 
 export default {
   name: 'AdminMemberDetails',
@@ -291,16 +298,20 @@ export default {
     show() {
       this.$refs.dialog.show();
     },
+
     hide() {
       this.$refs.dialog.hide();
     },
+
     onDialogHide() {
       this.$emit('hide');
     },
+
     onClickOk() {
       this.$emit('ok');
       this.hide();
     },
+
     downloadCertificate() {
       openURL(this.user.medicalCertificate);
     },
@@ -328,6 +339,7 @@ export default {
           });
         });
     },
+
     activateMember() {
       this.activateAccount({ member: this.user });
     },
@@ -352,6 +364,14 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    setAsPaid() {
+      this.$q.dialog({
+        component: AdminMemberPromptPaid,
+        parent: this,
+        user: this.user
+      });
     }
   }
 };

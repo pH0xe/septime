@@ -33,6 +33,8 @@
       flat
       bordered
       class="full-width"
+      @added="picAdded"
+      @removed="picRemoved"
     />
 
     <div class="text-body2 q-my-md">
@@ -66,6 +68,8 @@
           flat
           bordered
           class="full-width"
+          @added="certificateAdded"
+          @removed="certificateRemoved"
         />
       </div>
       <div class="col-12 col-md-6">
@@ -197,6 +201,8 @@ export default {
   },
 
   data: () => ({
+    isCertificate: false,
+    isProfilPic: false,
     certificateDate: null,
     laterality: Laterality.RIGHT,
     weaponsChoice: []
@@ -231,6 +237,10 @@ export default {
 
     weaponsOpt() {
       return weaponsOpt;
+    },
+
+    fileAreUploded() {
+      return this.isCertificate && this.isProfilPic;
     }
   },
 
@@ -245,8 +255,17 @@ export default {
 
     onSubmit() {
       this.$v.$touch();
+      const fileUploaded = this.fileAreUploded;
 
-      if (!this.$v.$invalid) {
+      if (!fileUploaded) {
+        this.$q.notify({
+          message: 'Merci de rajouter la photo et le certificat',
+          color: 'negative',
+          position: 'center'
+        });
+      }
+
+      if (!this.$v.$invalid && fileUploaded) {
         const { certificateDateParsed: certificateDate, laterality, weaponsChoice } = this;
         this.$emit('submit', {
           certificateDate,
@@ -256,6 +275,22 @@ export default {
           weaponsChoice
         });
       }
+    },
+
+    certificateAdded() {
+      this.isCertificate = true;
+    },
+
+    certificateRemoved() {
+      this.isCertificate = false;
+    },
+
+    picAdded() {
+      this.isProfilPic = true;
+    },
+
+    picRemoved() {
+      this.isProfilPic = false;
     }
   }
 };

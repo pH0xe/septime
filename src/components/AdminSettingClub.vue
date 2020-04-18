@@ -179,12 +179,9 @@ export default {
 
   computed: {
     ...mapState({
-      settings: (state) => state.settings.settings
-    }),
-
-    clubMembers() {
-      return this.settings.find((setting) => setting.type === 'clubMembers');
-    }
+      settingsClub: (state) => state.settings.settingsClub,
+      settingsRegister: (state) => state.settings.settingsRegister
+    })
   },
 
   data: () => ({
@@ -207,18 +204,18 @@ export default {
   },
 
   mounted() {
-    this.presidentLastName = this.clubMembers.president.lastName;
-    this.presidentFirstName = this.clubMembers.president.firstName;
-    this.presidentNumber = this.clubMembers.president.phone;
-    this.treasurerLastName = this.clubMembers.treasurer.lastName;
-    this.treasurerFirstName = this.clubMembers.treasurer.firstName;
-    this.treasurerNumber = this.clubMembers.treasurer.phone;
-    this.secretaryLastName = this.clubMembers.secretary.lastName;
-    this.secretaryFirstName = this.clubMembers.secretary.firstName;
-    this.secretaryNumber = this.clubMembers.secretary.phone;
-    this.masterLastName = this.clubMembers.master.lastName;
-    this.masterFirstName = this.clubMembers.master.firstName;
-    this.masterNumber = this.clubMembers.master.phone;
+    this.presidentLastName = this.settingsClub.president.lastName;
+    this.presidentFirstName = this.settingsClub.president.firstName;
+    this.presidentNumber = this.settingsClub.president.phone;
+    this.treasurerLastName = this.settingsClub.treasurer.lastName;
+    this.treasurerFirstName = this.settingsClub.treasurer.firstName;
+    this.treasurerNumber = this.settingsClub.treasurer.phone;
+    this.secretaryLastName = this.settingsClub.secretary.lastName;
+    this.secretaryFirstName = this.settingsClub.secretary.firstName;
+    this.secretaryNumber = this.settingsClub.secretary.phone;
+    this.masterLastName = this.settingsClub.master.lastName;
+    this.masterFirstName = this.settingsClub.master.firstName;
+    this.masterNumber = this.settingsClub.master.phone;
   },
 
   methods: {
@@ -295,7 +292,7 @@ export default {
       }
 
       this.updateClub({
-        setting: this.clubMembers, presidentInfo, treasurerInfo, masterInfo, secretaryInfo
+        setting: this.settingsClub, presidentInfo, treasurerInfo, masterInfo, secretaryInfo
       })
         .then(() => {
           Notify.create({

@@ -161,8 +161,7 @@ export default {
 
   computed: {
     ...mapState({
-      currentUser: (state) => state.auth.currentUser,
-      settings: (state) => state.settings.settings
+      currentUser: (state) => state.auth.currentUser
     }),
     ...mapGetters(['isLoggedIn', 'isRegisterOpen'])
   },

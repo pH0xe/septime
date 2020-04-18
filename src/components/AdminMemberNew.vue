@@ -274,6 +274,8 @@
                   hide-upload-btn
                   flat
                   bordered
+                  @added="certificateAdded"
+                  @removed="certificateRemoved"
                 />
               </q-item>
               <div>
@@ -304,6 +306,8 @@
                 hide-upload-btn
                 flat
                 bordered
+                @added="picAdded"
+                @removed="picRemoved"
               />
             </q-item>
           </q-card-section>
@@ -330,6 +334,7 @@
 <script>
 import { email, integer, required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
+import { mapActions } from 'vuex';
 import DateSelector from './DateSelector';
 import FirebaseUploader from './FirebaseUploader';
 import { Laterality } from '../js/Laterality';
@@ -348,6 +353,8 @@ export default {
   mixins: [validationMixin],
 
   data: () => ({
+    isCertificate: false,
+    isProfilPic: false,
     weapons: [],
     firstName: '',
     lastName: '',
@@ -420,20 +427,36 @@ export default {
     },
     Gender() {
       return Gender;
+    },
+
+    fileAreUploded() {
+      return this.isCertificate && this.isProfilPic;
     }
   },
 
   methods: {
+    ...mapActions(['fetchMembers']),
+
     show() {
       this.$refs.dialog.show();
     },
     hide() {
       this.$refs.dialog.hide();
     },
+
     onClickOk() {
       this.$v.$touch();
+      const fileUploaded = this.fileAreUploded;
 
-      if (!this.$v.$error) {
+      if (!fileUploaded) {
+        this.$q.notify({
+          message: 'Merci de rajouter la photo et le certificat',
+          color: 'negative',
+          position: 'center'
+        });
+      }
+
+      if (!this.$v.$error && fileUploaded) {
         const userData = {
           address: { ...this.address },
           birthDate: this.birthDate.toJSON(),
@@ -491,8 +514,6 @@ export default {
               icon: 'mdi-check',
               color: 'positive'
             });
-
-            return this.$store.commit('fetchMembers');
           })
           .then(() => {
             this.$q.loading.hide();
@@ -507,8 +528,25 @@ export default {
             });
 
             this.$q.loading.hide();
+            this.fetchMembers();
           });
       }
+    },
+
+    certificateAdded() {
+      this.isCertificate = true;
+    },
+
+    certificateRemoved() {
+      this.isCertificate = false;
+    },
+
+    picAdded() {
+      this.isProfilPic = true;
+    },
+
+    picRemoved() {
+      this.isProfilPic = false;
     }
   }
 };

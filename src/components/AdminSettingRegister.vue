@@ -9,6 +9,25 @@
       color="admin-primary"
       @input="onToggleChange"
     />
+
+    <q-separator />
+
+    <div class="text-h6 q-mt-lg">
+      Lien de l'adhésion HelloAsso
+    </div>
+    <a
+      href="https://aide.helloasso.com/hc/fr/articles/360000433106-Int%C3%A9grer-mon-formulaire-d-adh%C3%A9sion-sur-mon-site-internet"
+      target="_blank"
+    >
+      Cliquez ici pour savoir comment obtenir le code iframe à copier
+    </a>
+    <q-input
+      v-model="formURL"
+      class="w-50"
+      type="url"
+      color="admin-primary"
+      label="URL de l'adhésion HelloAsso"
+    />
   </div>
 </template>
 <script>
@@ -19,19 +38,17 @@ export default {
   name: 'AdminSettingRegister',
 
   data: () => ({
-    isOpen: false
+    isOpen: false,
+    formURL: null
   }),
 
   computed: {
     ...mapState({
-      settings: (state) => state.settings.settings
+      settingsClub: (state) => state.settings.settingsClub,
+      settingsRegister: (state) => state.settings.settingsRegister
     }),
 
-    ...mapGetters(['isRegisterOpen']),
-
-    clubMembers() {
-      return this.settings.find((setting) => setting.type === 'clubMembers');
-    }
+    ...mapGetters(['isRegisterOpen'])
   },
 
   beforeMount() {
@@ -46,15 +63,19 @@ export default {
     ...mapActions(['fetchSettings', 'updateRegisterOpened']),
 
     onToggleChange(value) {
-      const set = Array.from(this.settings);
-      const registerSet = set.find((s) => s.type === 'registerSettings');
-
-      this.updateRegisterOpened({ setting: registerSet, value });
+      this.updateRegisterOpened({ setting: this.settingsRegister, value });
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+a {
+  text-decoration: none;
+  color: darkred;
+}
 
+.w-50 {
+  width: 50%;
+}
 </style>

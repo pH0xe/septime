@@ -20,47 +20,47 @@
           Le bureau :
         </div>
         <div
-          v-if="clubMembers"
+          v-if="settings"
           class="q-mb-md"
         >
           <span class="underline"> Le président :</span>
           <ul class="q-ma-none">
-            <li>Nom : {{ clubMembers.president.lastName }}</li>
-            <li>Prénom : {{ clubMembers.president.firstName }}</li>
-            <li>Téléphone : {{ clubMembers.president.phone }}</li>
+            <li>Nom : {{ settings.president.lastName }}</li>
+            <li>Prénom : {{ settings.president.firstName }}</li>
+            <li>Téléphone : {{ settings.president.phone }}</li>
           </ul>
         </div>
         <div
-          v-if="clubMembers"
+          v-if="settings"
           class="q-mb-md"
         >
           <span class="underline"> Le trésorier :</span>
           <ul class="q-ma-none">
-            <li>Nom : {{ clubMembers.treasurer.lastName }}</li>
-            <li>Prénom : {{ clubMembers.treasurer.firstName }}</li>
-            <li>Téléphone : {{ clubMembers.treasurer.phone }}</li>
+            <li>Nom : {{ settings.treasurer.lastName }}</li>
+            <li>Prénom : {{ settings.treasurer.firstName }}</li>
+            <li>Téléphone : {{ settings.treasurer.phone }}</li>
           </ul>
         </div>
         <div
-          v-if="clubMembers"
+          v-if="settings"
           class="q-mb-md"
         >
           <span class="underline">Le secrétaire :</span>
           <ul class="q-ma-none">
-            <li>Nom : {{ clubMembers.secretary.lastName }}</li>
-            <li>Prénom : {{ clubMembers.secretary.firstName }}</li>
-            <li>Téléphone : {{ clubMembers.secretary.phone }}</li>
+            <li>Nom : {{ settings.secretary.lastName }}</li>
+            <li>Prénom : {{ settings.secretary.firstName }}</li>
+            <li>Téléphone : {{ settings.secretary.phone }}</li>
           </ul>
         </div>
         <div
-          v-if="clubMembers"
+          v-if="settings"
           class="q-mb-md"
         >
           <span class="underline">Le maître d'armes :</span>
           <ul class="q-ma-none">
-            <li>Nom : {{ clubMembers.master.lastName }}</li>
-            <li>Prénom : {{ clubMembers.master.firstName }}</li>
-            <li>Téléphone : {{ clubMembers.master.phone }}</li>
+            <li>Nom : {{ settings.master.lastName }}</li>
+            <li>Prénom : {{ settings.master.firstName }}</li>
+            <li>Téléphone : {{ settings.master.phone }}</li>
           </ul>
         </div>
       </q-card-section>
@@ -85,20 +85,14 @@ export default {
 
   props: {
     settings: {
-      type: Array,
+      type: Object,
       required: true
     }
   },
 
   data: () => ({
     url: 'mailto:escrime.moirans@free.fr'
-  }),
-
-  computed: {
-    clubMembers() {
-      return this.settings.find((setting) => setting.type === 'clubMembers');
-    }
-  }
+  })
 };
 </script>
 

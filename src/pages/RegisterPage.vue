@@ -68,7 +68,7 @@
                 Merci de correctement renseigner le formulaire puis cochez la case suivante. <br>
                 Une vérification du payement sera effectué avant que votre compte soit validé.
               </q-banner>
-              <iframe :src="link" />
+              <div v-html="link" />
               <q-checkbox
                 v-model="hasCheckPaid"
                 label="J'ai payé via HelloAsso"
@@ -101,6 +101,7 @@
 
 <script lang="js">
 import { Notify } from 'quasar';
+import { mapActions } from 'vuex';
 import store from '../store'; // Needed to access the store in beforeRouteEnter when the component hasn't been created yet
 import RegisterStepAccount from '../components/RegisterStepAccount';
 import RegisterStepCoordinates from '../components/RegisterStepCoordinates';
@@ -142,7 +143,18 @@ export default {
     }
   },
 
+  mounted() {
+    // if register is close come back to home
+    this.fetchSettings().then(() => {
+      if (!store.getters.isRegisterOpen || store.getters.isLoggedIn) {
+        this.$router.replace({ name: 'home' });
+      }
+    });
+  },
+
   methods: {
+    ...mapActions(['fetchSettings']),
+
     next() {
       this.$refs.stepper.next();
     },
@@ -199,7 +211,13 @@ export default {
         certificateDate,
         cerfa: false,
         gender,
-        payments: {},
+        payments: {
+          amount: 0,
+          assurance: false,
+          competition: false,
+          deposit: false,
+          paid: false
+        },
         weapons: weaponsChoice
       };
 
