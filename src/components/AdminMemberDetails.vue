@@ -304,12 +304,29 @@ export default {
     downloadCertificate() {
       openURL(this.user.medicalCertificate);
     },
+
     setAsAdmin() {
       this.setAdmin({ member: this.user });
+      cloudFunctions.addClaimsAdmin({ uid: this.user.uid, isAdmin: true })
+        .then(() => {
+          this.$q.notify({
+            message: 'Rôle ajouté avec succès',
+            icon: 'mdi-check',
+            color: 'positive'
+          });
+        });
     },
 
     removeFromAdmin() {
       this.removeAdmin({ member: this.user });
+      cloudFunctions.addClaimsAdmin({ uid: this.user.uid, isAdmin: false })
+        .then(() => {
+          this.$q.notify({
+            message: 'Rôle supprimé avec succès',
+            icon: 'mdi-check',
+            color: 'positive'
+          });
+        });
     },
     activateMember() {
       this.activateAccount({ member: this.user });

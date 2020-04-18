@@ -195,6 +195,13 @@ exports.addClaimsAdmin = functions.https.onCall(async (data, context) => {
   try {
     const { uid, isAdmin } = data;
 
+    admin.auth().setCustomUserClaims(uid, {isAdmin: isAdmin})
+      .then(() => {
+        return { isAdmin };
+      })
+      .catch((err) => {
+        return err;
+      });
 
     return uid;
 
