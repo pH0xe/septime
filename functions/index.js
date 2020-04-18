@@ -146,3 +146,63 @@ exports.validateStorageNews = functions.storage.object().onFinalize(async (objec
 
   return undefined;
 });
+
+exports.removeUser = functions.https.onCall(async (data, context) => {
+  try {
+    const { uid } = data;
+
+    // delete users from list
+    await admin.auth().deleteUser(uid)
+      .then(() => {
+        console.log("user delete from user list");
+        return true;
+      })
+      .catch((err) => {
+        console.log("Error when deleting user from list : ", err);
+      });
+
+    await admin.firestore().collection('users').doc(uid).delete()
+      .then(() => {
+        console.log("user delete from database");
+        return true;
+      })
+      .catch((err) => {
+        console.log("Error when deleting user from database : ", err);
+      });
+
+    const bucket = admin.storage().bucket();
+
+    if ((await bucket.file(`profile_pics/${uid}`).exists())[0]) {
+      await bucket.file(`profile_pics/${uid}`).delete();
+    }
+
+    if ((await bucket.file(`certificates/${uid}`).exists())[0]) {
+      await bucket.file(`certificates/${uid}`).delete();
+    }
+
+    return uid;
+
+  } catch (err) {
+    return {
+      error: true,
+      code: err.code,
+      message: err.message
+    };
+  }
+});
+
+exports.addClaimsAdmin = functions.https.onCall(async (data, context) => {
+  try {
+    const { uid, isAdmin } = data;
+
+
+    return uid;
+
+  } catch (err) {
+    return {
+      error: true,
+      code: err.code,
+      message: err.message
+    };
+  }
+});

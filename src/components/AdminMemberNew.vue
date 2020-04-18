@@ -447,8 +447,11 @@ export default {
           payments: { ...this.payments },
           phone: this.phone,
           weapons: [...this.weapons],
-          certificateDate: this.certificateDate.toJSON()
+          certificateDate: this.certificateDate.toJSON(),
+          laterality: this.laterality
         };
+
+        console.log(userData);
 
         this.$q.loading.show({
           message: 'Création du compte...'

@@ -35,7 +35,9 @@ export const cloudFunctions = {
   adminCreateMember: functions.httpsCallable('adminCreateMember'),
   getTopics: functions.httpsCallable('getTopics'),
   subscribeToTopic: functions.httpsCallable('subscribeToTopic'),
-  unsubscribeFromTopic: functions.httpsCallable('unsubscribeFromTopic')
+  unsubscribeFromTopic: functions.httpsCallable('unsubscribeFromTopic'),
+  removeUser: functions.httpsCallable('removeUser'),
+  addClaimsAdmin: functions.httpsCallable('addClaimsAdmin')
 };
 
 Vue.prototype.$firebase = firebase;

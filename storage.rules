@@ -5,6 +5,10 @@ service firebase.storage {
         		|| request.resource.contentType.matches('application/pdf');
     }
 
+    function isAdmin() {
+			return request.auth.token.isAdmin == true;
+    }
+
   	// Allow users to upload their certificate
     match /certificates/{userId} {
     	allow read: if request.auth != null && request.auth.uid == userId;
@@ -65,8 +69,8 @@ service firebase.storage {
     }
 
     match /important/{docId} {
-        	allow write : if false;
-          allow read: if true;
+    	allow write : if false;
+      allow read: if true;
     }
   }
 }

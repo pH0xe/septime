@@ -222,8 +222,40 @@
           label="Ok"
           @click="onClickOk"
         />
+        <q-btn
+          v-if="!user.isActive"
+          color="negative"
+          flat
+          label="Supprimer le compte"
+          @click="confirmDeleteAccount"
+        />
       </q-card-actions>
     </q-card>
+    <q-dialog
+      v-model="confirmDelete"
+    >
+      <q-card>
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">Voulez-vous vraiment supprimer cet utilisateur ?</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            v-close-popup
+            flat
+            label="Annuler"
+            color="admin-primary"
+          />
+          <q-btn
+            v-close-popup
+            flat
+            label="Valider"
+            color="negative"
+            @click="deleteAccount"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-dialog>
 </template>
 
@@ -232,6 +264,7 @@ import { openURL } from 'quasar';
 import { mapActions } from 'vuex';
 import { Weapons } from '../js/Weapons';
 import { Gender } from '../js/Gender';
+import { cloudFunctions } from '../boot/firebase';
 
 export default {
   name: 'AdminMemberDetails',
@@ -242,7 +275,8 @@ export default {
     }
   },
   data: () => ({
-    dialogDetails: false
+    dialogDetails: false,
+    confirmDelete: false
   }),
   computed: {
     Gender() {
@@ -253,7 +287,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount']),
+    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount', 'removeAccount', 'fetchMembers']),
     show() {
       this.$refs.dialog.show();
     },
@@ -273,12 +307,34 @@ export default {
     setAsAdmin() {
       this.setAdmin({ member: this.user });
     },
+
     removeFromAdmin() {
       this.removeAdmin({ member: this.user });
     },
     activateMember() {
       this.activateAccount({ member: this.user });
-      console.log('activer le compte a faire');
+    },
+
+    confirmDeleteAccount() {
+      this.confirmDelete = true;
+    },
+
+    deleteAccount() {
+      const data = {
+        uid: this.user.uid
+      };
+      this.$q.loading.show({
+        message: 'Suppression  du compte...'
+      });
+      cloudFunctions.removeUser({ ...data })
+        .then(() => {
+          this.$q.loading.hide();
+          this.fetchMembers();
+          this.hide();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
 };
