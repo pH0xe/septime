@@ -125,6 +125,13 @@
                   label="Fournis"
                 />
                 <q-btn
+                  v-if="!user.medicalCertificate"
+                  label="Ajouter"
+                  icon="mdi-file-upload"
+                  color="admin-primary"
+                  @click="addCertificate"
+                />
+                <q-btn
                   label="Télécharger"
                   icon="mdi-download"
                   color="admin-primary"
@@ -272,6 +279,7 @@ import { Weapons } from '../js/Weapons';
 import { Gender } from '../js/Gender';
 import { cloudFunctions } from '../boot/firebase';
 import AdminMemberPromptPaid from './AdminMemberPromptPaid';
+import AdminMemberAddCertificate from './AdminMemberAddCertificate';
 
 export default {
   name: 'AdminMemberDetails',
@@ -371,6 +379,21 @@ export default {
         component: AdminMemberPromptPaid,
         parent: this,
         user: this.user
+      });
+    },
+
+    addCertificate() {
+      this.$q.dialog({
+        component: AdminMemberAddCertificate,
+        parent: this,
+        user: this.user
+      }).onOk(() => {
+        this.fetchMembers();
+        this.$q.notify({
+          message: 'Certificat ajouté avec succès (un rafraîchissement de la page peut être nécessaire)',
+          icon: 'mdi-check',
+          color: 'positive'
+        });
       });
     }
   }
