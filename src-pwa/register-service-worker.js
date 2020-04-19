@@ -52,15 +52,24 @@ register(process.env.SERVICE_WORKER_FILE, {
   },
 
   updatefound(/* registration */) {
-    if (process.env.DEV) {
-      console.log('New content is downloading.');
-    }
+    console.log('New content is downloading.');
+    this.$q.notify({
+      message: 'Une mise a jours du site est en téléchargement',
+      color: 'info',
+      position: 'top'
+    });
   },
 
   updated(/* registration */) {
-    if (process.env.DEV) {
-      console.log('New content is available; please refresh.');
-    }
+    console.log('New content is available; please refresh.');
+    this.$q.dialog({
+      title: 'Mise à jour',
+      message: 'Une mise à jours est disponible. cliquez OK pour rafraîchir la page',
+      position: 'bottom'
+    })
+      .onOk(() => {
+        document.location.reload(true);
+      });
   },
 
   offline() {
