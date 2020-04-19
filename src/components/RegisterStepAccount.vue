@@ -40,6 +40,19 @@
       </div>
     </div>
 
+    <q-select
+      v-model="gender"
+      :options="genderOpt"
+      label="Sexe"
+      map-options
+      emit-value
+      required
+      error-message="Ce champ est requis"
+      :error="$v.gender.$error"
+      @blur="$v.gender.$touch"
+      @input="$v.gender.$touch"
+    />
+
     <q-input
       v-model.trim="email"
       label="E-mail"
@@ -133,6 +146,12 @@ import { date } from 'quasar';
 import { validationMixin } from 'vuelidate';
 import { minLength, required, email } from 'vuelidate/lib/validators';
 import { length } from '../js/vuelidate-custom-validators';
+import { Gender } from '../js/Gender';
+
+const genderOpt = [
+  { label: 'Femme', value: Gender.FEMALE },
+  { label: 'Homme', value: Gender.MALE }
+];
 
 export default {
   name: 'RegisterStepAccount',
@@ -142,6 +161,7 @@ export default {
 
     lastName: null,
     firstName: null,
+    gender: null,
     email: null,
     password: null,
     birthDate: null,
@@ -152,6 +172,7 @@ export default {
   validations: {
     lastName: { required },
     firstName: { required },
+    gender: { required },
     email: {
       required,
       email
@@ -169,6 +190,10 @@ export default {
   computed: {
     birthDateParsed() {
       return date.extractDate(this.birthDate, 'DD/MM/YYYY');
+    },
+
+    genderOpt() {
+      return genderOpt;
     }
   },
 
@@ -180,11 +205,11 @@ export default {
         const {
           // email est déjà utilisé dans les import
           // eslint-disable-next-line no-shadow
-          firstName, lastName, email, password, birthDateParsed: birthDate, isReferent
+          firstName, lastName, email, password, birthDateParsed: birthDate, isReferent, gender
         } = this;
 
         this.$emit('submit', {
-          firstName, lastName, email, password, birthDate, isReferent
+          firstName, lastName, email, password, birthDate, isReferent, gender
         });
       }
     }

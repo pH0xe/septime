@@ -64,8 +64,16 @@
                 rounded
                 class="q-ma-lg bg-warning"
               >
-                Intégration HelloAsso ici
+                Payement via HelloAsso. <br>
+                Merci de correctement renseigner le formulaire puis cochez la case suivante. <br>
+                Une vérification du payement sera effectué avant que votre compte soit validé.
               </q-banner>
+              <div v-html="link" />
+              <q-checkbox
+                v-model="hasCheckPaid"
+                label="J'ai payé via HelloAsso"
+                color="primary"
+              />
 
               <q-stepper-navigation>
                 <q-btn
@@ -93,6 +101,7 @@
 
 <script lang="js">
 import { Notify } from 'quasar';
+import { mapActions, mapState } from 'vuex';
 import store from '../store'; // Needed to access the store in beforeRouteEnter when the component hasn't been created yet
 import RegisterStepAccount from '../components/RegisterStepAccount';
 import RegisterStepCoordinates from '../components/RegisterStepCoordinates';
@@ -107,10 +116,16 @@ export default {
     data: {
       birthDate: null, // Initialize birthDate for it to be reactive,
       isReferent: false
-    }
+    },
+    link: '',
+    hasCheckPaid: false
   }),
 
   computed: {
+    ...mapState({
+      settingsRegister: (state) => state.settings.settingsRegister
+    }),
+
     isLastStep() {
       return this.step === 3;
     }
@@ -132,7 +147,19 @@ export default {
     }
   },
 
+  mounted() {
+    // if register is close come back to home
+    this.fetchSettings().then(() => {
+      if (!store.getters.isRegisterOpen || store.getters.isLoggedIn) {
+        this.$router.replace({ name: 'home' });
+      }
+      this.link = this.settingsRegister.linkToForm;
+    });
+  },
+
   methods: {
+    ...mapActions(['fetchSettings']),
+
     next() {
       this.$refs.stepper.next();
     },
@@ -154,7 +181,9 @@ export default {
 
       // If not the last step
       if (this.isLastStep) {
-        this.onLastStepSubmit();
+        if (this.hasCheckPaid) {
+          this.onLastStepSubmit();
+        }
       } else {
         // Goto the next step
         this.next();
@@ -165,7 +194,7 @@ export default {
       // Prepare data
       const {
         firstName, lastName, email, password, phone, phoneEmergency,
-        birthDate, laterality, certificateDate
+        birthDate, laterality, certificateDate, gender, weaponsChoice
       } = this.data;
 
       const address = {
@@ -174,7 +203,6 @@ export default {
         zip: this.data.address.zip
       };
 
-      // todo wesh manque plein de truc
       const userData = {
         firstName,
         lastName,
@@ -186,14 +214,20 @@ export default {
         address,
         laterality,
         certificateDate,
-        cerfa: true,
-        gender: 'N/A',
-        payments: {},
-        weapons: ['foil']
+        cerfa: false,
+        gender,
+        payments: {
+          amount: 0,
+          assurance: false,
+          competition: false,
+          deposit: false,
+          paid: false
+        },
+        weapons: weaponsChoice
       };
 
       // Debug
-      console.log(userData);
+      // console.log(userData);
 
       // Create user
       this.$q.loading.show({
@@ -297,6 +331,7 @@ export default {
                 color: 'negative',
                 icon: 'mdi-alert'
               });
+              this.$router.replace({ name: 'home' });
           }
 
           this.$q.loading.hide();
@@ -305,3 +340,13 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  iframe {
+    border: solid 1px black;
+    height: 40em;
+    width: 100%;
+    display: block;
+    margin: auto;
+  }
+</style>

@@ -105,8 +105,8 @@ module.exports = function (ctx) {
       workboxPluginMode: 'InjectManifest',
       workboxOptions: {}, // only for NON InjectManifest
       manifest: {
-        // name: 'Septime',
-        // short_name: 'Septime',
+        name: 'Cercle d\'Escrime de Moirans',
+        short_name: 'CEM',
         // description: 'Outil de gestion de club d'escrime',
         display: 'standalone',
         orientation: 'portrait',

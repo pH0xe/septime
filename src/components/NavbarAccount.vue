@@ -24,6 +24,7 @@
       color="white"
       text-color="primary"
       :to="{ name: 'register' }"
+      :disable="!isRegisterOpen"
     />
   </q-btn-group>
 
@@ -140,7 +141,7 @@
 </template>
 
 <script lang="js">
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import LoginDialog from './LoginDialog';
 
 export default {
@@ -162,7 +163,7 @@ export default {
     ...mapState({
       currentUser: (state) => state.auth.currentUser
     }),
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn', 'isRegisterOpen'])
   },
 
   watch: {
@@ -174,12 +175,15 @@ export default {
   },
 
   mounted() {
+    this.fetchSettings();
     if (this.$route.name === 'home' && this.$route.query.login && !this.$store.getters.isLoggedIn) {
       this.onClickLogin();
     }
   },
 
   methods: {
+    ...mapActions(['fetchSettings']),
+
     onClickLogin() {
       this.$q.dialog({
         component: LoginDialog,

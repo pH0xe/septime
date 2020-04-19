@@ -1,13 +1,12 @@
 <template>
   <q-dialog
     ref="dialog"
-    :maximized="$q.platform.is.mobile"
+    maximized
     class="q-dialog-plugin"
     @hide="onDialogHide"
   >
     <q-card>
       <q-bar
-        v-if="$q.platform.is.mobile"
         class="bg-admin-primary"
       >
         <q-space />
@@ -20,7 +19,7 @@
         />
       </q-bar>
 
-      <q-card-section class="text-h5">
+      <q-card-section class="text-h5 text-center">
         {{ user.lastName }} {{ user.firstName }}
       </q-card-section>
       <q-separator />
@@ -160,6 +159,13 @@
                   color="positive"
                   label="Fournis"
                 />
+                <q-btn
+                  v-if="!user.payments.paid"
+                  label="Payement vérifié"
+                  icon="mdi-plus"
+                  color="positive"
+                  @click="setAsPaid"
+                />
               </div>
             </q-item-section>
           </q-item>
@@ -222,8 +228,40 @@
           label="Ok"
           @click="onClickOk"
         />
+        <q-btn
+          v-if="!user.isActive"
+          color="negative"
+          flat
+          label="Supprimer le compte"
+          @click="confirmDeleteAccount"
+        />
       </q-card-actions>
     </q-card>
+    <q-dialog
+      v-model="confirmDelete"
+    >
+      <q-card>
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">Voulez-vous vraiment supprimer cet utilisateur ?</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            v-close-popup
+            flat
+            label="Annuler"
+            color="admin-primary"
+          />
+          <q-btn
+            v-close-popup
+            flat
+            label="Valider"
+            color="negative"
+            @click="deleteAccount"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-dialog>
 </template>
 
@@ -232,6 +270,8 @@ import { openURL } from 'quasar';
 import { mapActions } from 'vuex';
 import { Weapons } from '../js/Weapons';
 import { Gender } from '../js/Gender';
+import { cloudFunctions } from '../boot/firebase';
+import AdminMemberPromptPaid from './AdminMemberPromptPaid';
 
 export default {
   name: 'AdminMemberDetails',
@@ -242,7 +282,8 @@ export default {
     }
   },
   data: () => ({
-    dialogDetails: false
+    dialogDetails: false,
+    confirmDelete: false
   }),
   computed: {
     Gender() {
@@ -253,32 +294,84 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount']),
+    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount', 'removeAccount', 'fetchMembers']),
     show() {
       this.$refs.dialog.show();
     },
+
     hide() {
       this.$refs.dialog.hide();
     },
+
     onDialogHide() {
       this.$emit('hide');
     },
+
     onClickOk() {
       this.$emit('ok');
       this.hide();
     },
+
     downloadCertificate() {
       openURL(this.user.medicalCertificate);
     },
+
     setAsAdmin() {
       this.setAdmin({ member: this.user });
+      cloudFunctions.addClaimsAdmin({ uid: this.user.uid, isAdmin: true })
+        .then(() => {
+          this.$q.notify({
+            message: 'Rôle ajouté avec succès',
+            icon: 'mdi-check',
+            color: 'positive'
+          });
+        });
     },
+
     removeFromAdmin() {
       this.removeAdmin({ member: this.user });
+      cloudFunctions.addClaimsAdmin({ uid: this.user.uid, isAdmin: false })
+        .then(() => {
+          this.$q.notify({
+            message: 'Rôle supprimé avec succès',
+            icon: 'mdi-check',
+            color: 'positive'
+          });
+        });
     },
+
     activateMember() {
       this.activateAccount({ member: this.user });
-      console.log('activer le compte a faire');
+    },
+
+    confirmDeleteAccount() {
+      this.confirmDelete = true;
+    },
+
+    deleteAccount() {
+      const data = {
+        uid: this.user.uid
+      };
+      this.$q.loading.show({
+        message: 'Suppression  du compte...'
+      });
+      cloudFunctions.removeUser({ ...data })
+        .then(() => {
+          this.$q.loading.hide();
+          this.fetchMembers();
+          this.hide();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    setAsPaid() {
+      this.$q.dialog({
+        component: AdminMemberPromptPaid,
+        parent: this,
+        user: this.user
+      });
     }
   }
 };

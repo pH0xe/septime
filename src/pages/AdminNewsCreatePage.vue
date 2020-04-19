@@ -127,6 +127,8 @@
           hide-upload-btn
           flat
           bordered
+          @added="picUploader"
+          @removed="picUploader"
         />
       </q-card-section>
       <q-card-actions align="right">
@@ -156,7 +158,8 @@ export default {
 
   data: () => ({
     newsTitle: '',
-    newsText: ''
+    newsText: '',
+    isPic: false
   }),
 
   computed: {
@@ -170,7 +173,16 @@ export default {
 
     async createThisNews() {
       this.$v.$touch();
-      if (!this.$v.$error) {
+
+      if (!this.isPic) {
+        this.$q.notify({
+          message: 'La photo est obligatoire pour créer une actualité',
+          color: 'negative',
+          position: 'bottom'
+        });
+      }
+
+      if (!this.$v.$error && this.isPic) {
         const news = {
           title: this.newsTitle,
           text: this.newsText,
@@ -204,6 +216,10 @@ export default {
             });
           });
       }
+    },
+
+    picUploader() {
+      this.isPic = !this.isPic;
     }
   },
 

@@ -3,7 +3,7 @@
     <q-dialog
       ref="dialog"
       full-width
-      :maximized="$q.platform.is.mobile"
+      maximized
       @hide="hide"
     >
       <q-card>
@@ -11,7 +11,6 @@
           @submit.prevent="onClickOk"
         >
           <q-bar
-            v-if="$q.platform.is.mobile"
             class="bg-admin-primary"
           >
             <q-space />
@@ -274,6 +273,8 @@
                   hide-upload-btn
                   flat
                   bordered
+                  @added="certificateAdded"
+                  @removed="certificateRemoved"
                 />
               </q-item>
               <div>
@@ -304,6 +305,8 @@
                 hide-upload-btn
                 flat
                 bordered
+                @added="picAdded"
+                @removed="picRemoved"
               />
             </q-item>
           </q-card-section>
@@ -330,6 +333,7 @@
 <script>
 import { email, integer, required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
+import { mapActions } from 'vuex';
 import DateSelector from './DateSelector';
 import FirebaseUploader from './FirebaseUploader';
 import { Laterality } from '../js/Laterality';
@@ -348,6 +352,8 @@ export default {
   mixins: [validationMixin],
 
   data: () => ({
+    isCertificate: false,
+    isProfilPic: false,
     weapons: [],
     firstName: '',
     lastName: '',
@@ -420,20 +426,36 @@ export default {
     },
     Gender() {
       return Gender;
+    },
+
+    fileAreUploded() {
+      return this.isCertificate && this.isProfilPic;
     }
   },
 
   methods: {
+    ...mapActions(['fetchMembers']),
+
     show() {
       this.$refs.dialog.show();
     },
     hide() {
       this.$refs.dialog.hide();
     },
+
     onClickOk() {
       this.$v.$touch();
+      const fileUploaded = this.fileAreUploded;
 
-      if (!this.$v.$error) {
+      if (!fileUploaded) {
+        this.$q.notify({
+          message: 'Merci de rajouter la photo et le certificat',
+          color: 'negative',
+          position: 'center'
+        });
+      }
+
+      if (!this.$v.$error && fileUploaded) {
         const userData = {
           address: { ...this.address },
           birthDate: this.birthDate.toJSON(),
@@ -447,8 +469,11 @@ export default {
           payments: { ...this.payments },
           phone: this.phone,
           weapons: [...this.weapons],
-          certificateDate: this.certificateDate.toJSON()
+          certificateDate: this.certificateDate.toJSON(),
+          laterality: this.laterality
         };
+
+        console.log(userData);
 
         this.$q.loading.show({
           message: 'Création du compte...'
@@ -488,8 +513,6 @@ export default {
               icon: 'mdi-check',
               color: 'positive'
             });
-
-            return this.$store.commit('fetchMembers');
           })
           .then(() => {
             this.$q.loading.hide();
@@ -504,8 +527,25 @@ export default {
             });
 
             this.$q.loading.hide();
+            this.fetchMembers();
           });
       }
+    },
+
+    certificateAdded() {
+      this.isCertificate = true;
+    },
+
+    certificateRemoved() {
+      this.isCertificate = false;
+    },
+
+    picAdded() {
+      this.isProfilPic = true;
+    },
+
+    picRemoved() {
+      this.isProfilPic = false;
     }
   }
 };

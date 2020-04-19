@@ -27,6 +27,11 @@ export default {
     activateMember(state, member) {
       const index = state.members.indexOf(member);
       state.members[index].isActive = true;
+    },
+
+    changePaidState(state, { member, newPayments }) {
+      const index = state.members.indexOf(member);
+      state.members[index].payments = newPayments;
     }
   },
 
@@ -289,6 +294,23 @@ export default {
         .update({ phone: newPhone, phoneEmergency: newPhoneEmergency })
         .catch((err) => {
           console.log('Error while updating phone : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    changePaidInfo({ commit }, { member, newPayments }) {
+      db.collection('users')
+        .doc(member.uid)
+        .update({ payments: newPayments })
+        .then(() => {
+          commit('changePaidState', { member, newPayments });
+        })
+        .catch((err) => {
+          console.log('Error while changing paid information : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',

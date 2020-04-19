@@ -5,22 +5,39 @@ import { db } from '../boot/firebase';
 export default {
   namespaced: false,
   state: {
-    settings: []
+    settingsClub: [],
+    settingsRegister: [],
+    isOpen: false
+  },
+
+  getters: {
+    isRegisterOpen(state) {
+      return !!state.isOpen;
+    }
   },
 
   mutations: {
     setSettings(state, { settings }) {
-      state.settings = settings;
+      state.settingsClub = settings.find((s) => s.type === 'clubSettings');
+      state.settingsRegister = settings.find((s) => s.type === 'registerSettings');
+      state.isOpen = state.settingsRegister.isOpen;
+    },
+
+    updateIsOpen(state, { isOpen }) {
+      state.isOpen = isOpen;
     },
 
     updateClubState(state, {
-      setting, president, treasurer, master, secretary
+      president, treasurer, master, secretary
     }) {
-      const index = state.settings.indexOf(setting);
-      state.settings[index].president = president;
-      state.settings[index].treasurer = treasurer;
-      state.settings[index].master = master;
-      state.settings[index].secretary = secretary;
+      state.settingsClub.president = president;
+      state.settingsClub.treasurer = treasurer;
+      state.settingsClub.master = master;
+      state.settingsClub.secretary = secretary;
+    },
+
+    updateIframe(state, { linkToForm }) {
+      state.settingsRegister.linkToForm = linkToForm;
     }
   },
 
@@ -59,7 +76,6 @@ export default {
         })
         .then(() => {
           commit('updateClubState', {
-            setting,
             president: presidentInfo,
             treasurer: treasurerInfo,
             master: masterInfo,
@@ -67,7 +83,41 @@ export default {
           });
         })
         .catch((err) => {
-          console.log('Error while updating news : ', err);
+          console.log('Error while updating club settings : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    updateRegisterOpened({ commit }, {
+      setting, value
+    }) {
+      db.collection('settings').doc(setting.id)
+        .update({ isOpen: value })
+        .then(() => {
+          commit('updateIsOpen', { isOpen: value });
+        })
+        .catch((err) => {
+          console.log('Error while updating registration open : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    updateIframeLink({ commit }, { setting, value }) {
+      db.collection('settings').doc(setting.id)
+        .update({ linkToForm: value })
+        .then(() => {
+          commit('updateIframe', { linkToForm: value });
+        })
+        .catch((err) => {
+          console.log('Error while updating iframe link : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',

@@ -51,7 +51,7 @@
           </q-tab-panel>
 
           <q-tab-panel name="clubContact">
-            <contact-club :settings="settings" />
+            <contact-club :settings="settingsClub" />
           </q-tab-panel>
 
           <q-tab-panel name="access">
@@ -84,7 +84,7 @@ export default {
 
   computed: {
     ...mapState({
-      settings: (state) => state.settings.settings
+      settingsClub: (state) => state.settings.settingsClub
     })
   },
 

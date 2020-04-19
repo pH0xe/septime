@@ -10,7 +10,6 @@
 
           <q-img
             :src="currentNews.imgURL ? currentNews.imgURL : 'https://source.unsplash.com/random/400x200'"
-            :ratio="5/2"
             class="rounded-borders"
           />
           <q-separator class="q-my-md" />
