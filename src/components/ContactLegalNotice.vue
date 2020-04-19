@@ -42,15 +42,23 @@
         <div class="text-h6 underline">
           Conditions générales d'utilisation :
         </div>
-        <div class="container q-pa-lg">
+        <div
+          v-if="!$q.platform.is.mobile"
+          class="container q-pa-lg"
+        >
           <q-pdfviewer
             v-model="show"
-            :src="src"
+            :src="pdfLink"
             type="html5"
             content-class="fit container"
             inner-content-class="fit container"
           />
         </div>
+        <q-btn
+          color="warning"
+          label="Télécharger le pdf"
+          @click="downloadPDF"
+        />
       </q-card-section>
     </q-card>
   </div>
@@ -61,7 +69,7 @@ export default {
   name: 'ContactLegalNotice',
 
   props: {
-    src: {
+    pdfLink: {
       type: String,
       required: true
     }
@@ -69,7 +77,13 @@ export default {
 
   data: () => ({
     show: true
-  })
+  }),
+
+  methods: {
+    downloadPDF() {
+      window.open(this.pdfLink);
+    }
+  }
 };
 </script>
 

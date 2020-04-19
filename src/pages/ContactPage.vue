@@ -43,7 +43,7 @@
           transition-next="jump-up"
         >
           <q-tab-panel name="legalNotice">
-            <contact-legal-notice :src="pdfUrl" />
+            <contact-legal-notice :pdf-link="pdfUrl" />
           </q-tab-panel>
 
           <q-tab-panel name="webmasterContact">
