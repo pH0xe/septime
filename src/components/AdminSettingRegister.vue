@@ -28,6 +28,13 @@
       color="admin-primary"
       label="URL de l'adhésion HelloAsso"
     />
+    <q-btn
+      label="Valider le lien"
+      color="admin-primary"
+      flat
+      @click="changeIframe"
+    />
+
   </div>
 </template>
 <script>
@@ -57,13 +64,26 @@ export default {
 
   mounted() {
     this.isOpen = this.$store.getters.isRegisterOpen;
+    this.formURL = this.settingsRegister.linkToForm;
   },
 
   methods: {
-    ...mapActions(['fetchSettings', 'updateRegisterOpened']),
+    ...mapActions(['fetchSettings', 'updateRegisterOpened', 'updateIframeLink']),
 
     onToggleChange(value) {
       this.updateRegisterOpened({ setting: this.settingsRegister, value });
+    },
+
+    changeIframe() {
+      this.updateIframeLink({ setting: this.settingsRegister, value: this.formURL })
+        .then(() => {
+          this.$q.notify({
+            color: 'positive',
+            position: 'bottom',
+            message: 'Mise à jour du lien effectuée',
+            icon: 'mdi-check'
+          });
+        });
     }
   }
 };

@@ -101,7 +101,7 @@
 
 <script lang="js">
 import { Notify } from 'quasar';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import store from '../store'; // Needed to access the store in beforeRouteEnter when the component hasn't been created yet
 import RegisterStepAccount from '../components/RegisterStepAccount';
 import RegisterStepCoordinates from '../components/RegisterStepCoordinates';
@@ -122,6 +122,10 @@ export default {
   }),
 
   computed: {
+    ...mapState({
+      settingsRegister: (state) => state.settings.settingsRegister
+    }),
+
     isLastStep() {
       return this.step === 3;
     }
@@ -149,6 +153,7 @@ export default {
       if (!store.getters.isRegisterOpen || store.getters.isLoggedIn) {
         this.$router.replace({ name: 'home' });
       }
+      this.link = this.settingsRegister.linkToForm;
     });
   },
 

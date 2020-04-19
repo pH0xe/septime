@@ -34,6 +34,10 @@ export default {
       state.settingsClub.treasurer = treasurer;
       state.settingsClub.master = master;
       state.settingsClub.secretary = secretary;
+    },
+
+    updateIframe(state, { linkToForm }) {
+      state.settingsRegister.linkToForm = linkToForm;
     }
   },
 
@@ -98,6 +102,22 @@ export default {
         })
         .catch((err) => {
           console.log('Error while updating registration open : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    updateIframeLink({ commit }, { setting, value }) {
+      db.collection('settings').doc(setting.id)
+        .update({ linkToForm: value })
+        .then(() => {
+          commit('updateIframe', { linkToForm: value });
+        })
+        .catch((err) => {
+          console.log('Error while updating iframe link : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
