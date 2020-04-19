@@ -57,11 +57,6 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated(/* registration */) {
     console.log('New content is available; please refresh.');
-    // eslint-disable-next-line no-restricted-globals
-    const res = confirm('une nouvelle mise à jours est disponible. Rafraîchir pour en profiter ?');
-    if (res) {
-      document.location.reload(true);
-    }
   },
 
   offline() {
