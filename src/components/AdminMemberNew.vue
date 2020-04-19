@@ -3,7 +3,7 @@
     <q-dialog
       ref="dialog"
       full-width
-      :maximized="$q.platform.is.mobile"
+      maximized
       @hide="hide"
     >
       <q-card>
@@ -11,7 +11,6 @@
           @submit.prevent="onClickOk"
         >
           <q-bar
-            v-if="$q.platform.is.mobile"
             class="bg-admin-primary"
           >
             <q-space />
