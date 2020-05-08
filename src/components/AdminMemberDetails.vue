@@ -1,12 +1,14 @@
 <template>
   <q-dialog
     ref="dialog"
-    maximized
-    class="q-dialog-plugin"
+    :maximized="$q.platform.is.mobile"
     @hide="onDialogHide"
   >
-    <q-card>
+    <q-card
+      class="q-dialog-plugin w-60"
+    >
       <q-bar
+        v-if="$q.platform.is.mobile"
         class="bg-admin-primary"
       >
         <q-space />
@@ -132,7 +134,7 @@
                   @click="addCertificate"
                 />
                 <q-btn
-                  label="Télécharger"
+                  round
                   icon="mdi-download"
                   color="admin-primary"
                   :disable="!user.medicalCertificate"
@@ -189,18 +191,27 @@
                 />
                 <q-btn
                   v-if="!user.isAdmin"
-                  label="Mettre en administrateur"
+                  round
+                  tou
                   icon="mdi-plus"
                   color="admin-primary"
                   @click="setAsAdmin"
-                />
+                >
+                  <q-tooltip>
+                    Mettre en administrateur
+                  </q-tooltip>
+                </q-btn>
                 <q-btn
                   v-else
-                  label="Enlever des administrateurs"
+                  round
                   icon="mdi-minus"
                   color="negative"
                   @click="removeFromAdmin"
-                />
+                >
+                  <q-tooltip>
+                    Enlever des administrateurs
+                  </q-tooltip>
+                </q-btn>
               </div>
             </q-item-section>
           </q-item>
@@ -401,4 +412,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .w-60 {
+    width: 60%;
+  }
 </style>

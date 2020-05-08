@@ -25,3 +25,5 @@ yarn-error.log*
 # Env files
 .env
 .env.dev
+
+stale_outputs_checked
