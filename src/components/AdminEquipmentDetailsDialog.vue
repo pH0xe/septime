@@ -257,6 +257,7 @@ export default {
 
   methods: {
     ...mapActions(['rentEquipment', 'stopRentEquipment', 'updateControlEquipment', 'updateStateEquipment', 'deleteThisEquipment', 'fetchEquipments']),
+
     show() {
       this.$refs.dialog.show();
     },
@@ -276,19 +277,17 @@ export default {
         parent: this
       }).onOk((memberId) => {
         this.rentEquipment({ uid: memberId, equipment: this.equipment });
-        this.reloadEquipment();
         this.hide();
       });
     },
+
     removeFromMember() {
       this.stopRentEquipment({ equipment: this.equipment });
-      this.reloadEquipment();
       this.hide();
     },
 
     updateControlDate() {
       this.updateControlEquipment({ equipment: this.equipment });
-      this.reloadEquipment();
     },
 
     changeState() {
@@ -301,8 +300,6 @@ export default {
         newState = EquipmentState.GOOD;
       }
       this.updateStateEquipment({ equipment: this.equipment, newState });
-      this.reloadEquipment();
-      this.hide();
     },
 
     deleteEquipment() {
@@ -321,7 +318,6 @@ export default {
 
       }).onOk(() => {
         this.deleteThisEquipment({ equipment: this.equipment });
-        this.reloadEquipment();
       });
     },
 
@@ -336,10 +332,6 @@ export default {
         default:
           return 'Inconnu';
       }
-    },
-
-    reloadEquipment() {
-      setTimeout(() => { this.fetchEquipments(); }, 2000);
     }
 
   }
