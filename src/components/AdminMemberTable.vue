@@ -1,129 +1,66 @@
 <template>
-  <div>
-    <q-table
-      v-if="inactiveUsers.length"
-      title="Comptes en attente de validation"
-      :data="inactiveUsers"
-      :filter="filterInput"
-      :filter-method="filterUsers"
-      :columns="columns"
-      :pagination.sync="pagination"
-      :rows-per-page-options="[0]"
-      class="full-width q-mb-lg"
-      :dense="$q.platform.is.mobile"
-      flat
-      bordered
-      @row-click="toggleDialogMemberDetails"
-    >
-      <template v-slot:body-cell-memberAvatar="props">
-        <q-td
-          :props="props"
-          auto-width
-        >
-          <q-avatar>
-            <img
-              v-if="props.row.memberAvatar"
-              :src="props.row.memberAvatar"
-            >
-            <img
-              v-else
-              src="~assets/sad.svg"
-            >
-          </q-avatar>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-group="props">
-        <q-td
-          :props="props"
-        >
-          <q-badge
-            :color="getBadgeColorFor(props.row.group)"
+  <q-table
+    v-if="users.length"
+    :title="title"
+    :data="users"
+    :filter="filterInput"
+    :filter-method="filterUsers"
+    :columns="columns"
+    :pagination.sync="pagination"
+    :rows-per-page-options="[0]"
+    class="full-width q-mb-lg"
+    :dense="$q.platform.is.mobile"
+    flat
+    bordered
+    @row-click="toggleDialogMemberDetails"
+  >
+    <template v-slot:body-cell-memberAvatar="props">
+      <q-td
+        :props="props"
+        auto-width
+      >
+        <q-avatar>
+          <img
+            v-if="props.row.memberAvatar"
+            :src="props.row.memberAvatar"
           >
-            {{ props.row.group }}
-          </q-badge>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-paid="props">
-        <q-td
-          :props="props"
-        >
-          <q-badge
-            v-if="props.row.payments ? props.row.payments.paid : false"
-            color="positive"
-          >
-            oui
-          </q-badge>
-          <q-badge
+          <img
             v-else
-            color="negative"
+            src="~assets/sad.svg"
           >
-            non
-          </q-badge>
-        </q-td>
-      </template>
-    </q-table>
-    <q-table
-      title="Comptes activé"
-      :data="activeUsers"
-      :filter="filterInput"
-      :filter-method="filterUsers"
-      :columns="columns"
-      :pagination.sync="pagination"
-      :rows-per-page-options="[0]"
-      class="full-width"
-      :dense="$q.platform.is.mobile"
-      flat
-      bordered
-      @row-click="toggleDialogMemberDetails"
-    >
-      <template v-slot:body-cell-memberAvatar="props">
-        <q-td
-          :props="props"
-          auto-width
+        </q-avatar>
+      </q-td>
+    </template>
+    <template v-slot:body-cell-group="props">
+      <q-td
+        :props="props"
+      >
+        <q-badge
+          :color="getBadgeColorFor(props.row.group)"
         >
-          <q-avatar>
-            <img
-              v-if="props.row.memberAvatar"
-              :src="props.row.memberAvatar"
-            >
-            <img
-              v-else
-              src="~assets/sad.svg"
-            >
-          </q-avatar>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-group="props">
-        <q-td
-          :props="props"
+          {{ props.row.group }}
+        </q-badge>
+      </q-td>
+    </template>
+    <template v-slot:body-cell-paid="props">
+      <q-td
+        :props="props"
+      >
+        <q-badge
+          v-if="props.row.payments ? props.row.payments.paid : false"
+          color="positive"
         >
-          <q-badge
-            :color="getBadgeColorFor(props.row.group)"
-          >
-            {{ props.row.group }}
-          </q-badge>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-paid="props">
-        <q-td
-          :props="props"
+          oui
+        </q-badge>
+        <q-badge
+          v-else
+          color="negative"
         >
-          <q-badge
-            v-if="props.row.payments ? props.row.payments.paid : false"
-            color="positive"
-          >
-            oui
-          </q-badge>
-          <q-badge
-            v-else
-            color="negative"
-          >
-            non
-          </q-badge>
-        </q-td>
-      </template>
-    </q-table>
-  </div>
+          non
+        </q-badge>
+      </q-td>
+    </template>
+  </q-table>
 </template>
 
 <script>
@@ -177,10 +114,13 @@ export default {
     users: {
       type: Array,
       required: true
+    },
+    title: {
+      type: String,
+      required: true
     }
   },
   data: () => ({
-    text: '',
     pagination: {
       rowsPerPage: 0
     }
@@ -189,12 +129,6 @@ export default {
   computed: {
     columns() {
       return columns;
-    },
-    activeUsers() {
-      return this.users.filter((user) => user.isActive);
-    },
-    inactiveUsers() {
-      return this.users.filter((user) => !user.isActive);
     }
   },
 
