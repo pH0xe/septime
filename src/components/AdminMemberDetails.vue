@@ -5,7 +5,8 @@
     @hide="onDialogHide"
   >
     <q-card
-      class="q-dialog-plugin w-60"
+      class="q-dialog-plugin"
+      :class="{'w-60': !$q.platform.is.mobile}"
     >
       <q-bar
         v-if="$q.platform.is.mobile"
