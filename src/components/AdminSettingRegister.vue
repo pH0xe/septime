@@ -16,7 +16,7 @@
       Lien de l'adhésion HelloAsso
     </div>
     <a
-      href="https://aide.helloasso.com/hc/fr/articles/360000433106-Int%C3%A9grer-mon-formulaire-d-adh%C3%A9sion-sur-mon-site-internet"
+      href="https://centredaide.helloasso.com/s/article/integrer-helloasso-a-mon-site-internet"
       target="_blank"
     >
       Cliquez ici pour savoir comment obtenir le code iframe à copier
