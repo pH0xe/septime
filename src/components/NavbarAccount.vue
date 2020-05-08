@@ -222,6 +222,7 @@ export default {
     },
 
     onClickLogout() {
+      this.$router.replace({ name: 'home' });
       this.$store.dispatch('logout')
         .then(() => {
           this.$q.notify({

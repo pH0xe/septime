@@ -1,12 +1,14 @@
 <template>
   <q-dialog
     ref="dialog"
-    maximized
-    class="q-dialog-plugin"
+    :maximized="$q.platform.is.mobile"
     @hide="onDialogHide"
   >
-    <q-card>
+    <q-card
+      class="q-dialog-plugin w-60"
+    >
       <q-bar
+        v-if="$q.platform.is.mobile"
         class="bg-admin-primary"
       >
         <q-space />
@@ -125,7 +127,14 @@
                   label="Fournis"
                 />
                 <q-btn
-                  label="Télécharger"
+                  v-if="!user.medicalCertificate"
+                  label="Ajouter"
+                  icon="mdi-file-upload"
+                  color="admin-primary"
+                  @click="addCertificate"
+                />
+                <q-btn
+                  round
                   icon="mdi-download"
                   color="admin-primary"
                   :disable="!user.medicalCertificate"
@@ -182,18 +191,27 @@
                 />
                 <q-btn
                   v-if="!user.isAdmin"
-                  label="Mettre en administrateur"
+                  round
+                  tou
                   icon="mdi-plus"
                   color="admin-primary"
                   @click="setAsAdmin"
-                />
+                >
+                  <q-tooltip>
+                    Mettre en administrateur
+                  </q-tooltip>
+                </q-btn>
                 <q-btn
                   v-else
-                  label="Enlever des administrateurs"
+                  round
                   icon="mdi-minus"
                   color="negative"
                   @click="removeFromAdmin"
-                />
+                >
+                  <q-tooltip>
+                    Enlever des administrateurs
+                  </q-tooltip>
+                </q-btn>
               </div>
             </q-item-section>
           </q-item>
@@ -272,6 +290,7 @@ import { Weapons } from '../js/Weapons';
 import { Gender } from '../js/Gender';
 import { cloudFunctions } from '../boot/firebase';
 import AdminMemberPromptPaid from './AdminMemberPromptPaid';
+import AdminMemberAddCertificate from './AdminMemberAddCertificate';
 
 export default {
   name: 'AdminMemberDetails',
@@ -372,10 +391,28 @@ export default {
         parent: this,
         user: this.user
       });
+    },
+
+    addCertificate() {
+      this.$q.dialog({
+        component: AdminMemberAddCertificate,
+        parent: this,
+        user: this.user
+      }).onOk(() => {
+        this.fetchMembers();
+        this.$q.notify({
+          message: 'Certificat ajouté avec succès (un rafraîchissement de la page peut être nécessaire)',
+          icon: 'mdi-check',
+          color: 'positive'
+        });
+      });
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+  .w-60 {
+    width: 60%;
+  }
 </style>
