@@ -231,6 +231,11 @@ export default {
     members: {
       type: Array,
       required: true
+    },
+
+    membersActive: {
+      type: Array,
+      required: true
     }
   },
 
@@ -238,15 +243,13 @@ export default {
     date() {
       return date;
     },
+
     monthsBeforeNextControl() {
       const nextDate = date.addToDate(this.equipment.informationDate.control,
         { month: this.equipmentType.periodicity });
       return date.getDateDiff(nextDate, this.equipment.informationDate.control, 'months');
     },
-    activeUsers() {
-      const users = this.members;
-      return users.filter((user) => user.isActive);
-    },
+
     getMemberName() {
       const userId = this.equipment.renterId;
       const result = this.members.find((member) => member.uid === userId);
@@ -257,6 +260,7 @@ export default {
 
   methods: {
     ...mapActions(['rentEquipment', 'stopRentEquipment', 'updateControlEquipment', 'updateStateEquipment', 'deleteThisEquipment', 'fetchEquipments']),
+
     show() {
       this.$refs.dialog.show();
     },
@@ -272,23 +276,21 @@ export default {
     assignToMember() {
       this.$q.dialog({
         component: AdminEquipmentAssignDialog,
-        users: this.activeUsers,
+        users: this.membersActive,
         parent: this
       }).onOk((memberId) => {
         this.rentEquipment({ uid: memberId, equipment: this.equipment });
-        this.reloadEquipment();
         this.hide();
       });
     },
+
     removeFromMember() {
       this.stopRentEquipment({ equipment: this.equipment });
-      this.reloadEquipment();
       this.hide();
     },
 
     updateControlDate() {
       this.updateControlEquipment({ equipment: this.equipment });
-      this.reloadEquipment();
     },
 
     changeState() {
@@ -301,8 +303,6 @@ export default {
         newState = EquipmentState.GOOD;
       }
       this.updateStateEquipment({ equipment: this.equipment, newState });
-      this.reloadEquipment();
-      this.hide();
     },
 
     deleteEquipment() {
@@ -321,7 +321,6 @@ export default {
 
       }).onOk(() => {
         this.deleteThisEquipment({ equipment: this.equipment });
-        this.reloadEquipment();
       });
     },
 
@@ -336,10 +335,6 @@ export default {
         default:
           return 'Inconnu';
       }
-    },
-
-    reloadEquipment() {
-      setTimeout(() => { this.fetchEquipments(); }, 2000);
     }
 
   }

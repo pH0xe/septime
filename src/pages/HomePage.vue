@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <template v-if="isLoggedIn">
+      <template v-if="isLoggedIn && (currentUser.isActive || currentUser.isAdmin)">
         <div class="row">
           <div class="col">
             <h5 class="text-h5">

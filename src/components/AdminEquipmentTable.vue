@@ -149,6 +149,10 @@ export default {
     members: {
       type: Array,
       required: true
+    },
+    membersActive: {
+      type: Array,
+      required: true
     }
   },
   data: () => ({
@@ -170,9 +174,11 @@ export default {
         parent: this,
         equipment: row,
         equipmentType: this.getTypeByUid(row.equipmentType),
-        members: this.members
+        members: this.members,
+        membersActive: this.membersActive
       });
     },
+
     monthsBeforeNextControl(useDate, uid) {
       const type = this.getTypeByUid(uid);
       if (type.periodicity) {
@@ -181,6 +187,7 @@ export default {
         return date.getDateDiff(nextDate, useDate, 'months');
       } return 'Non requis';
     },
+
     getBadgeColorForControl(useDate, uid) {
       const month = this.monthsBeforeNextControl(useDate, uid);
       if (month <= 1) {
@@ -189,6 +196,7 @@ export default {
         return 'warning';
       } return 'positive';
     },
+
     getColorState(state) {
       switch (state) {
         case EquipmentState.BROKEN:
@@ -201,6 +209,7 @@ export default {
           return '';
       }
     },
+
     getTypeByUid(uid) {
       return this.types.find((type) => type.uid === uid);
     },

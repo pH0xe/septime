@@ -6,12 +6,16 @@ import { Group } from '../js/Group';
 export default {
   namespaced: false,
   state: {
-    members: []
+    members: [],
+    membersActive: [],
+    membersInactive: []
   },
 
   mutations: {
     setMembers(state, { members }) {
       state.members = members;
+      state.membersActive = members.filter((user) => user.isActive || user.isAdmin);
+      state.membersInactive = members.filter((user) => !user.isActive && !user.isAdmin);
     },
 
     setMemberAdmin(state, member) {

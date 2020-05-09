@@ -77,6 +77,13 @@ export default {
           equipment.uid = docReference.id;
           commit('addEquipment', { equipment });
         })
+        .then(() => {
+          Notify.create({
+            message: 'Equipement ajouté',
+            color: 'positive',
+            position: 'bottom'
+          });
+        })
         .catch((err) => {
           console.log('Error while adding equipment : ', err);
           Notify.create({
@@ -91,6 +98,13 @@ export default {
       return db.collection('equipments').doc(equipment.uid).update({ renterId: uid })
         .then(() => {
           commit('setMember', { uid, equipment });
+        })
+        .then(() => {
+          Notify.create({
+            message: 'Equipement assigné',
+            color: 'positive',
+            position: 'bottom'
+          });
         })
         .catch((err) => {
           console.log('Error while renting equipment : ', err);
@@ -108,6 +122,13 @@ export default {
         .then(() => {
           commit('resetMember', { equipment });
         })
+        .then(() => {
+          Notify.create({
+            message: 'Equipement dé-assigné',
+            color: 'positive',
+            position: 'bottom'
+          });
+        })
         .catch((err) => {
           console.log('Error while deleting renter : ', err);
           Notify.create({
@@ -124,6 +145,13 @@ export default {
         .then(() => {
           commit('updateControlDate', { equipment });
         })
+        .then(() => {
+          Notify.create({
+            message: 'Date mis à jour',
+            color: 'positive',
+            position: 'bottom'
+          });
+        })
         .catch((err) => {
           console.log('Error while updating date : ', err);
           Notify.create({
@@ -138,7 +166,14 @@ export default {
       return db.collection('equipments').doc(equipment.uid)
         .update({ state: newState })
         .then(() => {
-          commit('changeState', { equipment });
+          commit('changeState', { equipment, newState });
+        })
+        .then(() => {
+          Notify.create({
+            message: 'Etat mis à jour',
+            color: 'positive',
+            position: 'bottom'
+          });
         })
         .catch((err) => {
           console.log('Error while updating state : ', err);
@@ -156,6 +191,13 @@ export default {
         .then(() => {
           console.log('Equipment succesfully deleted');
           commit('deleteEquipment', { equipment });
+        })
+        .then(() => {
+          Notify.create({
+            message: 'Equipement supprimé',
+            color: 'positive',
+            position: 'bottom'
+          });
         })
         .catch((err) => {
           console.log('Error while deleting : ', err);

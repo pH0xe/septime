@@ -26,7 +26,13 @@
     </div>
     <admin-member-table
       :filter-input="searchQuery"
-      :users="members"
+      :users="membersInactive"
+      title="Comptes en attente de validation"
+    />
+    <admin-member-table
+      :filter-input="searchQuery"
+      :users="membersActive"
+      title="Comptes validé et administrateur"
     />
   </q-page>
 </template>
@@ -43,7 +49,10 @@ export default {
     searchQuery: ''
   }),
 
-  computed: mapState({ members: (state) => state.members.members }),
+  computed: mapState({
+    membersActive: (state) => state.members.membersActive,
+    membersInactive: (state) => state.members.membersInactive
+  }),
 
   beforeMount() {
     this.fetchMembers();

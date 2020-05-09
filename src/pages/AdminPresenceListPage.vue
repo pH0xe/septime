@@ -58,7 +58,8 @@ export default {
     trainingMember() {
       const result = [];
       this.training.students.forEach((student) => {
-        result.push(this.members.find((user) => user.uid === student.uid));
+        const findUser = this.members.find((user) => user.uid === student.uid);
+        if (findUser) result.push(findUser);
       });
       return result;
     }
