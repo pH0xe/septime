@@ -45,7 +45,7 @@
       :equipments="equipments"
       :types="equipmentsTypes"
       :members="members"
-      :membersActive="membersActive"
+      :members-active="membersActive"
     />
   </q-page>
 </template>
