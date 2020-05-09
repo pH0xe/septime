@@ -45,6 +45,7 @@
       :equipments="equipments"
       :types="equipmentsTypes"
       :members="members"
+      :membersActive="membersActive"
     />
   </q-page>
 </template>
@@ -63,6 +64,7 @@ export default {
   computed: {
     ...mapState({
       members: (state) => state.members.members,
+      membersActive: (state) => state.members.membersActive,
       equipments: (state) => state.equipments.equipments,
       equipmentsTypes: (state) => state.equipmentsType.equipmentsTypes
     })
@@ -71,10 +73,11 @@ export default {
   beforeMount() {
     this.fetchEquipmentsType();
     this.fetchEquipments();
+    this.fetchMembers();
   },
 
   methods: {
-    ...mapActions(['fetchEquipments', 'fetchEquipmentsType'])
+    ...mapActions(['fetchEquipments', 'fetchEquipmentsType', 'fetchMembers'])
   }
 
 };

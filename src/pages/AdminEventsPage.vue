@@ -56,12 +56,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchEvents', 'fetchMembers']),
-
-    debug() {
-      console.log(this.events);
-      console.log(this.members);
-    }
+    ...mapActions(['fetchEvents', 'fetchMembers'])
   }
 
 };

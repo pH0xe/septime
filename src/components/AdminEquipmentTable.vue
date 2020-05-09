@@ -149,6 +149,10 @@ export default {
     members: {
       type: Array,
       required: true
+    },
+    membersActive: {
+      type: Array,
+      required: true
     }
   },
   data: () => ({
@@ -170,7 +174,8 @@ export default {
         parent: this,
         equipment: row,
         equipmentType: this.getTypeByUid(row.equipmentType),
-        members: this.members
+        members: this.members,
+        membersActive: this.membersActive
       });
     },
 

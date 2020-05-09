@@ -231,6 +231,11 @@ export default {
     members: {
       type: Array,
       required: true
+    },
+
+    membersActive: {
+      type: Array,
+      required: true
     }
   },
 
@@ -238,15 +243,13 @@ export default {
     date() {
       return date;
     },
+
     monthsBeforeNextControl() {
       const nextDate = date.addToDate(this.equipment.informationDate.control,
         { month: this.equipmentType.periodicity });
       return date.getDateDiff(nextDate, this.equipment.informationDate.control, 'months');
     },
-    activeUsers() {
-      const users = this.members;
-      return users.filter((user) => user.isActive);
-    },
+
     getMemberName() {
       const userId = this.equipment.renterId;
       const result = this.members.find((member) => member.uid === userId);
@@ -273,7 +276,7 @@ export default {
     assignToMember() {
       this.$q.dialog({
         component: AdminEquipmentAssignDialog,
-        users: this.activeUsers,
+        users: this.membersActive,
         parent: this
       }).onOk((memberId) => {
         this.rentEquipment({ uid: memberId, equipment: this.equipment });

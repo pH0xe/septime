@@ -252,7 +252,7 @@
       <q-card-section>
         <admin-presence-member-table
           ref="memberList"
-          :members="members"
+          :members="membersActive"
           :filter-input="trainingGroup.toString()"
         />
       </q-card-section>
@@ -321,7 +321,8 @@ export default {
 
   computed: {
     ...mapState({
-      members: (state) => state.members.members
+      members: (state) => state.members.members,
+      membersActive: (state) => state.members.membersActive
     }),
 
     weekDays() {
