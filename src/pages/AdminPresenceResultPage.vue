@@ -84,11 +84,32 @@ export default {
       const tableResult = new Map();
       result.forEach((student, key) => {
         const findUser = this.members.find((user) => user.uid === key);
-        if (findUser.group === Group.SENIORS || findUser.group === Group.VETERANS1
-          || findUser.group === Group.VETERANS2
-          || findUser.group === Group.VETERANS3 || findUser.group === Group.VETERANS4) {
-          if (!tableResult.has(Group.SENIORS)) {
-            tableResult.set(Group.SENIORS, [{
+        if (findUser) {
+          if (findUser.group === Group.SENIORS || findUser.group === Group.VETERANS1
+            || findUser.group === Group.VETERANS2
+            || findUser.group === Group.VETERANS3 || findUser.group === Group.VETERANS4) {
+            if (!tableResult.has(Group.SENIORS)) {
+              tableResult.set(Group.SENIORS, [{
+                uid: findUser.uid,
+                firstName: findUser.firstName,
+                lastName: findUser.lastName,
+                here: student.here,
+                late: student.late,
+                absent: student.absent
+              }]);
+            } else {
+              tableResult.get(Group.SENIORS)
+                .push({
+                  uid: findUser.uid,
+                  firstName: findUser.firstName,
+                  lastName: findUser.lastName,
+                  here: student.here,
+                  late: student.late,
+                  absent: student.absent
+                });
+            }
+          } else if (!tableResult.has(findUser.group)) {
+            tableResult.set(findUser.group, [{
               uid: findUser.uid,
               firstName: findUser.firstName,
               lastName: findUser.lastName,
@@ -97,7 +118,7 @@ export default {
               absent: student.absent
             }]);
           } else {
-            tableResult.get(Group.SENIORS)
+            tableResult.get(findUser.group)
               .push({
                 uid: findUser.uid,
                 firstName: findUser.firstName,
@@ -107,25 +128,6 @@ export default {
                 absent: student.absent
               });
           }
-        } else if (!tableResult.has(findUser.group)) {
-          tableResult.set(findUser.group, [{
-            uid: findUser.uid,
-            firstName: findUser.firstName,
-            lastName: findUser.lastName,
-            here: student.here,
-            late: student.late,
-            absent: student.absent
-          }]);
-        } else {
-          tableResult.get(findUser.group)
-            .push({
-              uid: findUser.uid,
-              firstName: findUser.firstName,
-              lastName: findUser.lastName,
-              here: student.here,
-              late: student.late,
-              absent: student.absent
-            });
         }
       });
       // console.log(Array.from(tableResult));
