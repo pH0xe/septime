@@ -339,7 +339,7 @@ import FirebaseUploader from './FirebaseUploader';
 import { Laterality } from '../js/Laterality';
 import { Weapons } from '../js/Weapons';
 import { Gender } from '../js/Gender';
-import { adminCreateMember } from '../boot/firebase';
+import { adminCreateMember, auth } from '../boot/firebase';
 import { length } from '../js/vuelidate-custom-validators';
 
 
@@ -513,6 +513,16 @@ export default {
               icon: 'mdi-check',
               color: 'positive'
             });
+          })
+          .then(() => {
+            auth.sendPasswordResetEmail(this.email)
+              .then(() => {
+                this.$q.notify({
+                  message: `Mail de réinitialisation de mot de passe envoyé à ${this.firstName} ${this.lastName}`,
+                  icon: 'mdi-check',
+                  color: 'positive'
+                });
+              });
           })
           .then(() => {
             this.$q.loading.hide();

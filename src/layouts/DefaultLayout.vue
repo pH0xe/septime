@@ -54,6 +54,25 @@
       </q-banner>
 
       <q-banner
+        v-if="canShowBannerMemberInactive"
+        :inline-actions="!$q.platform.is.mobile"
+        class="bg-amber-10"
+      >
+        Votre compte n'a pas été validé par le club.
+        Vous n'avez pas encore accès à toutes les fonctionnalités.
+        <template v-slot:avatar>
+          <q-icon name="mdi-account" />
+        </template>
+        <template v-slot:action>
+          <q-btn
+            flat
+            icon="mdi-close"
+            @click="onClickBannerMemberDismiss"
+          />
+        </template>
+      </q-banner>
+
+      <q-banner
         v-if="canShowBannerNotification"
         inline-actions
         class="bg-orange-10 text-white"
@@ -151,7 +170,7 @@
 </template>
 
 <script lang="js">
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { auth } from '../boot/firebase';
 import NavbarLinks from '../components/NavbarLinks.vue';
 import NavbarAccount from '../components/NavbarAccount';
@@ -172,11 +191,18 @@ export default {
     bannerNotification: {
       show: true,
       isActivating: false
+    },
+    bannerMember: {
+      show: true
     }
   }),
 
   computed: {
     ...mapGetters(['isLoggedIn', 'isMessagingPossible', 'isMessagingReady']),
+
+    ...mapState({
+      currentUser: (state) => state.auth.currentUser
+    }),
 
     canShowBannerMail() {
       return this.isLoggedIn
@@ -188,6 +214,12 @@ export default {
       return this.isMessagingPossible
           && !this.isMessagingReady
           && this.bannerNotification.show;
+    },
+
+    canShowBannerMemberInactive() {
+      return this.isLoggedIn
+        && !(this.currentUser?.isActive || this.currentUser?.isAdmin)
+        && this.bannerMember.show;
     }
   },
 
@@ -219,6 +251,10 @@ export default {
 
     onClickBannerDismiss() {
       this.bannerNotification.show = false;
+    },
+
+    onClickBannerMemberDismiss() {
+      this.bannerMember.show = false;
     },
 
     onClickBannerActivateNotification() {
