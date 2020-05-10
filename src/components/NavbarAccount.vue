@@ -26,6 +26,19 @@
       :to="{ name: 'register' }"
       :disable="!isRegisterOpen"
     />
+
+    <q-separator
+      vertical
+      color="primary"
+    />
+
+    <q-btn
+      unelevated
+      icon="mdi-information-outline"
+      text-color="primary"
+      color="white"
+      :to="{name: 'contact', query: {to: 'legalNotice'}}"
+    />
   </q-btn-group>
 
   <q-btn
@@ -133,6 +146,24 @@
         <q-item-section>
           <q-item-label>
             Deconnexion
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        v-ripple
+        v-close-popup
+        clickable
+        :to="{name: 'contact', query: {to: 'legalNotice'}}"
+      >
+        <q-item-section avatar>
+          <q-avatar
+            icon="mdi-information-outline"
+          />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            À propos
           </q-item-label>
         </q-item-section>
       </q-item>
