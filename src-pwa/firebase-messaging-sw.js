@@ -6,7 +6,8 @@ firebase.initializeApp({
   messagingSenderId: '228008217062'
 });
 
-const messaging = firebase.messaging();
+//const messaging = firebase.messaging();
+const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
 
 messaging.setBackgroundMessageHandler(payload => {
   return self.registration.showNotification("Some title", {
