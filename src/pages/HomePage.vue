@@ -9,6 +9,29 @@
           Cercle d'escrime de moirans
         </h1>
       </div>
+      <div
+        class="absolute-bottom-right text-subtitle2"
+        :class="$q.platform.is.mobile? 'small-padding' : undefined"
+      >
+        <q-btn
+          icon="mdi-instagram"
+          flat
+          label="Instagram"
+          type="a"
+          href="https://www.instagram.com/escrime_moirans/"
+          target="_blank"
+          :size="$q.platform.is.mobile? 'sm' : 'md'"
+        />
+        <q-btn
+          icon="mdi-facebook"
+          flat
+          label="Facebook"
+          type="a"
+          href="https://fr-fr.facebook.com/CercleEscrimeDeMoirans/"
+          target="_blank"
+          :size="$q.platform.is.mobile? 'sm' : 'md'"
+        />
+      </div>
     </q-img>
 
     <div class="page-padded col-12 col-md-8 q-px-sm">
@@ -190,5 +213,9 @@ export default {
 
   .separator-margin {
     margin-bottom: 1rem;
+  }
+
+  .small-padding {
+    padding: 2%;
   }
 </style>
