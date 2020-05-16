@@ -27,7 +27,7 @@
       :to="{ name: 'usefulInfo' }"
       exact
       icon="mdi-information"
-      :label="mobile ? undefined : 'Info pratique'"
+      :label="mobile ? undefined : 'Infos pratiques'"
     />
   </q-tabs>
 </template>
