@@ -30,9 +30,9 @@
         color="admin-primary"
         emit-value
         :error="$v.newsTypeSelect.$error"
+        error-message="Champ requis"
         @input="$v.newsTypeSelect.$touch"
         @blur="$v.newsTypeSelect.$touch"
-        error-message="Champ requis"
       >
         <template v-slot:append>
           <q-icon

@@ -5,8 +5,8 @@
     </h5>
 
     <q-select
-      class="q-ma-lg"
       v-model="newsTypeSelect"
+      class="q-ma-lg"
       :options="newsType"
       map-options
       label="Rechercher par type"
