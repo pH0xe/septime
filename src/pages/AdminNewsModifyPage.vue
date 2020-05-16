@@ -21,6 +21,29 @@
         </div>
       </q-card-section>
 
+      <q-select
+        v-model="newsTypeSelect"
+        class="q-ma-lg"
+        :options="newsType"
+        map-options
+        label="Rechercher par type"
+        color="admin-primary"
+        emit-value
+        :error="$v.newsTypeSelect.$error"
+        error-message="Champ requis"
+        @input="$v.newsTypeSelect.$touch"
+        @blur="$v.newsTypeSelect.$touch"
+      >
+        <template v-slot:append>
+          <q-icon
+            v-if="newsTypeSelect !== ''"
+            class="cursor-pointer"
+            name="mdi-close"
+            @click="newsTypeSelect = ''"
+          />
+        </template>
+      </q-select>
+
       <q-card-section>
         <div class="full-width text-weight-bold q-mb-md">
           Contenu :
@@ -130,7 +153,26 @@
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import { mapState, mapActions } from 'vuex';
+import { NewsType } from '../js/newsType';
 
+const newsType = [
+  {
+    label: 'Info Pratique',
+    value: NewsType.USEFUL
+  },
+  {
+    label: 'FFE',
+    value: NewsType.FFE
+  },
+  {
+    label: 'Actualité',
+    value: NewsType.NEWS
+  },
+  {
+    label: 'Boutique',
+    value: NewsType.STORE
+  }
+];
 
 export default {
   name: 'AdminNewsModifyPage',
@@ -138,13 +180,18 @@ export default {
 
   data: () => ({
     newTitle: '',
-    newText: ''
+    newText: '',
+    newsTypeSelect: ''
   }),
 
   computed: {
     ...mapState({
-      news: (state) => state.news.news
-    })
+      news: (state) => state.news.allNews
+    }),
+
+    newsType() {
+      return newsType;
+    }
   },
 
   beforeMount() {
@@ -160,6 +207,11 @@ export default {
     } else {
       this.newTitle = '';
     }
+    if (currentNew.type) {
+      this.newsTypeSelect = currentNew.type;
+    } else {
+      this.newsTypeSelect = '';
+    }
   },
 
   methods: {
@@ -170,7 +222,12 @@ export default {
       this.$v.$touch();
       if (!this.$v.$error) {
         const currentNew = this.news.find((item) => item.uid === this.$route.query.uid);
-        this.updateNews({ news: currentNew, newTitle: this.newTitle, newText: this.newText });
+        this.updateNews({
+          news: currentNew,
+          newTitle: this.newTitle,
+          newText: this.newText,
+          newType: this.newsTypeSelect
+        });
         this.$q.loading.show({ message: 'Modification de la news en cours...' });
         setTimeout(() => {
           this.$q.loading.hide();
@@ -185,6 +242,9 @@ export default {
       required
     },
     newText: {
+      required
+    },
+    newsTypeSelect: {
       required
     }
   }
