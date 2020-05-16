@@ -21,7 +21,8 @@ register(process.env.SERVICE_WORKER_FILE, {
     // ** Setup messaging
 
     // Use the same service worker
-    const messaging = firebase.messaging();
+    // const messaging = firebase.messaging();
+    const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
     messaging.useServiceWorker(registration);
 
     // Setup message listener

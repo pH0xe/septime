@@ -25,7 +25,9 @@ firebase.initializeApp({
 export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
-export const messaging = firebase.messaging();
+// export const messaging = firebase.messaging();
+export const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
+
 export const adminCreateMember = firebase.functions().httpsCallable('adminCreateMember');
 
 // Functions

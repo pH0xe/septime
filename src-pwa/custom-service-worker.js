@@ -22,4 +22,5 @@ firebase.initializeApp({
   appId: '1:228008217062:web:9499c475fe821c71eb2e27'
 });
 
-const messaging = firebase.messaging();
+//const messaging = firebase.messaging();
+const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
