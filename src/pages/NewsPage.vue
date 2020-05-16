@@ -19,7 +19,7 @@
               />
               <q-tab
                 name="ffe"
-                icon="mdi-fencing"
+                icon="mdi-sword-cross"
                 label="FFE"
               />
             </q-tabs>
