@@ -1,5 +1,5 @@
 import { Notify } from 'quasar';
-import { db } from '../boot/firebase';
+import { db, storage } from '../boot/firebase';
 
 
 export default {
@@ -51,6 +51,39 @@ export default {
           });
           return collector;
         })
+        .then((settings) => Promise.all(settings.map(async (item) => {
+          if (item.type === 'clubSettings') {
+            try {
+              item.president.picture = await storage.ref()
+                .child('important/president')
+                .getDownloadURL();
+            } catch (_e) {
+              // Ignore
+            }
+            try {
+              item.master.picture = await storage.ref()
+                .child('important/master')
+                .getDownloadURL();
+            } catch (_e) {
+              // Ignore
+            }
+            try {
+              item.treasurer.picture = await storage.ref()
+                .child('important/treasurer')
+                .getDownloadURL();
+            } catch (_e) {
+              // Ignore
+            }
+            try {
+              item.secretary.picture = await storage.ref()
+                .child('important/secretary')
+                .getDownloadURL();
+            } catch (_e) {
+              // Ignore
+            }
+          }
+          return item;
+        })))
         .then((settings) => {
           commit('setSettings', { settings });
         })

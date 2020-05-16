@@ -19,49 +19,80 @@
         <div class="text-h6">
           Le bureau :
         </div>
-        <div
-          v-if="settings"
-          class="q-mb-md"
-        >
-          <span class="underline"> Le président :</span>
-          <ul class="q-ma-none">
-            <li>Nom : {{ settings.president.lastName }}</li>
-            <li>Prénom : {{ settings.president.firstName }}</li>
-            <li>Téléphone : {{ settings.president.phone }}</li>
-          </ul>
+        <div class="flex items-center justify-between">
+          <div
+            v-if="settings"
+            class="q-mb-md"
+          >
+            <span class="underline"> Le président :</span>
+            <ul class="q-ma-none">
+              <li>Nom : {{ settings.president.lastName }}</li>
+              <li>Prénom : {{ settings.president.firstName }}</li>
+              <li>Téléphone : {{ settings.president.phone }}</li>
+            </ul>
+          </div>
+          <q-img
+            :src="settings.president.picture"
+            spinner-color="grey-4"
+            class="clubImage rounded-borders"
+          />
         </div>
-        <div
-          v-if="settings"
-          class="q-mb-md"
-        >
-          <span class="underline"> Le trésorier :</span>
-          <ul class="q-ma-none">
-            <li>Nom : {{ settings.treasurer.lastName }}</li>
-            <li>Prénom : {{ settings.treasurer.firstName }}</li>
-            <li>Téléphone : {{ settings.treasurer.phone }}</li>
-          </ul>
+
+        <div class="flex items-center justify-between">
+          <div
+            v-if="settings"
+            class="q-mb-md"
+          >
+            <span class="underline"> Le trésorier :</span>
+            <ul class="q-ma-none">
+              <li>Nom : {{ settings.treasurer.lastName }}</li>
+              <li>Prénom : {{ settings.treasurer.firstName }}</li>
+              <li>Téléphone : {{ settings.treasurer.phone }}</li>
+            </ul>
+          </div>
+          <q-img
+            :src="settings.treasurer.picture"
+            spinner-color="grey-4"
+            class="clubImage rounded-borders"
+          />
         </div>
-        <div
-          v-if="settings"
-          class="q-mb-md"
-        >
-          <span class="underline">Le secrétaire :</span>
-          <ul class="q-ma-none">
-            <li>Nom : {{ settings.secretary.lastName }}</li>
-            <li>Prénom : {{ settings.secretary.firstName }}</li>
-            <li>Téléphone : {{ settings.secretary.phone }}</li>
-          </ul>
+
+        <div class="flex items-center justify-between">
+          <div
+            v-if="settings"
+            class="q-mb-md"
+          >
+            <span class="underline">Le secrétaire :</span>
+            <ul class="q-ma-none">
+              <li>Nom : {{ settings.secretary.lastName }}</li>
+              <li>Prénom : {{ settings.secretary.firstName }}</li>
+              <li>Téléphone : {{ settings.secretary.phone }}</li>
+            </ul>
+          </div>
+          <q-img
+            :src="settings.secretary.picture"
+            spinner-color="grey-4"
+            class="clubImage rounded-borders"
+          />
         </div>
-        <div
-          v-if="settings"
-          class="q-mb-md"
-        >
-          <span class="underline">Le maître d'armes :</span>
-          <ul class="q-ma-none">
-            <li>Nom : {{ settings.master.lastName }}</li>
-            <li>Prénom : {{ settings.master.firstName }}</li>
-            <li>Téléphone : {{ settings.master.phone }}</li>
-          </ul>
+
+        <div class="flex items-center justify-between">
+          <div
+            v-if="settings"
+            class="q-mb-md"
+          >
+            <span class="underline">Le maître d'armes :</span>
+            <ul class="q-ma-none">
+              <li>Nom : {{ settings.master.lastName }}</li>
+              <li>Prénom : {{ settings.master.firstName }}</li>
+              <li>Téléphone : {{ settings.master.phone }}</li>
+            </ul>
+          </div>
+          <q-img
+            :src="settings.master.picture"
+            spinner-color="grey-4"
+            class="clubImage rounded-borders"
+          />
         </div>
       </q-card-section>
       <q-card-section>
@@ -103,5 +134,10 @@ export default {
   }
   .underline{
     text-decoration: underline;
+  }
+  .clubImage {
+    width: 30%;
+    margin-right: 5%;
+    margin-bottom: 2%;
   }
 </style>
