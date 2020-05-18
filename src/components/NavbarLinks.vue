@@ -23,6 +23,12 @@
       icon="mdi-calendar"
       :label="mobile ? undefined : 'Calendrier'"
     />
+    <q-route-tab
+      :to="{ name: 'usefulInfo' }"
+      exact
+      icon="mdi-information"
+      :label="mobile ? undefined : 'Infos pratiques'"
+    />
   </q-tabs>
 </template>
 

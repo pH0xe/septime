@@ -1,20 +1,32 @@
 import { Notify } from 'quasar';
 import { db, storage } from '../boot/firebase';
+import { NewsType } from '../js/newsType';
 
 export default {
   state: {
-    news: []
+    allNews: [],
+    news: [],
+    usefulInfo: [],
+    ffeInfo: [],
+    clubStore: []
   },
 
   mutations: {
     setNews(state, { news }) {
-      state.news = news;
+      state.allNews = news;
+      state.news = news.filter((n) => n.type === NewsType.NEWS);
+      state.usefulInfo = news.filter((n) => n.type === NewsType.USEFUL);
+      state.clubStore = news.filter((n) => n.type === NewsType.STORE);
+      state.ffeInfo = news.filter((n) => n.type === NewsType.FFE);
     },
 
-    updateNewsState(state, { news, title, text }) {
-      const index = state.news.indexOf(news);
-      state.news[index].title = title;
-      state.news[index].text = text;
+    updateNewsState(state, {
+      news, title, text, type
+    }) {
+      const index = state.allNews.indexOf(news);
+      state.allNews[index].title = title;
+      state.allNews[index].text = text;
+      state.allNews[index].type = type;
     },
 
     deleteNewsState(state, { news }) {
@@ -66,11 +78,15 @@ export default {
         });
     },
 
-    updateNews({ commit }, { news, newTitle, newText }) {
+    updateNews({ commit }, {
+      news, newTitle, newText, newType
+    }) {
       db.collection('news').doc(news.uid)
-        .update({ title: newTitle, text: newText })
+        .update({ title: newTitle, text: newText, type: newType })
         .then(() => {
-          commit('updateNewsState', { news, title: newTitle, text: newText });
+          commit('updateNewsState', {
+            news, title: newTitle, text: newText, type: newType
+          });
         })
         .catch((err) => {
           console.log('Error while updating news : ', err);

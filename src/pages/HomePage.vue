@@ -9,13 +9,36 @@
           Cercle d'escrime de moirans
         </h1>
       </div>
+      <div
+        class="absolute-bottom-right text-subtitle2"
+        :class="$q.platform.is.mobile? 'small-padding' : undefined"
+      >
+        <q-btn
+          icon="mdi-instagram"
+          flat
+          label="Instagram"
+          type="a"
+          href="https://www.instagram.com/escrime_moirans/"
+          target="_blank"
+          :size="$q.platform.is.mobile? 'sm' : 'md'"
+        />
+        <q-btn
+          icon="mdi-facebook"
+          flat
+          label="Facebook"
+          type="a"
+          href="https://fr-fr.facebook.com/CercleEscrimeDeMoirans/"
+          target="_blank"
+          :size="$q.platform.is.mobile? 'sm' : 'md'"
+        />
+      </div>
     </q-img>
 
     <div class="page-padded col-12 col-md-8 q-px-sm">
       <div class="row">
         <div class="col">
           <h5 class="text-h5">
-            Dernières actualités
+            Dernières actualités du club
             <q-btn
               flat
               icon="mdi-dots-horizontal"
@@ -29,6 +52,34 @@
       <div class="row q-col-gutter-md">
         <div
           v-for="news in orderedNews"
+          :key="news.uid"
+          class="col-12 col-md-4"
+        >
+          <news-card
+            :title="news.title"
+            :content="news.text"
+            :date="news.date"
+            :img-src="news.imgURL"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h5 class="text-h5">
+            Dernières actualités FFE
+            <q-btn
+              flat
+              icon="mdi-dots-horizontal"
+              :to="{ name: 'news' }"
+            />
+          </h5>
+          <q-separator class="separator-margin" />
+        </div>
+      </div>
+
+      <div class="row q-col-gutter-md">
+        <div
+          v-for="news in orderedNewsFFE"
           :key="news.uid"
           class="col-12 col-md-4"
         >
@@ -110,13 +161,26 @@ export default {
       currentUser: (state) => state.auth.currentUser,
       news: (state) => state.news.news,
       trainings: (state) => state.trainings.trainings,
-      events: (state) => state.events.events
+      events: (state) => state.events.events,
+      newsFFE: (state) => state.news.ffeInfo
     }),
 
     ...mapGetters(['isLoggedIn']),
 
     orderedNews() {
       const newsCopy = Array.from(this.news);
+      newsCopy.sort((news1, news2) => {
+        if (news1.date > news2.date) {
+          return -1;
+        }
+        return 1;
+      });
+
+      return newsCopy.slice(0, 3);
+    },
+
+    orderedNewsFFE() {
+      const newsCopy = Array.from(this.newsFFE);
       newsCopy.sort((news1, news2) => {
         if (news1.date > news2.date) {
           return -1;
@@ -190,5 +254,9 @@ export default {
 
   .separator-margin {
     margin-bottom: 1rem;
+  }
+
+  .small-padding {
+    padding: 2%;
   }
 </style>

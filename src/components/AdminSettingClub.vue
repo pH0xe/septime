@@ -15,25 +15,23 @@
         <q-card-section class="text-h6">
           Le président :
         </q-card-section>
-        <q-card-section class="flex">
+        <q-card-section class="flex items-center">
           <q-input
-            v-model="presidentLastName"
+            v-model="president.lastName"
             class="q-ma-sm"
             color="admin-primary"
             filled
             label="Nom"
           />
-
           <q-input
-            v-model="presidentFirstName"
+            v-model="president.firstName"
             class="q-ma-sm"
             color="admin-primary"
             filled
             label="Prénoms"
           />
-          <br>
           <q-input
-            v-model="presidentNumber"
+            v-model="president.phone"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -42,6 +40,20 @@
             unmasked-value
             autocomplete="tel-national"
           />
+          <q-btn
+            round
+            @click="addImage('president')"
+          >
+            <q-avatar
+              :icon="!president.picture ? 'mdi-account': undefined"
+              color="grey-4"
+              round
+            >
+              <q-img
+                :src="president.picture"
+              />
+            </q-avatar>
+          </q-btn>
         </q-card-section>
       </q-card>
 
@@ -53,9 +65,9 @@
         <q-card-section class="text-h6">
           Le trésorier :
         </q-card-section>
-        <q-card-section class="flex">
+        <q-card-section class="flex items-center">
           <q-input
-            v-model="treasurerLastName"
+            v-model="treasurer.lastName"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -63,7 +75,7 @@
           />
 
           <q-input
-            v-model="treasurerFirstName"
+            v-model="treasurer.firstName"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -71,7 +83,7 @@
           />
           <br>
           <q-input
-            v-model="treasurerNumber"
+            v-model="treasurer.phone"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -80,6 +92,20 @@
             unmasked-value
             autocomplete="tel-national"
           />
+          <q-btn
+            round
+            @click="addImage('treasurer')"
+          >
+            <q-avatar
+              :icon="!treasurer.picture ? 'mdi-account': undefined"
+              color="grey-4"
+              round
+            >
+              <q-img
+                :src="treasurer.picture"
+              />
+            </q-avatar>
+          </q-btn>
         </q-card-section>
       </q-card>
 
@@ -91,9 +117,9 @@
         <q-card-section class="text-h6">
           Le secrétaire :
         </q-card-section>
-        <q-card-section class="flex">
+        <q-card-section class="flex items-center">
           <q-input
-            v-model="secretaryLastName"
+            v-model="secretary.lastName"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -101,7 +127,7 @@
           />
 
           <q-input
-            v-model="secretaryFirstName"
+            v-model="secretary.firstName"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -109,7 +135,7 @@
           />
           <br>
           <q-input
-            v-model="secretaryNumber"
+            v-model="secretary.phone"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -118,6 +144,20 @@
             unmasked-value
             autocomplete="tel-national"
           />
+          <q-btn
+            round
+            @click="addImage('secretary')"
+          >
+            <q-avatar
+              :icon="!secretary.picture ? 'mdi-account': undefined"
+              color="grey-4"
+              round
+            >
+              <q-img
+                :src="secretary.picture"
+              />
+            </q-avatar>
+          </q-btn>
         </q-card-section>
       </q-card>
 
@@ -129,9 +169,9 @@
         <q-card-section class="text-h6">
           Le maître d’armes :
         </q-card-section>
-        <q-card-section class="flex">
+        <q-card-section class="flex items-center">
           <q-input
-            v-model="masterLastName"
+            v-model="master.lastName"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -139,7 +179,7 @@
           />
 
           <q-input
-            v-model="masterFirstName"
+            v-model="master.firstName"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -147,7 +187,7 @@
           />
           <br>
           <q-input
-            v-model="masterNumber"
+            v-model="master.phone"
             class="q-ma-sm"
             color="admin-primary"
             filled
@@ -156,6 +196,20 @@
             unmasked-value
             autocomplete="tel-national"
           />
+          <q-btn
+            round
+            @click="addImage('master')"
+          >
+            <q-avatar
+              :icon="!master.picture ? 'mdi-account': undefined"
+              color="grey-4"
+              round
+            >
+              <q-img
+                :src="master.picture"
+              />
+            </q-avatar>
+          </q-btn>
         </q-card-section>
       </q-card>
 
@@ -173,9 +227,33 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import { Notify } from 'quasar';
+import AdminSettingsAddPict from './AdminSettingsAddPict';
 
 export default {
   name: 'AdminSettingClub',
+
+  data: () => ({
+    president: {
+      lastName: '',
+      firstName: '',
+      phone: ''
+    },
+    treasurer: {
+      lastName: '',
+      firstName: '',
+      phone: ''
+    },
+    secretary: {
+      lastName: '',
+      firstName: '',
+      phone: ''
+    },
+    master: {
+      lastName: '',
+      firstName: '',
+      phone: ''
+    }
+  }),
 
   computed: {
     ...mapState({
@@ -184,112 +262,37 @@ export default {
     })
   },
 
-  data: () => ({
-    presidentLastName: '',
-    presidentFirstName: '',
-    presidentNumber: '',
-    treasurerLastName: '',
-    treasurerFirstName: '',
-    treasurerNumber: '',
-    secretaryLastName: '',
-    secretaryFirstName: '',
-    secretaryNumber: '',
-    masterLastName: '',
-    masterFirstName: '',
-    masterNumber: ''
-  }),
-
   beforeMount() {
     this.fetchSettings();
   },
 
   mounted() {
-    this.presidentLastName = this.settingsClub.president.lastName;
-    this.presidentFirstName = this.settingsClub.president.firstName;
-    this.presidentNumber = this.settingsClub.president.phone;
-    this.treasurerLastName = this.settingsClub.treasurer.lastName;
-    this.treasurerFirstName = this.settingsClub.treasurer.firstName;
-    this.treasurerNumber = this.settingsClub.treasurer.phone;
-    this.secretaryLastName = this.settingsClub.secretary.lastName;
-    this.secretaryFirstName = this.settingsClub.secretary.firstName;
-    this.secretaryNumber = this.settingsClub.secretary.phone;
-    this.masterLastName = this.settingsClub.master.lastName;
-    this.masterFirstName = this.settingsClub.master.firstName;
-    this.masterNumber = this.settingsClub.master.phone;
+    this.president = { ...this.settingsClub.president };
+    this.treasurer = { ...this.settingsClub.treasurer };
+    this.secretary = { ...this.settingsClub.secretary };
+    this.master = { ...this.settingsClub.master };
   },
 
   methods: {
     ...mapActions(['fetchSettings', 'updateClub']),
 
+    checkValue(out, source, who) {
+      out.lastName = source.lastName !== '' ? source.lastName : `Aucun nom n'a été donné pour le ${who}.`;
+      out.firstName = source.firstName !== '' ? source.firstName : `Aucun prénoms n'a été donné pour le ${who}.`;
+      out.phone = source.phone !== '' ? source.phone : `Aucun numéros n'a été donné pour le ${who}.`;
+    },
+
     onSubmit() {
+      // console.log(this.president, this.secretary, this.master, this.treasurer);
       const presidentInfo = {};
       const treasurerInfo = {};
       const masterInfo = {};
       const secretaryInfo = {};
 
-      if (this.presidentLastName !== '') {
-        presidentInfo.lastName = this.presidentLastName;
-      } else {
-        presidentInfo.lastName = "Aucun nom n'a été donné pour le président. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.presidentFirstName !== '') {
-        presidentInfo.firstName = this.presidentFirstName;
-      } else {
-        presidentInfo.firstName = "Aucun prénoms n'a été donné pour le président. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.presidentNumber !== '') {
-        presidentInfo.phone = this.presidentNumber;
-      } else {
-        presidentInfo.phone = "Aucun numéros n'a été donné pour le président. Contacter un administrateur pour plus d'information.";
-      }
-
-      if (this.treasurerLastName !== '') {
-        treasurerInfo.lastName = this.treasurerLastName;
-      } else {
-        treasurerInfo.lastName = "Aucun nom n'a été donné pour le trésorier. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.treasurerFirstName !== '') {
-        treasurerInfo.firstName = this.treasurerFirstName;
-      } else {
-        treasurerInfo.firstName = "Aucun prénoms n'a été donné pour le trésorier. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.treasurerNumber !== '') {
-        treasurerInfo.phone = this.treasurerNumber;
-      } else {
-        treasurerInfo.phone = "Aucun numéros n'a été donné pour le trésorier. Contacter un administrateur pour plus d'information.";
-      }
-
-      if (this.masterLastName !== '') {
-        masterInfo.lastName = this.masterLastName;
-      } else {
-        masterInfo.lastName = "Aucun nom n'a été donné pour le Maître d’armes. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.masterFirstName !== '') {
-        masterInfo.firstName = this.masterFirstName;
-      } else {
-        masterInfo.firstName = "Aucun prénoms n'a été donné pour le Maître d’armes. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.masterNumber !== '') {
-        masterInfo.phone = this.masterNumber;
-      } else {
-        masterInfo.phone = "Aucun numéros n'a été donné pour le Maître d’armes. Contacter un administrateur pour plus d'information.";
-      }
-
-      if (this.secretaryLastName !== '') {
-        secretaryInfo.lastName = this.secretaryLastName;
-      } else {
-        secretaryInfo.lastName = "Aucun nom n'a été donné pour le secrétaire. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.secretaryFirstName !== '') {
-        secretaryInfo.firstName = this.secretaryFirstName;
-      } else {
-        secretaryInfo.firstName = "Aucun prénoms n'a été donné pour le secrétaire. Contacter un administrateur pour plus d'information.";
-      }
-      if (this.secretaryNumber !== '') {
-        secretaryInfo.phone = this.secretaryNumber;
-      } else {
-        secretaryInfo.phone = "Aucun numéros n'a été donné pour le secrétaire. Contacter un administrateur pour plus d'information.";
-      }
+      this.checkValue(presidentInfo, this.president, 'président');
+      this.checkValue(treasurerInfo, this.treasurer, 'trésorier');
+      this.checkValue(masterInfo, this.master, 'Maître d’armes');
+      this.checkValue(secretaryInfo, this.secretary, 'secrétaire');
 
       this.updateClub({
         setting: this.settingsClub, presidentInfo, treasurerInfo, masterInfo, secretaryInfo
@@ -308,6 +311,14 @@ export default {
             position: 'top'
           });
         });
+    },
+
+    addImage(who) {
+      this.$q.dialog({
+        component: AdminSettingsAddPict,
+        parent: this,
+        regarding: who
+      });
     }
   }
 };

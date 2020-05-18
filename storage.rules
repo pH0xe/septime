@@ -69,7 +69,7 @@ service firebase.storage {
     }
 
     match /important/{docId} {
-    	allow write : if false;
+    	allow write : if isAdmin();
       allow read: if true;
     }
   }

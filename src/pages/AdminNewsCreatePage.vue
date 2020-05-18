@@ -21,6 +21,29 @@
         </div>
       </q-card-section>
 
+      <q-select
+        v-model="newsTypeSelect"
+        class="q-ma-lg"
+        :options="newsType"
+        map-options
+        label="Rechercher par type"
+        color="admin-primary"
+        emit-value
+        :error="$v.newsTypeSelect.$error"
+        error-message="Champ requis"
+        @input="$v.newsTypeSelect.$touch"
+        @blur="$v.newsTypeSelect.$touch"
+      >
+        <template v-slot:append>
+          <q-icon
+            v-if="newsTypeSelect !== ''"
+            class="cursor-pointer"
+            name="mdi-close"
+            @click="newsTypeSelect = ''"
+          />
+        </template>
+      </q-select>
+
       <q-card-section>
         <div class="full-width text-weight-bold q-mb-md">
           Contenu :
@@ -149,7 +172,26 @@ import { validationMixin } from 'vuelidate';
 import { mapState, mapActions } from 'vuex';
 import { Notify } from 'quasar';
 import FirebaseUploader from '../components/FirebaseUploader';
+import { NewsType } from '../js/newsType';
 
+const newsType = [
+  {
+    label: 'Info Pratique',
+    value: NewsType.USEFUL
+  },
+  {
+    label: 'FFE',
+    value: NewsType.FFE
+  },
+  {
+    label: 'Actualité',
+    value: NewsType.NEWS
+  },
+  {
+    label: 'Boutique',
+    value: NewsType.STORE
+  }
+];
 
 export default {
   name: 'AdminNewsCreatePage',
@@ -159,13 +201,18 @@ export default {
   data: () => ({
     newsTitle: '',
     newsText: '',
-    isPic: false
+    isPic: false,
+    newsTypeSelect: ''
   }),
 
   computed: {
     ...mapState({
       news: (state) => state.news.news
-    })
+    }),
+
+    newsType() {
+      return newsType;
+    }
   },
 
   methods: {
@@ -186,7 +233,8 @@ export default {
         const news = {
           title: this.newsTitle,
           text: this.newsText,
-          date: new Date()
+          date: new Date(),
+          type: this.newsTypeSelect
         };
 
         this.$q.loading.show({ message: 'Création de la news en cours...' });
@@ -220,6 +268,10 @@ export default {
 
     picUploader() {
       this.isPic = !this.isPic;
+    },
+
+    test() {
+      console.log(this.newsTypeSelect);
     }
   },
 
@@ -228,6 +280,9 @@ export default {
       required
     },
     newsText: {
+      required
+    },
+    newsTypeSelect: {
       required
     }
   }

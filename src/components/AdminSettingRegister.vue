@@ -13,10 +13,10 @@
     <q-separator />
 
     <div class="text-h6 q-mt-lg">
-      Lien de l'adhésion HelloAsso
+      Lien de l'adhésion AssoConnect
     </div>
     <a
-      href="https://centredaide.helloasso.com/s/article/integrer-helloasso-a-mon-site-internet"
+      href="https://help.assoconnect.com/hc/fr/articles/115003805265-Int%C3%A9grer-les-formulaires-de-billetterie-dons-adh%C3%A9sions-en-iframe"
       target="_blank"
     >
       Cliquez ici pour savoir comment obtenir le code iframe à copier
@@ -26,7 +26,7 @@
       class="w-50"
       type="url"
       color="admin-primary"
-      label="URL de l'adhésion HelloAsso"
+      label="URL de l'adhésion AssoConnect"
     />
     <q-btn
       label="Valider le lien"

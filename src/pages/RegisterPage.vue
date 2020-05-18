@@ -64,14 +64,14 @@
                 rounded
                 class="q-ma-lg bg-warning"
               >
-                Payement via HelloAsso. <br>
+                Adhésion via AssoConnect <br>
                 Merci de correctement renseigner le formulaire puis cochez la case suivante. <br>
                 Une vérification du payement sera effectué avant que votre compte soit validé.
               </q-banner>
               <div v-html="link" />
               <q-checkbox
                 v-model="hasCheckPaid"
-                label="J'ai payé via HelloAsso"
+                label="J'ai payé via AssoConnect"
                 color="primary"
               />
 

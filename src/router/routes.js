@@ -7,6 +7,7 @@ import NewsArticlePage from '../pages/NewsArticlePage';
 import ProfilPage from '../pages/ProfilPage';
 import ProfilUpdatePage from '../pages/ProfilUpdatePage';
 import ContactPage from '../pages/ContactPage';
+import UsefulInformationPage from '../pages/UsefulInformationPage';
 
 
 const routes = [
@@ -66,6 +67,11 @@ const routes = [
         path: 'contact',
         name: 'contact',
         component: ContactPage
+      },
+      {
+        path: 'useful',
+        name: 'usefulInfo',
+        component: UsefulInformationPage
       }
     ]
   },

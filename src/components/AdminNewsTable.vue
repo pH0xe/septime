@@ -8,6 +8,8 @@
     bordered
     hide-bottom
     row-key="uid"
+    :filter="search"
+    :filter-method="filterNews"
   >
     <template v-slot:body="props">
       <q-tr>
@@ -29,6 +31,12 @@
           :props="props"
         >
           {{ props.row.date | dateDMY }}
+        </q-td>
+        <q-td
+          key="type"
+          :props="props"
+        >
+          {{ getTypeLabel(props.row.type) }}
         </q-td>
         <q-td
           key="modify"
@@ -61,6 +69,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { NewsType } from '../js/newsType';
 
 
 const columns = [
@@ -79,6 +88,13 @@ const columns = [
     sortable: false
   },
   {
+    name: 'type',
+    label: 'Type',
+    align: 'left',
+    field: 'type',
+    sortable: true
+  },
+  {
     name: 'modify',
     align: 'right',
     sortable: false
@@ -91,6 +107,11 @@ export default {
   props: {
     news: {
       type: Array,
+      required: true
+    },
+
+    search: {
+      type: String,
       required: true
     }
   },
@@ -121,6 +142,34 @@ export default {
 
     updateNews(uid) {
       this.$router.push({ name: 'admin_news_modify', query: { uid } });
+    },
+
+    filterNews(rows, lookFor) {
+      // Sanitize input
+      lookFor = lookFor.toLowerCase();
+
+      // Copy the rows to work on them
+      let results = rows;
+      results = results
+        .filter((result) => result.type.toLowerCase() === lookFor);
+
+      // Return them
+      return results;
+    },
+
+    getTypeLabel(type) {
+      switch (type) {
+        case NewsType.NEWS:
+          return 'Actualité';
+        case NewsType.FFE:
+          return 'FFE';
+        case NewsType.USEFUL:
+          return 'Info pratique';
+        case NewsType.STORE:
+          return 'Boutique';
+        default:
+          return 'Autre';
+      }
     }
   }
 };

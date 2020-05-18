@@ -43,7 +43,7 @@ export default {
 
   computed: {
     ...mapState({
-      news: (state) => state.news.news
+      news: (state) => state.news.allNews
     }),
 
     currentNews() {
