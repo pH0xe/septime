@@ -163,7 +163,7 @@
           >
             ● Accès Cercle d'escrime de Moirans
           </router-link>
-          <h6>V1.0.0</h6>
+          <h6>V1.0.1</h6>
         </div>
       </div>
     </q-footer>
@@ -309,7 +309,7 @@ export default {
     padding: 0.5%;
     margin: 0;
     display: inline;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     right: 0;
   }
