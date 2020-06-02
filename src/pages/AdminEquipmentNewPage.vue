@@ -50,7 +50,6 @@
             label="Numéro interne"
             error-message="Champ requis"
             :error="$v.internalId.$error"
-            type="number"
           />
         </q-card-section>
       </div>
@@ -295,8 +294,7 @@ export default {
       required
     },
     internalId: {
-      required,
-      numeric
+      required
     },
     productionDate: {
       maxValue: maxValue(date.addToDate(new Date(),

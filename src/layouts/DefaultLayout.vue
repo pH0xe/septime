@@ -163,7 +163,7 @@
           >
             ● Accès Cercle d'escrime de Moirans
           </router-link>
-          <h6>V1.0.1</h6>
+          <h6>V1.0.2</h6>
         </div>
       </div>
     </q-footer>
