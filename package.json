@@ -1,6 +1,6 @@
 {
   "name": "septime",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "description": "Outil de gestion de club d'escrime",
   "productName": "Cercle d'escrime de Moirans",
   "cordovaId": "org.cordova.quasar.app",
