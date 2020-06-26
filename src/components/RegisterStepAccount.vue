@@ -125,10 +125,12 @@
       </template>
     </q-input>
 
+    <!--
     <q-checkbox
       v-model="isReferent"
       :label="isReferent ? 'Je suis un parent référent' : 'Je ne suis pas un parent référent'"
     />
+    -->
 
     <q-stepper-navigation>
       <q-btn

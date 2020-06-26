@@ -26,7 +26,6 @@
           <q-separator class="q-my-md" />
 
           <div
-            class="text-capitalize"
             v-html="currentNews.text"
           />
         </template>
