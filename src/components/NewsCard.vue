@@ -50,7 +50,7 @@ export default {
 
   computed: {
     firstLine() {
-      return this.content.split('<div>')[0];
+      return this.content.replace(/<[^>]*>/g, '');
     }
   },
 

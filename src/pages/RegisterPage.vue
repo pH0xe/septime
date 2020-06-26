@@ -30,7 +30,7 @@
             </q-step>
             <q-step
               :name="1"
-              title="Coordonées"
+              title="Coordonnées"
               icon="mdi-home"
               :done="step > 1"
             >
@@ -56,7 +56,7 @@
 
             <q-step
               :name="3"
-              title="Paiment"
+              title="Paiement"
               icon="mdi-currency-eur"
               :done="step > 3"
             >

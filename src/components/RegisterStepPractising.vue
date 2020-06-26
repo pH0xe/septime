@@ -1,5 +1,6 @@
 <template lang="html">
   <q-form @submit="onSubmit">
+    <!--
     <q-banner
       rounded
       class="bg-warning"
@@ -17,6 +18,7 @@
         />
       </template>
     </q-banner>
+    -->
 
     <div class="text-body2 q-my-md">
       Veuillez fournir une photo récente du nouvel adhérent.
@@ -240,7 +242,7 @@ export default {
     },
 
     fileAreUploded() {
-      return this.isCertificate && this.isProfilPic;
+      return this.isCertificate;
     }
   },
 
@@ -259,7 +261,7 @@ export default {
 
       if (!fileUploaded) {
         this.$q.notify({
-          message: 'Merci de rajouter la photo et le certificat',
+          message: 'Merci de rajouter le certificat',
           color: 'negative',
           position: 'center'
         });

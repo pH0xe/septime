@@ -163,7 +163,7 @@
           >
             ● Accès Cercle d'escrime de Moirans
           </router-link>
-          <h6>V1.0.2</h6>
+          <h6>V {{ appVersion }}</h6>
         </div>
       </div>
     </q-footer>
@@ -172,6 +172,8 @@
 
 <script lang="js">
 import { mapGetters, mapState } from 'vuex';
+import { version as appVersion } from '../../package.json';
+
 import { auth } from '../boot/firebase';
 import NavbarLinks from '../components/NavbarLinks.vue';
 import NavbarAccount from '../components/NavbarAccount';
@@ -221,6 +223,10 @@ export default {
       return this.isLoggedIn
         && !(this.currentUser?.isActive || this.currentUser?.isAdmin)
         && this.bannerMember.show;
+    },
+
+    appVersion() {
+      return appVersion;
     }
   },
 
