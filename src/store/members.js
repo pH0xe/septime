@@ -69,7 +69,7 @@ export default {
           member.memberAvatar = await storage.ref()
             .child(`profile_pics/${member.uid}`)
             .getDownloadURL()
-            .catch(() => { member.memberAvatar = 'https://picsum.photos/200'; });
+            .catch(() => { member.memberAvatar = ''; });
           return member;
         })))
         .then((members) => Promise.all(members.map(async (member) => {
