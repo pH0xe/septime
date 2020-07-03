@@ -133,6 +133,14 @@ export default {
             position: 'top-left'
           });
         });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    updateNewsImage({ commit }, { news }) {
+      storage.ref()
+        .child('news')
+        .child(news.uid)
+        .delete();
     }
   }
 };
