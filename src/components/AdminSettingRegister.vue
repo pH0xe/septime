@@ -34,6 +34,12 @@
     >
       Cliquez ici pour savoir comment obtenir le code iframe à copier
     </a>
+    <div class="text-subtitle1">
+      Ne mettre que le contenu de "src"
+    </div>
+    <div>
+      Exemple : <span class="text-weight-bolder">https://cercle-d-escrime-de-moirans.assoconnect.com/billetterie/offre/134026-h-inscriptions-2020-2021?iframe=1</span>
+    </div>
     <q-input
       v-model="formURL"
       class="w-50"
@@ -42,9 +48,10 @@
       label="URL de l'adhésion AssoConnect"
     />
     <q-btn
+      class="q-mt-md"
       label="Valider le lien"
       color="admin-primary"
-      flat
+      outline
       @click="changeIframe"
     />
   </div>
