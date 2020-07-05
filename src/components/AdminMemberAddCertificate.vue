@@ -29,12 +29,12 @@
           <q-btn
             label="Valider"
             type="submit"
-            color="primary"
+            color="admin-primary"
           />
           <q-btn
             label="Annuler"
             type="reset"
-            color="primary"
+            color="admin-primary"
             flat
             class="q-ml-sm"
           />

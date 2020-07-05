@@ -12,6 +12,19 @@
 
     <q-separator />
 
+    <div class="text-h6">
+      Désactiver tous les comptes (sauf les administrateurs)
+    </div>
+    <q-btn
+      class="q-mt-md q-mb-lg"
+      outline
+      color="admin-primary"
+      label="Désactiver"
+      @click="deactivate"
+    />
+
+    <q-separator />
+
     <div class="text-h6 q-mt-lg">
       Lien de l'adhésion AssoConnect
     </div>
@@ -21,6 +34,12 @@
     >
       Cliquez ici pour savoir comment obtenir le code iframe à copier
     </a>
+    <div class="text-subtitle1">
+      Ne mettre que le contenu de "src"
+    </div>
+    <div>
+      Exemple : <span class="text-weight-bolder">https://cercle-d-escrime-de-moirans.assoconnect.com/billetterie/offre/134026-h-inscriptions-2020-2021?iframe=1</span>
+    </div>
     <q-input
       v-model="formURL"
       class="w-50"
@@ -29,9 +48,10 @@
       label="URL de l'adhésion AssoConnect"
     />
     <q-btn
+      class="q-mt-md"
       label="Valider le lien"
       color="admin-primary"
-      flat
+      outline
       @click="changeIframe"
     />
   </div>
@@ -51,7 +71,8 @@ export default {
   computed: {
     ...mapState({
       settingsClub: (state) => state.settings.settingsClub,
-      settingsRegister: (state) => state.settings.settingsRegister
+      settingsRegister: (state) => state.settings.settingsRegister,
+      activeMember: (state) => state.members.membersActive
     }),
 
     ...mapGetters(['isRegisterOpen'])
@@ -59,6 +80,7 @@ export default {
 
   beforeMount() {
     this.fetchSettings();
+    this.fetchMembers();
   },
 
   mounted() {
@@ -67,7 +89,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchSettings', 'updateRegisterOpened', 'updateIframeLink']),
+    ...mapActions(['fetchSettings', 'updateRegisterOpened', 'updateIframeLink', 'deactivateMembers', 'fetchMembers']),
 
     onToggleChange(value) {
       this.updateRegisterOpened({ setting: this.settingsRegister, value });
@@ -80,6 +102,18 @@ export default {
             color: 'positive',
             position: 'bottom',
             message: 'Mise à jour du lien effectuée',
+            icon: 'mdi-check'
+          });
+        });
+    },
+
+    deactivate() {
+      this.deactivateMembers({ members: this.activeMember })
+        .then(() => {
+          this.$q.notify({
+            color: 'positive',
+            position: 'bottom',
+            message: 'Désactivation effectuée',
             icon: 'mdi-check'
           });
         });

@@ -2,7 +2,7 @@
   <q-form @submit="onSubmit">
     <q-input
       v-model="address.street"
-      label="Addresse"
+      label="Adresse"
       required
       autocomplete="address-line1"
       :error="$v.address.street.$error"

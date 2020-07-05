@@ -102,7 +102,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>
-            {{ currentUser.displayName }}
+            {{ currentUser.firstName }} {{ currentUser.lastName }}
             <q-badge :label="currentUser.group" />
           </q-item-label>
           <q-item-label caption>

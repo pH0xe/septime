@@ -68,7 +68,7 @@
                 Merci de correctement renseigner le formulaire puis cochez la case suivante. <br>
                 Une vérification du payement sera effectué avant que votre compte soit validé.
               </q-banner>
-              <div v-html="link" />
+              <iframe :src="link" />
               <q-checkbox
                 v-model="hasCheckPaid"
                 label="J'ai payé via AssoConnect"

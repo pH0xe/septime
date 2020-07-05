@@ -36,6 +36,17 @@ export default {
     changePaidState(state, { member, newPayments }) {
       const index = state.members.indexOf(member);
       state.members[index].payments = newPayments;
+    },
+
+    deactivateMember(state, { member }) {
+      let index = state.members.indexOf(member);
+      state.members[index].isActive = false;
+
+      index = state.membersActive.indexOf(member);
+      if (index > -1) {
+        state.membersActive.splice(index, 1);
+      }
+      state.membersInactive = [...state.membersInactive, member];
     }
   },
 
@@ -58,7 +69,7 @@ export default {
           member.memberAvatar = await storage.ref()
             .child(`profile_pics/${member.uid}`)
             .getDownloadURL()
-            .catch(() => { member.memberAvatar = 'https://picsum.photos/200'; });
+            .catch(() => { member.memberAvatar = ''; });
           return member;
         })))
         .then((members) => Promise.all(members.map(async (member) => {
@@ -321,6 +332,27 @@ export default {
             position: 'top-left'
           });
         });
+    },
+
+    deactivateMembers({ commit }, { members }) {
+      members.forEach((member) => {
+        if (member.isAdmin === false) {
+          db.collection('users')
+            .doc(member.uid)
+            .update({ isActive: false })
+            .then(() => {
+              commit('deactivateMember', { member });
+            })
+            .catch((err) => {
+              console.log('Error while deactivate : ', err);
+              Notify.create({
+                message: `Une erreur s'est produite: ${err}`,
+                color: 'negative',
+                position: 'top-left'
+              });
+            });
+        }
+      });
     }
   }
 };

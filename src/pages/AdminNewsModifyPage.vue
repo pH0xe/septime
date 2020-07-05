@@ -137,6 +137,24 @@
         </div>
       </q-card-section>
 
+      <q-card-section>
+        <div class="full-width text-weight-bold q-mb-md">
+          Modifier l'image :
+        </div>
+        <firebase-uploader
+          ref="newsUploader"
+          color="admin-primary"
+          path="news/public_temp"
+          :max-total-size="1048576"
+          :auto-upload="false"
+          hide-upload-btn
+          flat
+          bordered
+          @added="picUploader"
+          @removed="picUploader"
+        />
+      </q-card-section>
+
       <q-card-actions align="right">
         <q-btn
           color="admin-primary"
@@ -153,7 +171,9 @@
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import { mapState, mapActions } from 'vuex';
+import { Notify } from 'quasar';
 import { NewsType } from '../js/newsType';
+import FirebaseUploader from '../components/FirebaseUploader';
 
 const newsType = [
   {
@@ -176,12 +196,14 @@ const newsType = [
 
 export default {
   name: 'AdminNewsModifyPage',
+  components: { FirebaseUploader },
   mixins: [validationMixin],
 
   data: () => ({
     newTitle: '',
     newText: '',
-    newsTypeSelect: ''
+    newsTypeSelect: '',
+    isPic: false
   }),
 
   computed: {
@@ -215,25 +237,51 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchNews', 'updateNews']),
+    ...mapActions(['fetchNews', 'updateNews', 'updateNewsImage']),
 
 
     modifyNews() {
       this.$v.$touch();
       if (!this.$v.$error) {
         const currentNew = this.news.find((item) => item.uid === this.$route.query.uid);
+
+        this.$q.loading.show({ message: 'Modification de la news en cours...' });
         this.updateNews({
           news: currentNew,
           newTitle: this.newTitle,
           newText: this.newText,
           newType: this.newsTypeSelect
-        });
-        this.$q.loading.show({ message: 'Modification de la news en cours...' });
-        setTimeout(() => {
-          this.$q.loading.hide();
-          this.$router.replace({ name: 'admin_news' });
-        }, 3000);
+        })
+          .then(() => {
+            if (this.isPic) {
+              this.$q.loading.show({ message: 'Upload de l\'image' });
+              this.updateNewsImage({ news: currentNew });
+              this.$refs.newsUploader.extra.filename = currentNew.uid;
+
+              return this.$refs.newsUploader.upload().catch((err) => {
+                Notify.create({
+                  message: `Une erreur s'est produite: ${err}`,
+                  color: 'negative',
+                  position: 'bottom'
+                });
+              });
+            }
+            return null;
+          })
+          .then(() => {
+            this.$q.loading.hide();
+            this.$router.replace({ name: 'admin_news' });
+          });
       }
+    },
+
+    picUploader() {
+      this.isPic = !this.isPic;
+    },
+
+    test() {
+      const currentNew = this.news.find((item) => item.uid === this.$route.query.uid);
+      this.updateNewsImage({ news: currentNew });
     }
   },
 
