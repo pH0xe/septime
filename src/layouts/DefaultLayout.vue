@@ -106,7 +106,7 @@
         <div class="q-py-sm">
           <footer-image
             v-for="partner in partners"
-            :key="partner.link"
+            :key="partner.id"
             :link="partner.link"
             :image-link="partner.image"
           />
@@ -114,7 +114,7 @@
         <div class="q-py-sm">
           <router-link
             v-for="footerLink in footerLinks"
-            :key="footerLink.link"
+            :key="footerLink.id"
             :to="footerLink.link"
             class="cursor-pointer simple-link"
           >
@@ -138,52 +138,64 @@ import FooterImage from '../components/footerImage';
 
 const partners = [
   {
+    id: 0,
     link: 'http://www.isere.gouv.fr/Services-de-l-Etat/Sante-et-cohesion-sociale/Direction-Departementale-de-la-Cohesion-Sociale-D.D.C.S/DDCS-presentation-et-organigramme',
     image: 'prefet.png'
   },
   {
+    id: 1,
     link: 'https://www.isere.fr/',
     image: 'isere.png'
   },
   {
+    id: 2,
     link: 'http://www.escrime-ffe.fr/',
     image: 'ffe.png'
   },
   {
+    id: 3,
     link: 'http://escrime.ds.free.fr/joomla/index.php',
     image: 'ligue.jpeg'
   },
   {
+    id: 4,
     link: 'https://escrime38.wordpress.com/',
     image: 'comite.png'
   },
   {
+    id: 5,
     link: 'http://www.ville-moirans.fr/',
     image: 'moirans.jpg'
   },
   {
+    id: 6,
     link: 'https://www.voiron.fr/',
     image: 'voiron.jpg'
   },
   {
+    id: 7,
     link: 'https://www.auvergnerhonealpes.fr/',
     image: 'AURA.png'
   }
 ];
 const footerLinks = [
   {
+    id: 0,
     link: { name: 'contact', query: { to: 'legalNotice' } },
     label: 'Mentions légales'
   },
   {
+    id: 1,
     link: { name: 'contact', query: { to: 'webmasterContact' } },
     label: '● Contact webmaster'
   },
   {
+    id: 2,
     link: { name: 'contact', query: { to: 'clubContact' } },
     label: '● Contact Cercle d\'escrime de Moirans'
   },
   {
+    id: 3,
     link: { name: 'contact', query: { to: 'access' } },
     label: '● Accès Cercle d\'escrime de Moirans'
   }
