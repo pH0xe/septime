@@ -8,19 +8,25 @@
     hide-bottom
     flat
     bordered
+    class="q-my-md"
     @row-click="onClickTraining"
-
   >
-    <template v-slot:body-cell-startDate="props">
+    <template v-slot:body-cell-startHour="props">
       <q-td
         :props="props"
         class="cursor-pointer"
+        auto-width
       >
-        {{ date.formatDate(props.row.startDate, 'dddd DD MMMM, HH:mm - ', {
-          days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-          months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-                   'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']}) }}
-        {{ date.formatDate(props.row.endDate, 'HH:mm') }}
+        {{ props.row.hours.start }} - {{ props.row.hours.end }}
+      </q-td>
+    </template>
+    <template v-slot:body-cell-studentNumber="props">
+      <q-td
+        :props="props"
+        class="cursor-pointer"
+        auto-width
+      >
+        {{ props.row.students.length }}
       </q-td>
     </template>
   </q-table>
@@ -31,17 +37,24 @@ import { date } from 'quasar';
 
 const columns = [
   {
-    name: 'startDate',
+    name: 'startHour',
     align: 'left',
-    label: 'Horaire',
+    label: 'Heure',
     sortable: false,
-    field: 'startDate'
+    field: 'hours.start'
+  },
+  {
+    name: 'studentNumber',
+    align: 'left',
+    label: 'Nombre d\'inscrit',
+    sortable: false,
+    field: 'student'
   }
 ];
 
 
 export default {
-  name: 'AdminPresenceTrainingTable',
+  name: 'AdminPresencePlanningTable',
 
   props: {
     title: {
@@ -58,7 +71,8 @@ export default {
   data: () => ({
     pagination: {
       rowsPerPage: 0,
-      sortBy: 'startDate'
+      sortBy: 'startHour',
+      descending: true
     }
   }),
 
@@ -74,10 +88,10 @@ export default {
 
   methods: {
     onClickTraining(event, row) {
-      this.$router.push({ name: 'admin_presence_list', params: { id: row.uid } });
+      this.$router.push({ name: 'admin_presence_update', params: { id: row.internalId } });
     }
   }
 };
 </script>
 
-  <style scoped />
+<style scoped />

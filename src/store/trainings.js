@@ -20,7 +20,7 @@ export default {
       state.trainings = trainings;
       let max = 0;
       trainings.forEach((training) => {
-        if (max < training.id) max = training.id;
+        if (max < training.internalId) max = training.internalId;
       });
       state.maxID = max;
     },
@@ -77,6 +77,22 @@ export default {
             position: 'bottom'
           });
         });
+    },
+
+    updateStudents({ commit }, { trainings, newStudents }) {
+      trainings.forEach((training) => db.collection('trainings').doc(training.uid)
+        .update({ students: newStudents })
+        .then(() => {
+          commit('updateStudent', { training });
+        })
+        .catch((err) => {
+          console.error('Error while updating student list: ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'bottom'
+          });
+        }));
     },
 
     createMultipleTraining(_, { trainings }) {

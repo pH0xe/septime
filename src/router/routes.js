@@ -123,6 +123,11 @@ const routes = [
         component: () => import('../pages/adminPresencePlanningPage')
       },
       {
+        path: 'presence/update/:id',
+        name: 'admin_presence_update',
+        component: () => import('../pages/adminPresenceUpdatePage')
+      },
+      {
         path: 'equipment/create',
         name: 'admin_equipment_create',
         component: () => import('../pages/AdminEquipmentNewTypePage')
