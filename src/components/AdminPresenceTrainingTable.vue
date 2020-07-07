@@ -9,7 +9,6 @@
     flat
     bordered
     @row-click="onClickTraining"
-
   >
     <template v-slot:body-cell-startDate="props">
       <q-td
