@@ -21,7 +21,13 @@
       flat
       class="q-mt-md"
     >
-      <q-card-actions align="right">
+      <q-card-actions align="left">
+        <q-btn
+          color="negative"
+          label="Supprimer"
+          @click="deleteThisTrainings"
+        />
+        <q-space />
         <q-btn
           color="negative"
           outline
@@ -79,7 +85,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchMembers', 'fetchTrainings', 'updateStudentPresence']),
+    ...mapActions(['fetchMembers', 'fetchTrainings', 'updateStudentPresence', 'deleteTraining']),
 
     onOkClick() {
       this.updateStudentPresence({ training: this.training });
@@ -88,6 +94,13 @@ export default {
 
     onCancelClick() {
       this.$router.push({ name: 'admin_presence' });
+    },
+
+    deleteThisTrainings() {
+      console.log(this.training);
+      this.deleteTraining({ training: this.training }).then(() => {
+        this.$router.replace({ name: 'admin_presence' });
+      });
     }
   }
 };

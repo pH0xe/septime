@@ -28,6 +28,11 @@ export default {
     updateStudent(state, { training }) {
       const updatedTraining = state.trainings.find((item) => training.uid === item.uid);
       updatedTraining.students = training.students;
+    },
+
+    deleteTrainingState(state, { training }) {
+      const index = state.trainings.indexOf(training);
+      delete state.trainings[index];
     }
   },
 
@@ -95,6 +100,22 @@ export default {
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
             position: 'bottom'
+          });
+        });
+    },
+
+    deleteTraining({ commit }, { training }) {
+      db.collection('trainings').doc(training.uid)
+        .delete()
+        .then(() => {
+          commit('deleteTrainingState', { training });
+        })
+        .catch((err) => {
+          console.log('Error while deleting training : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
           });
         });
     }
