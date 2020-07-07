@@ -78,6 +78,7 @@
             class="col-12 col-md-5 q-mr-md"
             error-message="Champ requis"
             :error="$v.startHour.$error"
+            color="admin-primary"
             @input="$v.startHour.$touch"
             @blur="$v.startHour.$touch"
           >
@@ -105,6 +106,7 @@
           <q-input
             v-model="endHour"
             filled
+            color="admin-primary"
             label="Fin"
             class="col-12 col-md-5 q-mr-md"
             error-message="Champ requis"
@@ -272,7 +274,7 @@
 import { required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import { date as quasarDate } from 'quasar';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { Group } from '../js/Group';
 import AdminPresenceMemberTable from '../components/AdminPresenceMemberTable';
 
@@ -344,8 +346,10 @@ export default {
 
   methods: {
     ...mapActions(['fetchMembers', 'createMultipleTraining']),
+    ...mapGetters(['maxID']),
 
     onSubmit() {
+      console.log(this.maxID());
       this.$v.$touch();
       if (!this.$v.$error) {
         const trainingsToAdd = [];
@@ -366,8 +370,11 @@ export default {
           usersTraining.push({ isPresent: 'here', uid: member.uid });
         });
 
+        const id = this.maxID() + 1;
+
         while (currentDate <= endDate) {
           const currentTraining = {
+            id,
             startDate: quasarDate.adjustDate(currentDate,
               { hours: startHour, minutes: startMinute }),
             endDate: quasarDate.adjustDate(currentDate,

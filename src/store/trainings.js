@@ -5,12 +5,24 @@ import { db } from '../boot/firebase';
 export default {
   namespaced: false,
   state: {
-    trainings: []
+    trainings: [],
+    maxID: null
+  },
+
+  getters: {
+    maxID(state) {
+      return state.maxID;
+    }
   },
 
   mutations: {
     setTrainings(state, { trainings }) {
       state.trainings = trainings;
+      let max = 0;
+      trainings.forEach((training) => {
+        if (max < training.id) max = training.id;
+      });
+      state.maxID = max;
     },
 
     updateStudent(state, { training }) {
