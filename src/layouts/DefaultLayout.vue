@@ -105,63 +105,20 @@
       <div align="center">
         <div class="q-py-sm">
           <footer-image
-            link="http://www.isere.gouv.fr/Services-de-l-Etat/Sante-et-cohesion-sociale/Direction-Departementale-de-la-Cohesion-Sociale-D.D.C.S/DDCS-presentation-et-organigramme"
-            image-link="prefet.png"
-          />
-          <footer-image
-            link="https://www.isere.fr/"
-            image-link="isere.png"
-          />
-          <footer-image
-            link="http://www.escrime-ffe.fr/"
-            image-link="ffe.png"
-          />
-          <footer-image
-            link="http://escrime.ds.free.fr/joomla/index.php"
-            image-link="ligue.jpeg"
-          />
-          <footer-image
-            link="https://escrime38.wordpress.com/"
-            image-link="comite.png"
-          />
-          <footer-image
-            link="http://www.ville-moirans.fr/"
-            image-link="moirans.jpg"
-          />
-          <footer-image
-            link="https://www.voiron.fr/"
-            image-link="voiron.jpg"
-          />
-          <footer-image
-            link="https://www.auvergnerhonealpes.fr/"
-            image-link="AURA.png"
+            v-for="partner in partners"
+            :key="partner.link"
+            :link="partner.link"
+            :image-link="partner.image"
           />
         </div>
         <div class="q-py-sm">
           <router-link
-            :to="{name: 'contact', query: {to: 'legalNotice'}}"
+            v-for="footerLink in footerLinks"
+            :key="footerLink.link"
+            :to="footerLink.link"
             class="cursor-pointer simple-link"
           >
-            Mentions légales
-          </router-link>
-
-          <router-link
-            :to="{name: 'contact', query: {to: 'webmasterContact'}}"
-            class="cursor-pointer simple-link"
-          >
-            ● Contact webmaster
-          </router-link>
-          <router-link
-            :to="{name: 'contact', query: {to: 'clubContact'}}"
-            class="cursor-pointer simple-link"
-          >
-            ● Contact Cercle d'escrime de Moirans
-          </router-link>
-          <router-link
-            :to="{name: 'contact', query: {to: 'access'}}"
-            class="cursor-pointer simple-link"
-          >
-            ● Accès Cercle d'escrime de Moirans
+            {{ footerLink.label }}
           </router-link>
           <h6>V {{ appVersion }}</h6>
         </div>
@@ -178,6 +135,59 @@ import { auth } from '../boot/firebase';
 import NavbarLinks from '../components/NavbarLinks.vue';
 import NavbarAccount from '../components/NavbarAccount';
 import FooterImage from '../components/footerImage';
+
+const partners = [
+  {
+    link: 'http://www.isere.gouv.fr/Services-de-l-Etat/Sante-et-cohesion-sociale/Direction-Departementale-de-la-Cohesion-Sociale-D.D.C.S/DDCS-presentation-et-organigramme',
+    image: 'prefet.png'
+  },
+  {
+    link: 'https://www.isere.fr/',
+    image: 'isere.png'
+  },
+  {
+    link: 'http://www.escrime-ffe.fr/',
+    image: 'ffe.png'
+  },
+  {
+    link: 'http://escrime.ds.free.fr/joomla/index.php',
+    image: 'ligue.jpeg'
+  },
+  {
+    link: 'https://escrime38.wordpress.com/',
+    image: 'comite.png'
+  },
+  {
+    link: 'http://www.ville-moirans.fr/',
+    image: 'moirans.jpg'
+  },
+  {
+    link: 'https://www.voiron.fr/',
+    image: 'voiron.jpg'
+  },
+  {
+    link: 'https://www.auvergnerhonealpes.fr/',
+    image: 'AURA.png'
+  }
+];
+const footerLinks = [
+  {
+    link: { name: 'contact', query: { to: 'legalNotice' } },
+    label: 'Mentions légales'
+  },
+  {
+    link: { name: 'contact', query: { to: 'webmasterContact' } },
+    label: '● Contact webmaster'
+  },
+  {
+    link: { name: 'contact', query: { to: 'clubContact' } },
+    label: '● Contact Cercle d\'escrime de Moirans'
+  },
+  {
+    link: { name: 'contact', query: { to: 'access' } },
+    label: '● Accès Cercle d\'escrime de Moirans'
+  }
+];
 
 export default {
   name: 'DefaultLayout',
@@ -227,6 +237,14 @@ export default {
 
     appVersion() {
       return appVersion;
+    },
+
+    partners() {
+      return partners;
+    },
+
+    footerLinks() {
+      return footerLinks;
     }
   },
 
