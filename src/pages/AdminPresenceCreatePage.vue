@@ -370,11 +370,11 @@ export default {
           usersTraining.push({ isPresent: 'here', uid: member.uid });
         });
 
-        const id = this.maxID() + 1;
+        const internalId = this.maxID() + 1;
 
         while (currentDate <= endDate) {
           const currentTraining = {
-            id,
+            internalId,
             startDate: quasarDate.adjustDate(currentDate,
               { hours: startHour, minutes: startMinute }),
             endDate: quasarDate.adjustDate(currentDate,
