@@ -146,11 +146,6 @@ export default {
     }
   },
 
-  beforeMount() {
-    this.fetchTrainings();
-    this.fetchMembers();
-  },
-
   methods: {
     ...mapActions(['fetchMembers', 'fetchTrainings']),
 

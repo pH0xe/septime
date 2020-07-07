@@ -346,10 +346,6 @@ export default {
     }
   },
 
-  beforeMount() {
-    this.fetchMembers();
-  },
-
   methods: {
     ...mapActions(['fetchMembers', 'createMultipleTraining']),
     ...mapGetters(['maxID']),

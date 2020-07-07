@@ -78,8 +78,6 @@ export default {
   },
 
   beforeMount() {
-    this.fetchMembers();
-    this.fetchTrainings();
     const searchUid = this.$route.params.id;
     this.training = this.trainings.find((training) => training.uid === searchUid);
   },

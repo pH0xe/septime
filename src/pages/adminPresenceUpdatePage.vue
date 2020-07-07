@@ -6,7 +6,6 @@
       de <span class="text-weight-bold">{{ getStartHours }}</span>
       à <span class="text-weight-bold">{{ getEndHours }}</span>
     </h5>
-    {{ currentTraining }}
     <admin-presence-member-update-table
       ref="memberList"
       :members="members"
