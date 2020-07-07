@@ -5,18 +5,25 @@
     </h5>
     <div class="row q-mb-md">
       <q-btn
-        class="col-12 col-md-auto q-mr-md"
+        class="col-12 col-md-auto q-mb-sm q-mr-sm"
         label="Nouvel entrainement"
         icon-right="mdi-plus"
         color="admin-primary"
         :to="{ name: 'admin_presence_create'}"
       />
       <q-btn
-        class="col-12 col-md-auto q-mr-md"
+        class="col-12 col-md-auto q-mb-sm q-mr-sm"
         label="Resultat"
         icon-right="mdi-trophy"
         color="admin-primary"
         :to="{ name: 'admin_presence_result' }"
+      />
+      <q-btn
+        class="col-12 col-md-auto q-mb-sm q-mr-sm"
+        label="Planning"
+        icon-right="mdi-calendar-clock"
+        color="admin-primary"
+        :to="{ name: 'admin_presence_planning' }"
       />
       <q-option-group
         v-model="activeTable"

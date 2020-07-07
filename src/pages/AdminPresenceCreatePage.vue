@@ -260,6 +260,12 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn
+          color="negative"
+          outline
+          label="retour"
+          @click="onCancelClick"
+        />
+        <q-btn
           color="admin-primary"
           flat
           label="Valider"
@@ -394,6 +400,10 @@ export default {
 
     optionSunday(date) {
       return quasarDate.extractDate(date, 'YYYY/MM/DD').getDay() === 0;
+    },
+
+    onCancelClick() {
+      this.$router.push({ name: 'admin_presence' });
     }
   },
 

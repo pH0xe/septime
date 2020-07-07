@@ -118,6 +118,11 @@ const routes = [
         component: () => import('../pages/AdminPresenceListPage.vue')
       },
       {
+        path: 'presence/planning',
+        name: 'admin_presence_planning',
+        component: () => import('../pages/adminPresencePlanningPage')
+      },
+      {
         path: 'equipment/create',
         name: 'admin_equipment_create',
         component: () => import('../pages/AdminEquipmentNewTypePage')

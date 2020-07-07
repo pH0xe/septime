@@ -13,6 +13,17 @@
         :members="list[1]"
       />
     </div>
+    <div
+      align="right"
+    >
+      <q-btn
+        class="q-my-md"
+        color="admin-primary"
+        label="retour"
+        outline
+        @click="onCancelClick"
+      />
+    </div>
   </q-page>
 </template>
 
@@ -141,7 +152,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchMembers', 'fetchTrainings'])
+    ...mapActions(['fetchMembers', 'fetchTrainings']),
+
+    onCancelClick() {
+      this.$router.push({ name: 'admin_presence' });
+    }
   }
 };
 </script>
