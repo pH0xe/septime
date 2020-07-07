@@ -25,7 +25,7 @@ export default function ({ store }) {
   router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth || record.meta.requiresAdmin)) {
       if (!store.getters.isLoggedIn) {
-        next({ name: 'login' });
+        next({ name: 'home' });
         return;
       }
     }
