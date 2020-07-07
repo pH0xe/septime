@@ -23,6 +23,12 @@
     >
       <q-card-actions align="right">
         <q-btn
+          color="negative"
+          outline
+          label="Retour"
+          @click="onCancelClick"
+        />
+        <q-btn
           color="admin-primary"
           flat
           label="Valider"
@@ -68,7 +74,7 @@ export default {
   beforeMount() {
     this.fetchMembers();
     this.fetchTrainings();
-    const searchUid = this.$route.query.uid;
+    const searchUid = this.$route.params.id;
     this.training = this.trainings.find((training) => training.uid === searchUid);
   },
 
@@ -77,6 +83,10 @@ export default {
 
     onOkClick() {
       this.updateStudentPresence({ training: this.training });
+      this.$router.push({ name: 'admin_presence' });
+    },
+
+    onCancelClick() {
       this.$router.push({ name: 'admin_presence' });
     }
   }

@@ -113,7 +113,7 @@ const routes = [
         component: () => import('../pages/AdminPresenceResultPage.vue')
       },
       {
-        path: 'presence/list',
+        path: 'presence/list/:id',
         name: 'admin_presence_list',
         component: () => import('../pages/AdminPresenceListPage.vue')
       },

@@ -13,6 +13,7 @@
     <template v-slot:body-cell-startDate="props">
       <q-td
         :props="props"
+        class="cursor-pointer"
       >
         {{ date.formatDate(props.row.startDate, 'dddd DD MMMM, HH:mm - ', {
           days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -71,7 +72,7 @@ export default {
 
   methods: {
     onClickTraining(event, row) {
-      this.$router.push({ name: 'admin_presence_list', query: { uid: row.uid } });
+      this.$router.push({ name: 'admin_presence_list', params: { id: row.uid } });
     }
   }
 };

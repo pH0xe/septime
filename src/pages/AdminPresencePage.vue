@@ -18,17 +18,26 @@
         color="admin-primary"
         :to="{ name: 'admin_presence_result' }"
       />
+      <q-option-group
+        v-model="activeTable"
+        :options="activeOptions"
+        type="checkbox"
+        inline
+      />
     </div>
     <admin-presence-training-table
+      v-if="activeTable.includes('today')"
       title="Aujourd'hui"
       :trainings="todayTrainings"
     />
     <admin-presence-training-table
+      v-if="activeTable.includes('futur')"
       class="q-my-md"
       title="Prochain entrainement"
       :trainings="futurTrainings"
     />
     <admin-presence-training-table
+      v-if="activeTable.includes('past')"
       title="Entrainement passé"
       :trainings="pastTrainings"
     />
@@ -40,9 +49,20 @@ import { mapState, mapActions } from 'vuex';
 import { date } from 'quasar';
 import AdminPresenceTrainingTable from '../components/AdminPresenceTrainingTable';
 
+const activeOptions = [
+  { label: 'Aujourd\'hui', value: 'today', color: 'admin-primary' },
+  { label: 'Prochain entrainement', value: 'futur', color: 'admin-primary' },
+  { label: 'Entrainement passé', value: 'past', color: 'admin-primary' }
+];
+
 export default {
   name: 'AdminPresencePage',
   components: { AdminPresenceTrainingTable },
+
+  data: () => ({
+    activeTable: ['today', 'futur', 'past']
+  }),
+
   computed: {
     ...mapState({
       members: (state) => state.members.members,
@@ -86,6 +106,10 @@ export default {
       });
 
       return results;
+    },
+
+    activeOptions() {
+      return activeOptions;
     }
   },
 
