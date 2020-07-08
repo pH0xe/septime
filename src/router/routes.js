@@ -64,7 +64,7 @@ const routes = [
         }
       },
       {
-        path: 'contact',
+        path: 'contact/:to',
         name: 'contact',
         component: ContactPage
       },
@@ -161,7 +161,7 @@ const routes = [
         path: 'news/create', name: 'admin_news_create', component: () => import('pages/AdminNewsCreatePage.vue')
       },
       {
-        path: 'news/modify', name: 'admin_news_modify', component: () => import('pages/AdminNewsModifyPage.vue')
+        path: 'news/modify/:id', name: 'admin_news_modify', component: () => import('pages/AdminNewsModifyPage.vue')
       }
     ]
   }

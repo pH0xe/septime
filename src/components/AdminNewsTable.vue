@@ -141,7 +141,7 @@ export default {
     },
 
     updateNews(uid) {
-      this.$router.push({ name: 'admin_news_modify', query: { uid } });
+      this.$router.push({ name: 'admin_news_modify', params: { id: uid } });
     },
 
     filterNews(rows, lookFor) {

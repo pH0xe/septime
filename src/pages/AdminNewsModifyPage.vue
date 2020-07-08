@@ -157,6 +157,12 @@
 
       <q-card-actions align="right">
         <q-btn
+          color="negative"
+          outline
+          label="Retour"
+          @click="onCancelClick"
+        />
+        <q-btn
           color="admin-primary"
           flat
           label="Modifier"
@@ -218,7 +224,7 @@ export default {
 
   beforeMount() {
     this.fetchNews();
-    const currentNew = this.news.find((item) => item.uid === this.$route.query.uid);
+    const currentNew = this.news.find((item) => item.uid === this.$route.params.id);
     if (currentNew.text) {
       this.newText = currentNew.text;
     } else {
@@ -282,6 +288,10 @@ export default {
     test() {
       const currentNew = this.news.find((item) => item.uid === this.$route.query.uid);
       this.updateNewsImage({ news: currentNew });
+    },
+
+    onCancelClick() {
+      this.$router.push({ name: 'admin_news' });
     }
   },
 

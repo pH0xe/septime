@@ -181,22 +181,22 @@ const partners = [
 const footerLinks = [
   {
     id: 0,
-    link: { name: 'contact', query: { to: 'legalNotice' } },
+    link: { name: 'contact', params: { to: 'legalNotice' } },
     label: 'Mentions légales'
   },
   {
     id: 1,
-    link: { name: 'contact', query: { to: 'webmasterContact' } },
+    link: { name: 'contact', params: { to: 'webmasterContact' } },
     label: '● Contact webmaster'
   },
   {
     id: 2,
-    link: { name: 'contact', query: { to: 'clubContact' } },
+    link: { name: 'contact', params: { to: 'clubContact' } },
     label: '● Contact Cercle d\'escrime de Moirans'
   },
   {
     id: 3,
-    link: { name: 'contact', query: { to: 'access' } },
+    link: { name: 'contact', params: { to: 'access' } },
     label: '● Accès Cercle d\'escrime de Moirans'
   }
 ];
