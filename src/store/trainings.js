@@ -1,4 +1,4 @@
-import { Notify } from 'quasar';
+import { Notify, date as quasarDate } from 'quasar';
 import { db } from '../boot/firebase';
 
 
@@ -79,20 +79,40 @@ export default {
         });
     },
 
-    updateStudents({ commit }, { trainings, newStudents }) {
-      trainings.forEach((training) => db.collection('trainings').doc(training.uid)
-        .update({ students: newStudents })
-        .then(() => {
-          commit('updateStudent', { training });
-        })
-        .catch((err) => {
-          console.error('Error while updating student list: ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'bottom'
+    updateStudents({ commit }, {
+      trainings, newStudents, newGroup, newStartHour, newStartMinute, newEndHour, newEndMinute
+    }) {
+      trainings.forEach((training) => {
+        const newStartDate = quasarDate.adjustDate(training.startDate,
+          {
+            hours: newStartHour,
+            minutes: newStartMinute
           });
-        }));
+        const newEndDate = quasarDate.adjustDate(training.endDate,
+          {
+            hours: newEndHour,
+            minutes: newEndMinute
+          });
+        db.collection('trainings')
+          .doc(training.uid)
+          .update({
+            students: newStudents,
+            group: newGroup,
+            startDate: newStartDate,
+            endDate: newEndDate
+          })
+          .then(() => {
+            commit('updateStudent', { training });
+          })
+          .catch((err) => {
+            console.error('Error while updating student list: ', err);
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'bottom'
+            });
+          });
+      });
     },
 
     createMultipleTraining(_, { trainings }) {
