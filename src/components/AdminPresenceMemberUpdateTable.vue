@@ -36,6 +36,21 @@
         />
       </q-td>
     </template>
+
+    <template v-slot:body-cell-is-active="props">
+      <q-td :props="props">
+        <q-badge
+          v-if="props.row.isActive"
+          color="positive"
+          label="Oui"
+        />
+        <q-badge
+          v-else
+          color="negative"
+          label="Non"
+        />
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -68,6 +83,13 @@ const columns = [
     align: 'left',
     field: 'group',
     label: 'Catégorie'
+  },
+  {
+    name: 'is-active',
+    sortable: false,
+    align: 'left',
+    field: 'isActive',
+    label: 'Compte Validé ?'
   }
 ];
 

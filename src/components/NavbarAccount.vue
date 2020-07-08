@@ -154,7 +154,7 @@
         v-ripple
         v-close-popup
         clickable
-        :to="{name: 'contact', query: {to: 'legalNotice'}}"
+        :to="{name: 'contact', params: {to: 'legalNotice'}}"
       >
         <q-item-section avatar>
           <q-avatar
