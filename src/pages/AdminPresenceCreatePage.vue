@@ -78,6 +78,7 @@
             class="col-12 col-md-5 q-mr-md"
             error-message="Champ requis"
             :error="$v.startHour.$error"
+            color="admin-primary"
             @input="$v.startHour.$touch"
             @blur="$v.startHour.$touch"
           >
@@ -105,6 +106,7 @@
           <q-input
             v-model="endHour"
             filled
+            color="admin-primary"
             label="Fin"
             class="col-12 col-md-5 q-mr-md"
             error-message="Champ requis"
@@ -258,6 +260,12 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn
+          color="negative"
+          outline
+          label="retour"
+          @click="onCancelClick"
+        />
+        <q-btn
           color="admin-primary"
           flat
           label="Valider"
@@ -272,7 +280,7 @@
 import { required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import { date as quasarDate } from 'quasar';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { Group } from '../js/Group';
 import AdminPresenceMemberTable from '../components/AdminPresenceMemberTable';
 
@@ -338,14 +346,12 @@ export default {
     }
   },
 
-  beforeMount() {
-    this.fetchMembers();
-  },
-
   methods: {
     ...mapActions(['fetchMembers', 'createMultipleTraining']),
+    ...mapGetters(['maxID']),
 
     onSubmit() {
+      console.log(this.maxID());
       this.$v.$touch();
       if (!this.$v.$error) {
         const trainingsToAdd = [];
@@ -366,8 +372,11 @@ export default {
           usersTraining.push({ isPresent: 'here', uid: member.uid });
         });
 
+        const internalId = this.maxID() + 1;
+
         while (currentDate <= endDate) {
           const currentTraining = {
+            internalId,
             startDate: quasarDate.adjustDate(currentDate,
               { hours: startHour, minutes: startMinute }),
             endDate: quasarDate.adjustDate(currentDate,
@@ -387,6 +396,10 @@ export default {
 
     optionSunday(date) {
       return quasarDate.extractDate(date, 'YYYY/MM/DD').getDay() === 0;
+    },
+
+    onCancelClick() {
+      this.$router.push({ name: 'admin_presence' });
     }
   },
 

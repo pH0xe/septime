@@ -262,10 +262,6 @@ export default {
     })
   },
 
-  beforeMount() {
-    this.fetchSettings();
-  },
-
   mounted() {
     this.president = { ...this.settingsClub.president };
     this.treasurer = { ...this.settingsClub.treasurer };
@@ -274,7 +270,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchSettings', 'updateClub']),
+    ...mapActions(['updateClub']),
 
     checkValue(out, source, who) {
       out.lastName = source.lastName !== '' ? source.lastName : `Aucun nom n'a été donné pour le ${who}.`;

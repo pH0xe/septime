@@ -78,18 +78,13 @@ export default {
     ...mapGetters(['isRegisterOpen'])
   },
 
-  beforeMount() {
-    this.fetchSettings();
-    this.fetchMembers();
-  },
-
   mounted() {
     this.isOpen = this.$store.getters.isRegisterOpen;
     this.formURL = this.settingsRegister.linkToForm;
   },
 
   methods: {
-    ...mapActions(['fetchSettings', 'updateRegisterOpened', 'updateIframeLink', 'deactivateMembers', 'fetchMembers']),
+    ...mapActions(['updateRegisterOpened', 'updateIframeLink', 'deactivateMembers']),
 
     onToggleChange(value) {
       this.updateRegisterOpened({ setting: this.settingsRegister, value });

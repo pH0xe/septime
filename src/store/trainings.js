@@ -1,21 +1,38 @@
-import { Notify } from 'quasar';
+import { Notify, date as quasarDate } from 'quasar';
 import { db } from '../boot/firebase';
 
 
 export default {
   namespaced: false,
   state: {
-    trainings: []
+    trainings: [],
+    maxID: null
+  },
+
+  getters: {
+    maxID(state) {
+      return state.maxID;
+    }
   },
 
   mutations: {
     setTrainings(state, { trainings }) {
       state.trainings = trainings;
+      let max = 0;
+      trainings.forEach((training) => {
+        if (max < training.internalId) max = training.internalId;
+      });
+      state.maxID = max;
     },
 
     updateStudent(state, { training }) {
       const updatedTraining = state.trainings.find((item) => training.uid === item.uid);
       updatedTraining.students = training.students;
+    },
+
+    deleteTrainingState(state, { training }) {
+      const index = state.trainings.indexOf(training);
+      delete state.trainings[index];
     }
   },
 
@@ -62,6 +79,42 @@ export default {
         });
     },
 
+    updateStudents({ commit }, {
+      trainings, newStudents, newGroup, newStartHour, newStartMinute, newEndHour, newEndMinute
+    }) {
+      trainings.forEach((training) => {
+        const newStartDate = quasarDate.adjustDate(training.startDate,
+          {
+            hours: newStartHour,
+            minutes: newStartMinute
+          });
+        const newEndDate = quasarDate.adjustDate(training.endDate,
+          {
+            hours: newEndHour,
+            minutes: newEndMinute
+          });
+        db.collection('trainings')
+          .doc(training.uid)
+          .update({
+            students: newStudents,
+            group: newGroup,
+            startDate: newStartDate,
+            endDate: newEndDate
+          })
+          .then(() => {
+            commit('updateStudent', { training });
+          })
+          .catch((err) => {
+            console.error('Error while updating student list: ', err);
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'bottom'
+            });
+          });
+      });
+    },
+
     createMultipleTraining(_, { trainings }) {
       const batch = db.batch();
 
@@ -83,6 +136,22 @@ export default {
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
             position: 'bottom'
+          });
+        });
+    },
+
+    deleteTraining({ commit }, { training }) {
+      db.collection('trainings').doc(training.uid)
+        .delete()
+        .then(() => {
+          commit('deleteTrainingState', { training });
+        })
+        .catch((err) => {
+          console.log('Error while deleting training : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
           });
         });
     }

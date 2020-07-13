@@ -90,7 +90,7 @@ export default {
 
 
   mounted() {
-    this.tab = this.$route.query.to;
+    this.tab = this.$route.params.to;
 
     const storageRef = storage.ref();
     storageRef.child('important/cgu.pdf').getDownloadURL()
@@ -104,11 +104,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchSettings', 'updateClub']),
-
-    test() {
-      console.log(this.pdfUrl);
-    }
+    ...mapActions(['fetchSettings', 'updateClub'])
   }
 
 };

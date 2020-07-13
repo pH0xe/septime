@@ -21,7 +21,19 @@
       flat
       class="q-mt-md"
     >
-      <q-card-actions align="right">
+      <q-card-actions align="left">
+        <q-btn
+          color="negative"
+          label="Supprimer"
+          @click="deleteThisTrainings"
+        />
+        <q-space />
+        <q-btn
+          color="negative"
+          outline
+          label="Retour"
+          @click="onCancelClick"
+        />
         <q-btn
           color="admin-primary"
           flat
@@ -66,18 +78,27 @@ export default {
   },
 
   beforeMount() {
-    this.fetchMembers();
-    this.fetchTrainings();
-    const searchUid = this.$route.query.uid;
+    const searchUid = this.$route.params.id;
     this.training = this.trainings.find((training) => training.uid === searchUid);
   },
 
   methods: {
-    ...mapActions(['fetchMembers', 'fetchTrainings', 'updateStudentPresence']),
+    ...mapActions(['fetchMembers', 'fetchTrainings', 'updateStudentPresence', 'deleteTraining']),
 
     onOkClick() {
       this.updateStudentPresence({ training: this.training });
       this.$router.push({ name: 'admin_presence' });
+    },
+
+    onCancelClick() {
+      this.$router.push({ name: 'admin_presence' });
+    },
+
+    deleteThisTrainings() {
+      console.log(this.training);
+      this.deleteTraining({ training: this.training }).then(() => {
+        this.$router.replace({ name: 'admin_presence' });
+      });
     }
   }
 };

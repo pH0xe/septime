@@ -64,7 +64,7 @@ const routes = [
         }
       },
       {
-        path: 'contact',
+        path: 'contact/:to',
         name: 'contact',
         component: ContactPage
       },
@@ -113,9 +113,19 @@ const routes = [
         component: () => import('../pages/AdminPresenceResultPage.vue')
       },
       {
-        path: 'presence/list',
+        path: 'presence/list/:id',
         name: 'admin_presence_list',
         component: () => import('../pages/AdminPresenceListPage.vue')
+      },
+      {
+        path: 'presence/planning',
+        name: 'admin_presence_planning',
+        component: () => import('../pages/adminPresencePlanningPage')
+      },
+      {
+        path: 'presence/update/:id',
+        name: 'admin_presence_update',
+        component: () => import('../pages/adminPresenceUpdatePage')
       },
       {
         path: 'equipment/create',
@@ -151,7 +161,7 @@ const routes = [
         path: 'news/create', name: 'admin_news_create', component: () => import('pages/AdminNewsCreatePage.vue')
       },
       {
-        path: 'news/modify', name: 'admin_news_modify', component: () => import('pages/AdminNewsModifyPage.vue')
+        path: 'news/modify/:id', name: 'admin_news_modify', component: () => import('pages/AdminNewsModifyPage.vue')
       }
     ]
   }

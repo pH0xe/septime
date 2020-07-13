@@ -32,7 +32,7 @@
   </q-page>
 </template>
 <script>
-
+import { mapActions } from 'vuex';
 import AdminSettingClub from '../components/AdminSettingClub';
 import AdminSettingRegister from '../components/AdminSettingRegister';
 
@@ -42,7 +42,16 @@ export default {
 
   data: () => ({
     tab: 'club'
-  })
+  }),
+
+  beforeMount() {
+    this.fetchSettings();
+    this.fetchMembers();
+  },
+
+  methods: {
+    ...mapActions(['fetchSettings', 'fetchMembers'])
+  }
 
 };
 </script>
