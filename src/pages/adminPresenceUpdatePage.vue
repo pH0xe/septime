@@ -174,7 +174,7 @@ export default {
 
     getAllTraining() {
       return this.trainings.filter((training) => training.internalId === this.$route.params.id
-        && training.startDate > date.endOfDate(new Date(), 'day'));
+        && (training.startDate > date.endOfDate(new Date(), 'day') || date.isSameDate(training.startDate, new Date(), 'day')));
     },
 
     groupOption() {
