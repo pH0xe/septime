@@ -249,7 +249,7 @@ export default {
     modifyNews() {
       this.$v.$touch();
       if (!this.$v.$error) {
-        const currentNew = this.news.find((item) => item.uid === this.$route.query.uid);
+        const currentNew = this.news.find((item) => item.uid === this.$route.params.id);
 
         this.$q.loading.show({ message: 'Modification de la news en cours...' });
         this.updateNews({
@@ -283,11 +283,6 @@ export default {
 
     picUploader() {
       this.isPic = !this.isPic;
-    },
-
-    test() {
-      const currentNew = this.news.find((item) => item.uid === this.$route.query.uid);
-      this.updateNewsImage({ news: currentNew });
     },
 
     onCancelClick() {
