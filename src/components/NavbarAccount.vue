@@ -37,7 +37,7 @@
       icon="mdi-information-outline"
       text-color="primary"
       color="white"
-      :to="{name: 'contact', query: {to: 'legalNotice'}}"
+      :to="{name: 'contact', params: {to: 'legalNotice'}}"
     />
   </q-btn-group>
 
