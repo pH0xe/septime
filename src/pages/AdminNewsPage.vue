@@ -78,6 +78,10 @@ export default {
 
   methods: {
     ...mapActions(['fetchNews'])
+  },
+
+  meta: {
+    title: 'Admin - Actualités'
   }
 };
 </script>

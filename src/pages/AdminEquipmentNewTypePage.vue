@@ -166,6 +166,10 @@ export default {
     sizeOption: {
       required
     }
+  },
+
+  meta: {
+    title: 'Admin - Matériels'
   }
 };
 </script>

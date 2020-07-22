@@ -100,6 +100,10 @@ export default {
         this.$router.replace({ name: 'admin_presence' });
       });
     }
+  },
+
+  meta: {
+    title: 'Admin - Entraînements'
   }
 };
 </script>

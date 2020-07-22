@@ -286,6 +286,7 @@ export default {
       }
     }
   },
+
   validations: {
     equipmentChoice: {
       required
@@ -311,6 +312,10 @@ export default {
     newtons: {
       numeric
     }
+  },
+
+  meta: {
+    title: 'Admin - Matériels'
   }
 };
 </script>

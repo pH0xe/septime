@@ -127,6 +127,10 @@ export default {
 
   methods: {
     ...mapActions(['fetchMembers', 'fetchTrainings'])
+  },
+
+  meta: {
+    title: 'Admin - Entraînements'
   }
 };
 </script>

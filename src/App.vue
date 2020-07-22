@@ -19,6 +19,14 @@ export default {
     }, (error) => {
       console.error(error);
     });
+  },
+
+  meta: {
+    title: '',
+    titleTemplate: (title) => `${title} - Cercle d'escrime de Moirans`,
+    meta: {
+      description: { name: 'description', content: 'Le Cercle d\'escrime de Moirans propose la pratique de l\'escrime à tous les âges et aux trois armes, que ce soit comme loisirs ou en compétition.' }
+    }
   }
 };
 </script>

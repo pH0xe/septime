@@ -295,6 +295,10 @@ export default {
         ]
       });
     }
+  },
+
+  meta: {
+    title: 'Accueil'
   }
 
 };

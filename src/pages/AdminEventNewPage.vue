@@ -372,6 +372,10 @@ export default {
         minValue: 1
       }
     }
+  },
+
+  meta: {
+    title: 'Admin - Actualités'
   }
 };
 </script>

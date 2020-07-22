@@ -152,6 +152,10 @@ export default {
     onCancelClick() {
       this.$router.push({ name: 'admin_presence' });
     }
+  },
+
+  meta: {
+    title: 'Admin - Entraînements'
   }
 };
 </script>

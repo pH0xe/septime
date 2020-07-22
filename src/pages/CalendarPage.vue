@@ -62,7 +62,10 @@ export default {
     test() {
       console.log(this.calendarEvents);
     }
-  }
+  },
 
+  meta: {
+    title: 'Calendrier'
+  }
 };
 </script>

@@ -51,7 +51,10 @@ export default {
 
   methods: {
     ...mapActions(['fetchSettings', 'fetchMembers'])
-  }
+  },
 
+  meta: {
+    title: 'Admin - Paramètres'
+  }
 };
 </script>

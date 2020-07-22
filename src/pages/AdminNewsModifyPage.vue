@@ -300,6 +300,10 @@ export default {
     newsTypeSelect: {
       required
     }
+  },
+
+  meta: {
+    title: 'Admin - Actualités'
   }
 };
 </script>

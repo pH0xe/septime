@@ -9,6 +9,10 @@
 
 <script>
 export default {
-  name: 'LogoPage'
+  name: 'LogoPage',
+
+  meta: {
+    title: ''
+  }
 };
 </script>

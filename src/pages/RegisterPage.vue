@@ -337,6 +337,10 @@ export default {
           this.$q.loading.hide();
         });
     }
+  },
+
+  meta: {
+    title: 'Inscription'
   }
 };
 </script>

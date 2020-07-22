@@ -105,6 +105,10 @@ export default {
 
   methods: {
     ...mapActions(['fetchSettings', 'updateClub'])
+  },
+
+  meta: {
+    title: 'À propos'
   }
 
 };

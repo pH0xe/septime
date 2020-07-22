@@ -57,6 +57,10 @@ export default {
 
   methods: {
     ...mapActions(['fetchEvents', 'fetchMembers'])
+  },
+
+  meta: {
+    title: 'Admin - Événements'
   }
 
 };
