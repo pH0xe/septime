@@ -6,21 +6,6 @@ import store from '../src/store';
 // events passes a ServiceWorkerRegistration instance in their arguments.
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
 
-const notifyUpdate = (worker) => {
-  this.$q.notify({
-    message: 'Une nouvelle version du site est disponible.',
-    caption: 'Voulez-vous rafraichir ?',
-    color: 'dark',
-    icon: 'mdi-refresh',
-    timeout: 0,
-    actions: [
-      { label: 'Oui', color: 'amber', handler: () => { worker.postMessage({ action: 'skipWaiting' }); } },
-      { label: 'Non', color: 'white', handler: () => { /* ... */ } }
-    ]
-  });
-};
-
-
 register(process.env.SERVICE_WORKER_FILE, {
   // The registrationOptions object will be passed as the second argument
   // to ServiceWorkerContainer.register()
@@ -71,9 +56,8 @@ register(process.env.SERVICE_WORKER_FILE, {
     console.log('New content is downloading.');
   },
 
-  updated(registration) {
+  updated(/* registration */) {
     console.log('New content is available; please refresh.');
-    notifyUpdate(registration.waiting);
   },
 
   offline() {
@@ -87,11 +71,4 @@ register(process.env.SERVICE_WORKER_FILE, {
       // console.error('Error during service worker registration:', err);
     }
   }
-});
-
-let refreshing;
-navigator.serviceWorker.addEventListener('controllerchange', () => {
-  if (refreshing) return;
-  window.location.reload();
-  refreshing = true;
 });
