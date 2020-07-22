@@ -156,6 +156,10 @@ export default {
   name: 'HomePage',
   components: { EventCard, LessonCard, NewsCard },
 
+  data: () => ({
+    deferredPrompt: null
+  }),
+
   computed: {
     ...mapState({
       currentUser: (state) => state.auth.currentUser,
@@ -234,15 +238,52 @@ export default {
     }
   },
 
-  methods: {
-    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents'])
-  },
-
   async beforeMount() {
     this.fetchNews();
     this.fetchTrainings();
     this.fetchEvents();
+  },
+
+  mounted() {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this.deferredPrompt = e;
+      if (!localStorage.getItem('doNotInstall')) this.showInstallPromotion();
+    });
+  },
+
+  methods: {
+    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents']),
+
+    showInstallPromotion() {
+      this.$q.notify({
+        message: 'Voulez-vous ajouter l\'application Cercle d\'escrime de Moirans sur votre bureau ?',
+        caption: '(Ne prend pas d\'espace mémoire)',
+        color: 'secondary',
+        icon: 'mdi-help',
+        timeout: 0,
+        actions: [
+          { label: 'Oui, installer', color: 'amber', handler: () => { this.deferredPrompt.prompt(); } },
+          { label: 'Non', color: 'white', handler: () => { localStorage.setItem('doNotInstall', 'true'); } }
+        ]
+      });
+    },
+
+    showRefreshNotification() {
+      this.$q.notify({
+        message: 'Une nouvelle version du site est disponible.',
+        caption: 'Voulez-vous rafraichir ?',
+        color: 'dark',
+        icon: 'mdi-refresh',
+        timeout: 0,
+        actions: [
+          { label: 'Oui', color: 'amber', handler: () => { /* ... */ } },
+          { label: 'Non', color: 'white', handler: () => { /* ... */ } }
+        ]
+      });
+    }
   }
+
 };
 </script>
 
