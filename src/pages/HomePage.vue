@@ -147,7 +147,7 @@
 
 <script lang="js">
 import { mapState, mapGetters, mapActions } from 'vuex';
-
+import { date } from 'quasar';
 import NewsCard from '../components/NewsCard';
 import LessonCard from '../components/LessonCard';
 import EventCard from '../components/EventCard';
@@ -248,7 +248,12 @@ export default {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       this.deferredPrompt = e;
-      if (!localStorage.getItem('doNotInstall')) this.showInstallPromotion();
+      let item = localStorage.getItem('doNotInstall');
+      item = JSON.parse(item);
+      let diff = 0;
+      if (item) diff = date.getDateDiff(Date(), item.date, 'days');
+      console.log(diff);
+      if (!item || diff >= 10) this.showInstallPromotion();
     });
   },
 
@@ -264,7 +269,14 @@ export default {
         timeout: 0,
         actions: [
           { label: 'Oui, installer', color: 'amber', handler: () => { this.deferredPrompt.prompt(); } },
-          { label: 'Non', color: 'white', handler: () => { localStorage.setItem('doNotInstall', 'true'); } }
+          {
+            label: 'Non',
+            color: 'white',
+            handler: () => {
+              const data = { value: true, date: Date() };
+              localStorage.setItem('doNotInstall', JSON.stringify(data));
+            }
+          }
         ]
       });
     },
