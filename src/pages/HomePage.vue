@@ -147,6 +147,7 @@
 
 <script lang="js">
 import { mapState, mapGetters, mapActions } from 'vuex';
+
 import { date } from 'quasar';
 import NewsCard from '../components/NewsCard';
 import LessonCard from '../components/LessonCard';
