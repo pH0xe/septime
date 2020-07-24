@@ -56,7 +56,8 @@
       />
       <div
         v-if="error"
-        class="text-negative">
+        class="text-negative"
+      >
         Veuillez confirmer
       </div>
     </div>
