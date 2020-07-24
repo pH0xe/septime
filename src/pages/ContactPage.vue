@@ -37,7 +37,6 @@
         <q-tab-panels
           v-model="tab"
           animated
-          :swipeable="$q.platform.is.mobile"
           vertical
           transition-prev="jump-up"
           transition-next="jump-up"
