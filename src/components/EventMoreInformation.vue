@@ -123,16 +123,17 @@
         </q-card-section>
 
         <q-separator />
+
+        <q-card-section>
+          <span class="text-weight-bold">Armes :</span>
+          <span
+            v-for="(weapon, index) in event.competitionWeapons"
+            :key="index"
+            class="q-ml-sm"
+          > ● {{ getWeaponName(weapon) }}</span>
+        </q-card-section>
       </template>
 
-      <q-card-section>
-        <span class="text-weight-bold">Par équipe :</span>
-        <span
-          v-for="(weapon, index) in event.competitionWeapons"
-          :key="index"
-          class="q-ml-sm"
-        > ● {{ getWeaponName(weapon) }}</span>
-      </q-card-section>
 
       <q-card-actions align="right">
         <q-btn
