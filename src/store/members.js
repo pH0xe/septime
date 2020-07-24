@@ -66,16 +66,18 @@ export default {
           return member;
         }))
         .then((members) => Promise.all(members.map(async (member) => {
-          member.memberAvatar = await storage.ref()
+          await storage.ref()
             .child(`profile_pics/${member.uid}`)
             .getDownloadURL()
+            .then((url) => { member.memberAvatar = url; })
             .catch(() => { member.memberAvatar = ''; });
           return member;
         })))
         .then((members) => Promise.all(members.map(async (member) => {
-          member.medicalCertificate = await storage.ref()
+          await storage.ref()
             .child(`certificates/${member.uid}`)
             .getDownloadURL()
+            .then((url) => { member.medicalCertificate = url; })
             .catch(() => { member.medicalCertificate = undefined; });
           return member;
         })))
