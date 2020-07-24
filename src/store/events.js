@@ -50,11 +50,12 @@ export default {
         });
     },
 
-    subscribeToEvent(_, { id, role }) {
+    subscribeToEvent(_, { id, role, displayName }) {
       return db.collection('events').doc(id)
         .update({
           registerMember: firebase.firestore.FieldValue.arrayUnion({
             uid: auth.currentUser.uid,
+            name: displayName,
             role
           })
         });

@@ -58,7 +58,7 @@
         </q-virtual-scroll>
       </q-card-section>
       <q-separator />
-      <q-card-section>
+      <q-card-section v-if="$store.getters.isLoggedIn">
         <span class="text-weight-bold">Personnes inscrites :</span>
         <q-virtual-scroll
           :items="event.registerMember"
@@ -74,7 +74,7 @@
               <q-item-section>
                 <q-item-label>
                   <!-- {{ item.uid }} -->
-                  ● {{ getUserName(item.uid) }} : {{ item.role }}
+                  ● {{ item.name }} : {{ item.role }}
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -157,11 +157,6 @@ export default {
     event: {
       required: true,
       type: Object
-    },
-
-    members: {
-      required: true,
-      type: Array
     }
   },
 
@@ -192,11 +187,6 @@ export default {
     },
     hide() {
       this.$refs.dialog.hide();
-    },
-
-    getUserName(uid) {
-      const members = this.members.find((member) => member.uid === uid);
-      return `${members.firstName} ${members.lastName}`;
     },
 
     isMixte() {

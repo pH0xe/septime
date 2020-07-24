@@ -32,7 +32,6 @@
     </q-card-section>
 
     <q-card-actions
-      v-if="$store.getters.isLoggedIn"
       align="right"
     >
       <q-btn
@@ -43,26 +42,29 @@
         @click="onClikMoreInfo"
       />
 
-      <q-btn
-        v-if="canParticipate"
-        :loading="isSubscribing"
-        flat
-        icon="mdi-account-check"
-        label="Participer"
-        @click="handleClickParticipate"
-      />
-      <q-btn
-        v-else
-        flat
-        disable
-        icon="mdi-account-check"
-        label="Vous participez !"
-      />
+      <template v-if="$store.getters.isLoggedIn">
+        <q-btn
+          v-if="canParticipate"
+          :loading="isSubscribing"
+          flat
+          icon="mdi-account-check"
+          label="Participer"
+          @click="handleClickParticipate"
+        />
+        <q-btn
+          v-else
+          flat
+          disable
+          icon="mdi-account-check"
+          label="Vous participez !"
+        />
+      </template>
     </q-card-actions>
   </q-card>
 </template>
 
 <script lang="js">
+import { mapState } from 'vuex';
 import EventParticipateDialog from './EventParticipateDialog';
 import EventMoreInformation from './EventMoreInformation';
 
@@ -72,11 +74,6 @@ export default {
     event: {
       type: Object,
       required: true
-    },
-
-    members: {
-      type: Array,
-      required: true
     }
   },
 
@@ -85,6 +82,10 @@ export default {
   }),
 
   computed: {
+    ...mapState({
+      currentUser: (state) => state.auth.currentUser
+    }),
+
     dateFormatted() {
       return this.event.startDate.toLocaleString('fr-FR', {
         timeZone: 'Europe/Paris',
@@ -119,7 +120,7 @@ export default {
         roles: this.event.neededRole
       }).onOk(({ role: { value } }) => {
         this.isSubscribing = true;
-        this.$store.dispatch('subscribeToEvent', { id: this.event.id, role: value })
+        this.$store.dispatch('subscribeToEvent', { id: this.event.id, role: value, displayName: `${this.currentUser.firstName} ${this.currentUser.lastName}` })
           .then(() => {
             this.isSubscribing = false;
             this.$q.notify({
@@ -145,8 +146,7 @@ export default {
       this.$q.dialog({
         component: EventMoreInformation,
         parent: this,
-        event: this.event,
-        members: this.members
+        event: this.event
       }).onOk(() => {
         console.log('OK');
       }).onCancel(() => {
