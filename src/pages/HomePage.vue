@@ -150,7 +150,6 @@
         >
           <event-card
             :event="event"
-            :members="members"
           />
         </div>
       </div>
@@ -180,8 +179,7 @@ export default {
       news: (state) => state.news.news,
       trainings: (state) => state.trainings.trainings,
       events: (state) => state.events.events,
-      newsFFE: (state) => state.news.ffeInfo,
-      members: (state) => state.members.members
+      newsFFE: (state) => state.news.ffeInfo
     }),
 
     ...mapGetters(['isLoggedIn']),
@@ -257,7 +255,6 @@ export default {
     this.fetchNews();
     this.fetchTrainings();
     this.fetchEvents();
-    this.fetchMembers();
   },
 
   mounted() {
@@ -274,7 +271,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents', 'fetchMembers']),
+    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents']),
 
     showInstallPromotion() {
       this.$q.notify({
