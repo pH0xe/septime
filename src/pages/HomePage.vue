@@ -148,7 +148,10 @@
           :key="event.uid"
           class="col-12 col-md-4"
         >
-          <event-card :event="event" :members="members" />
+          <event-card
+            :event="event"
+            :members="members"
+          />
         </div>
       </div>
     </div>
