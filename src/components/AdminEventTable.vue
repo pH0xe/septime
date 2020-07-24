@@ -100,7 +100,9 @@ export default {
   data: () => ({
     text: '',
     pagination: {
-      rowsPerPage: 0
+      rowsPerPage: 0,
+      sortBy: 'startDate',
+      descending: true
     }
   }),
 

@@ -78,14 +78,14 @@ const columns = [
     label: 'Titre',
     align: 'left',
     field: 'title',
-    sortable: false
+    sortable: true
   },
   {
     name: 'date',
     label: 'Date',
     align: 'left',
     field: 'date',
-    sortable: false
+    sortable: true
   },
   {
     name: 'type',
@@ -118,7 +118,9 @@ export default {
 
   data: () => ({
     pagination: {
-      rowsPerPage: 0
+      rowsPerPage: 0,
+      sortBy: 'date',
+      descending: true
     }
   }),
 
