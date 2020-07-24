@@ -146,8 +146,7 @@ export default {
       this.$q.dialog({
         component: EventMoreInformation,
         parent: this,
-        event: this.event,
-        members: this.members
+        event: this.event
       }).onOk(() => {
         console.log('OK');
       }).onCancel(() => {
