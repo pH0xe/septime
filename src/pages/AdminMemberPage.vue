@@ -67,6 +67,10 @@ export default {
         parent: this
       });
     }
+  },
+
+  meta: {
+    title: 'Admin - Membres'
   }
 };
 

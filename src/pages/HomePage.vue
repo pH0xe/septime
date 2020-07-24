@@ -107,6 +107,16 @@
           </div>
         </div>
 
+        <q-banner
+          class="q-mb-md bg-negative text-white"
+          rounded
+        >
+          <span class="text-weight-bold">Rappel important :</span><br>
+          Pour le bon déroulement des cours,
+          il est demandé à chaque tireurs d'être présent
+          15 minutes à l'avance afin de s'équiper.
+        </q-banner>
+
         <div class="row q-col-gutter-md">
           <div
             v-for="training in upcomingTrainings"
@@ -138,7 +148,10 @@
           :key="event.uid"
           class="col-12 col-md-4"
         >
-          <event-card :event="event" />
+          <event-card
+            :event="event"
+            :members="members"
+          />
         </div>
       </div>
     </div>
@@ -148,6 +161,7 @@
 <script lang="js">
 import { mapState, mapGetters, mapActions } from 'vuex';
 
+import { date } from 'quasar';
 import NewsCard from '../components/NewsCard';
 import LessonCard from '../components/LessonCard';
 import EventCard from '../components/EventCard';
@@ -156,13 +170,18 @@ export default {
   name: 'HomePage',
   components: { EventCard, LessonCard, NewsCard },
 
+  data: () => ({
+    deferredPrompt: null
+  }),
+
   computed: {
     ...mapState({
       currentUser: (state) => state.auth.currentUser,
       news: (state) => state.news.news,
       trainings: (state) => state.trainings.trainings,
       events: (state) => state.events.events,
-      newsFFE: (state) => state.news.ffeInfo
+      newsFFE: (state) => state.news.ffeInfo,
+      members: (state) => state.members.members
     }),
 
     ...mapGetters(['isLoggedIn']),
@@ -234,15 +253,69 @@ export default {
     }
   },
 
-  methods: {
-    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents'])
-  },
-
   async beforeMount() {
     this.fetchNews();
     this.fetchTrainings();
     this.fetchEvents();
+    this.fetchMembers();
+  },
+
+  mounted() {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this.deferredPrompt = e;
+      let item = localStorage.getItem('doNotInstall');
+      item = JSON.parse(item);
+      let diff = 0;
+      if (item) diff = date.getDateDiff(Date(), item.date, 'days');
+      console.log(diff);
+      if (!item || diff >= 10) this.showInstallPromotion();
+    });
+  },
+
+  methods: {
+    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents', 'fetchMembers']),
+
+    showInstallPromotion() {
+      this.$q.notify({
+        message: 'Voulez-vous ajouter l\'application Cercle d\'escrime de Moirans sur votre bureau ?',
+        caption: '(Ne prend pas d\'espace mémoire)',
+        color: 'secondary',
+        icon: 'mdi-help',
+        timeout: 0,
+        actions: [
+          { label: 'Oui, installer', color: 'amber', handler: () => { this.deferredPrompt.prompt(); } },
+          {
+            label: 'Non',
+            color: 'white',
+            handler: () => {
+              const data = { value: true, date: Date() };
+              localStorage.setItem('doNotInstall', JSON.stringify(data));
+            }
+          }
+        ]
+      });
+    },
+
+    showRefreshNotification() {
+      this.$q.notify({
+        message: 'Une nouvelle version du site est disponible.',
+        caption: 'Voulez-vous rafraichir ?',
+        color: 'dark',
+        icon: 'mdi-refresh',
+        timeout: 0,
+        actions: [
+          { label: 'Oui', color: 'amber', handler: () => { /* ... */ } },
+          { label: 'Non', color: 'white', handler: () => { /* ... */ } }
+        ]
+      });
+    }
+  },
+
+  meta: {
+    title: 'Accueil'
   }
+
 };
 </script>
 

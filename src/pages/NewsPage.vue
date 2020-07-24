@@ -139,6 +139,13 @@ export default {
     onClickNews(id) {
       this.$router.push({ name: 'news_details', params: { id } });
     }
+  },
+
+  meta: {
+    title: 'Actualités',
+    meta: {
+      description: { name: 'description', content: 'Retrouvez toute les dernières actualités' }
+    }
   }
 };
 </script>

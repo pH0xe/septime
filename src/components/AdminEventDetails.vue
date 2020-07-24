@@ -27,6 +27,7 @@
           {{ event.description }}
         </q-card-section>
         <q-separator />
+
         <q-list>
           <q-item>
             <q-item-section>

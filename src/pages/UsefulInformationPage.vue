@@ -67,6 +67,13 @@ export default {
     onClickNews(id) {
       this.$router.push({ name: 'news_details', params: { id } });
     }
+  },
+
+  meta: {
+    title: 'Infos pratiques',
+    meta: {
+      description: { name: 'description', content: 'Retrouvez toute les informations pratiques du club' }
+    }
   }
 };
 </script>

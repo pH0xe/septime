@@ -19,10 +19,14 @@
           {{ category }}
         </q-badge>
       </div>
+    </q-card-section>
+
+    <q-card-section>
       <div class="row items-center q-gutter-sm">
         <q-icon name="mdi-clock-outline" />
         <div>
-          Le {{ dateFormatted }}, de {{ event.startDate | dateHM }} à {{ event.startDate | dateHM }}
+          Du {{ dateFormatted }} à {{ event.startDate | dateHM }}
+          au {{ endDateFormatted }} à {{ event.startDate | dateHM }}
         </div>
       </div>
     </q-card-section>
@@ -31,6 +35,14 @@
       v-if="$store.getters.isLoggedIn"
       align="right"
     >
+      <q-btn
+        outline
+        color="primary"
+        label="information"
+        icon="mdi-information"
+        @click="onClikMoreInfo"
+      />
+
       <q-btn
         v-if="canParticipate"
         :loading="isSubscribing"
@@ -52,12 +64,18 @@
 
 <script lang="js">
 import EventParticipateDialog from './EventParticipateDialog';
+import EventMoreInformation from './EventMoreInformation';
 
 export default {
   name: 'EventCard',
   props: {
     event: {
       type: Object,
+      required: true
+    },
+
+    members: {
+      type: Array,
       required: true
     }
   },
@@ -74,6 +92,15 @@ export default {
         month: '2-digit'
       });
     },
+
+    endDateFormatted() {
+      return this.event.endDate.toLocaleString('fr-FR', {
+        timeZone: 'Europe/Paris',
+        day: '2-digit',
+        month: '2-digit'
+      });
+    },
+
     timeRangeFormatted() {
       return `${this.timeRange[0]}-${this.timeRange[1]}h`;
     },
@@ -111,6 +138,21 @@ export default {
               position: 'bottom'
             });
           });
+      });
+    },
+
+    onClikMoreInfo() {
+      this.$q.dialog({
+        component: EventMoreInformation,
+        parent: this,
+        event: this.event,
+        members: this.members
+      }).onOk(() => {
+        console.log('OK');
+      }).onCancel(() => {
+        console.log('Cancel');
+      }).onDismiss(() => {
+        console.log('Called on OK or Cancel');
       });
     }
   }

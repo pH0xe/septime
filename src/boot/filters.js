@@ -11,5 +11,9 @@ export default ({ Vue }) => {
 
   Vue.filter('dateDMY', (value) => date.formatDate(value, 'DD/MM/YYYY'));
 
+  Vue.filter('dateDM', (value) => date.formatDate(value, 'DD MMMM YYYY', {
+    months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+  }));
+
   Vue.filter('dateHM', (value) => date.formatDate(value, 'HH:mm'));
 };

@@ -78,6 +78,10 @@ export default {
 
   methods: {
     ...mapActions(['fetchEquipments', 'fetchEquipmentsType', 'fetchMembers'])
+  },
+
+  meta: {
+    title: 'Admin - Matériels'
   }
 
 };

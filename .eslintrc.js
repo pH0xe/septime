@@ -34,6 +34,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'no-param-reassign': 'off',
+    "max-len": "off",
     'comma-dangle': ['error', 'never'],
     'no-unused-vars': ['error', {
       argsIgnorePattern: '^_'

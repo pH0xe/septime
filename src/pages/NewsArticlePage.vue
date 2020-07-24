@@ -60,6 +60,10 @@ export default {
     returnToNews() {
       this.$router.push({ name: 'news' });
     }
+  },
+
+  meta: {
+    title: 'Actualités'
   }
 };
 </script>

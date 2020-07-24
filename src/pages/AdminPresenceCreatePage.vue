@@ -437,6 +437,10 @@ export default {
     location: {
       required
     }
+  },
+
+  meta: {
+    title: 'Admin - Entraînements'
   }
 };
 </script>

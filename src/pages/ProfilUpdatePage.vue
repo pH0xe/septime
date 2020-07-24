@@ -333,6 +333,10 @@ export default {
           });
       }
     }
+  },
+
+  meta: {
+    title: 'Profil'
   }
 };
 </script>

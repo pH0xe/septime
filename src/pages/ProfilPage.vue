@@ -70,6 +70,10 @@ export default {
     cloudFunctions.getTopics().then((topics) => {
       this.topics = topics.data.topics;
     });
+  },
+
+  meta: {
+    title: 'Profil'
   }
 };
 </script>
