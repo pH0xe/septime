@@ -47,6 +47,7 @@
               :disable="data.isReferent"
             >
               <register-step-practising
+                ref="upload"
                 :birth-date="data.birthDate"
                 @go-back="previous"
                 @goto="goto"
@@ -56,9 +57,21 @@
 
             <q-step
               :name="3"
+              title="Obligations"
+              icon="mdi-alert-circle"
+              :done="step > 3"
+            >
+              <register-step-obligation
+                @submit="onStepSubmit"
+                @go-back="previous"
+              />
+            </q-step>
+
+            <q-step
+              :name="4"
               title="Paiement"
               icon="mdi-currency-eur"
-              :done="step > 3"
+              :done="step > 4"
             >
               <q-banner
                 rounded
@@ -106,10 +119,13 @@ import store from '../store'; // Needed to access the store in beforeRouteEnter 
 import RegisterStepAccount from '../components/RegisterStepAccount';
 import RegisterStepCoordinates from '../components/RegisterStepCoordinates';
 import RegisterStepPractising from '../components/RegisterStepPractising';
+import RegisterStepObligation from '../components/RegisterStepObligation';
 
 export default {
   name: 'RegisterPage',
-  components: { RegisterStepPractising, RegisterStepCoordinates, RegisterStepAccount },
+  components: {
+    RegisterStepObligation, RegisterStepPractising, RegisterStepCoordinates, RegisterStepAccount
+  },
 
   data: () => ({
     step: 0,
@@ -127,7 +143,7 @@ export default {
     }),
 
     isLastStep() {
-      return this.step === 3;
+      return this.step === 4;
     }
   },
 
@@ -241,10 +257,12 @@ export default {
             message: 'Upload de la photo de profil'
           });
 
-          const { photoUploader } = this.data;
+          if (this.$refs.upload.isProfilPic === true) {
+            const { photoUploader } = this.data;
 
-          photoUploader.extra.filename = currentUser.uid;
-          await photoUploader.upload();
+            photoUploader.extra.filename = currentUser.uid;
+            await photoUploader.upload();
+          }
 
           return currentUser;
         }) // Upload profile picture
