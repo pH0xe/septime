@@ -107,6 +107,16 @@
           </div>
         </div>
 
+        <q-banner
+          class="q-mb-md bg-negative text-white"
+          rounded
+        >
+          <span class="text-weight-bold">Rappel important :</span><br>
+          Pour le bon déroulement des cours,
+          il est demandé à chaque tireurs d'être présent
+          15 minutes à l'avance afin de s'équiper.
+        </q-banner>
+
         <div class="row q-col-gutter-md">
           <div
             v-for="training in upcomingTrainings"
