@@ -120,7 +120,16 @@
           >
             {{ footerLink.label }}
           </router-link>
-          <h6>V {{ appVersion }}</h6>
+          <a
+            :href="githubLink"
+            target="_blank"
+            class="link"
+          >
+            <q-icon
+              name="img:statics/github.svg"
+              class="bigger"
+            />
+            V {{ appVersion }}</a>
         </div>
       </div>
     </q-footer>
@@ -187,6 +196,10 @@ export default {
     ...mapState({
       currentUser: (state) => state.auth.currentUser
     }),
+
+    githubLink() {
+      return 'https://github.com/pH0xe/septime/commits/master';
+    },
 
     canShowBannerMail() {
       return this.isLoggedIn
@@ -299,7 +312,7 @@ export default {
     text-decoration: none;
   }
 
-  h6 {
+  .link {
     font-size: small;
     padding: 0.5%;
     margin: 0;
@@ -307,5 +320,12 @@ export default {
     position: absolute;
     bottom: 0;
     right: 0;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .bigger {
+    font-size: large;
   }
 </style>
