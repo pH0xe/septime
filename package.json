@@ -1,6 +1,6 @@
 {
   "name": "septime",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Le Cercle d'escrime de Moirans propose la pratique de l'escrime à tous les âges et aux trois armes, que ce soit comme loisirs ou en compétition.",
   "productName": "Cercle d'escrime de Moirans",
   "cordovaId": "org.cordova.quasar.app",
