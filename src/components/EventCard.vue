@@ -26,7 +26,7 @@
         <q-icon name="mdi-clock-outline" />
         <div>
           Du {{ dateFormatted }} à {{ event.startDate | dateHM }}
-          au {{ endDateFormatted }} à {{ event.startDate | dateHM }}
+          au {{ endDateFormatted }} à {{ event.endDate | dateHM }}
         </div>
       </div>
     </q-card-section>
