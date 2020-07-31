@@ -42,7 +42,7 @@
     </div>
     <q-input
       v-model="formURL"
-      class="w-50"
+      :class="$q.platform.is.mobile? '' : 'w-50'"
       type="url"
       color="admin-primary"
       label="URL de l'adhésion AssoConnect"
