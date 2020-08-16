@@ -3,8 +3,9 @@
     <h5 class="text-h5 q-my-md">
       Liste des membres
     </h5>
-    <div class="row items-center q-pb-lg">
+    <div class="row q-mb-md">
       <q-btn
+        class="col-12 col-md-auto q-mb-sm q-mr-sm"
         label="Ajouter"
         icon-right="mdi-plus"
         color="admin-primary"
@@ -16,7 +17,7 @@
           color="admin-primary"
           type="search"
           label="Rechercher..."
-          class="q-ml-md"
+          class="col-12 col-md-auto q-mb-sm q-mr-sm"
         >
           <template v-slot:append>
             <q-icon name="mdi-magnify" />

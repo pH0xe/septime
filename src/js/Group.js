@@ -20,10 +20,11 @@ export const Group = {
 const from = (birth) => {
   // Set to 1st september
   const now = new Date();
-  now.setMonth(8, 0);
   now.setHours(0, 0, 0, 0);
 
-  const years = date.getDateDiff(now, birth, 'years');
+  let years = date.getDateDiff(now, birth, 'years');
+
+  if (now.getMonth() >= 6) years += 1;
 
   if (years <= 5) {
     return Group.M5;
