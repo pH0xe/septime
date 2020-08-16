@@ -77,9 +77,10 @@
                 rounded
                 class="q-ma-lg bg-warning"
               >
-                Adhésion via AssoConnect <br>
-                Merci de correctement renseigner le formulaire puis cochez la case suivante. <br>
-                Une vérification du payement sera effectué avant que votre compte soit validé.
+                Adhésion via AssoConnect : <br>
+                Merci de renseigner le formulaire accessible en cliquant sur le bouton "j'adhére" puis cocher la case "j'ai payé via assoconnect". <br>
+                Une vérification du paiement sera effectuée avant que votre compte soit validé. <br>
+                Une fois l'inscription terminée vous serez redirigé à la page d'accueil.
               </q-banner>
               <iframe :src="link" />
               <q-checkbox
@@ -199,6 +200,13 @@ export default {
       if (this.isLastStep) {
         if (this.hasCheckPaid) {
           this.onLastStepSubmit();
+        } else {
+          Notify.create({
+            message: 'Merci de cocher la case "J\'ai payé via Assoconnect',
+            color: 'negative',
+            position: 'center',
+            icon: 'mdi-warning'
+          });
         }
       } else {
         // Goto the next step
