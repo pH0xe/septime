@@ -54,6 +54,34 @@
       outline
       @click="changeIframe"
     />
+
+
+    <q-separator />
+
+    <div class="text-h6 q-mt-lg">
+      Lien de l'iframe du formulaire HelloAsso :
+    </div>
+    <a
+      href="https://centredaide.helloasso.com/s/article/integrer-helloasso-a-mon-site-internet"
+      target="_blank"
+    >
+      Cliquez ici pour savoir comment obtenir le code iframe à copier <br>
+      Utiliser le lien sous "Diffusez le lien de votre page de collecte"
+    </a>
+    <q-input
+      v-model="helloassoURL"
+      :class="$q.platform.is.mobile? '' : 'w-50'"
+      type="url"
+      color="admin-primary"
+      label="URL de l'adhésion HelloAsso"
+    />
+    <q-btn
+      class="q-mt-md"
+      label="Valider le lien"
+      color="admin-primary"
+      outline
+      @click="changeHelloasso"
+    />
   </div>
 </template>
 <script>
@@ -65,7 +93,8 @@ export default {
 
   data: () => ({
     isOpen: false,
-    formURL: null
+    formURL: null,
+    helloassoURL: null
   }),
 
   computed: {
@@ -81,10 +110,11 @@ export default {
   mounted() {
     this.isOpen = this.$store.getters.isRegisterOpen;
     this.formURL = this.settingsRegister.linkToForm;
+    this.helloassoURL = this.settingsRegister.linkToHelloasso;
   },
 
   methods: {
-    ...mapActions(['updateRegisterOpened', 'updateIframeLink', 'deactivateMembers']),
+    ...mapActions(['updateRegisterOpened', 'updateIframeLink', 'deactivateMembers', 'updateHelloassoLink']),
 
     onToggleChange(value) {
       this.updateRegisterOpened({ setting: this.settingsRegister, value });
@@ -92,6 +122,19 @@ export default {
 
     changeIframe() {
       this.updateIframeLink({ setting: this.settingsRegister, value: this.formURL })
+        .then(() => {
+          this.$q.notify({
+            color: 'positive',
+            position: 'bottom',
+            message: 'Mise à jour du lien effectuée',
+            icon: 'mdi-check'
+          });
+        });
+    },
+
+    changeHelloasso() {
+      const newLink = `${this.helloassoURL}/widget`;
+      this.updateHelloassoLink({ setting: this.settingsRegister, value: newLink })
         .then(() => {
           this.$q.notify({
             color: 'positive',

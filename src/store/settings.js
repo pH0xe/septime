@@ -45,6 +45,10 @@ export default {
 
     updateIframe(state, { linkToForm }) {
       state.settingsRegister.linkToForm = linkToForm;
+    },
+
+    updateHelloasso(state, { linkToForm }) {
+      state.settingsRegister.linkToHelloasso = linkToForm;
     }
   },
 
@@ -155,6 +159,22 @@ export default {
         .update({ linkToForm: value })
         .then(() => {
           commit('updateIframe', { linkToForm: value });
+        })
+        .catch((err) => {
+          console.log('Error while updating iframe link : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    updateHelloassoLink({ commit }, { setting, value }) {
+      db.collection('settings').doc(setting.id)
+        .update({ linkToHelloasso: value })
+        .then(() => {
+          commit('updateHelloasso', { linkToForm: value });
         })
         .catch((err) => {
           console.log('Error while updating iframe link : ', err);
