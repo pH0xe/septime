@@ -77,15 +77,21 @@
                 rounded
                 class="q-ma-lg bg-warning"
               >
-                Adhésion via AssoConnect : <br>
-                Merci de renseigner le formulaire accessible en cliquant sur le bouton "j'adhére" puis cocher la case "j'ai payé via assoconnect". <br>
+                Adhésion via AssoConnect et Helloasso: <br>
+                Merci de renseigner le formulaire accessible en cliquant sur le bouton "j'adhére" puis cocher la case "J'ai créé mon compte sur AssoConnect et payé sur Helloasso si je paye par carte bancaire". <br>
                 Une vérification du paiement sera effectuée avant que votre compte soit validé. <br>
                 Une fois l'inscription terminée vous serez redirigé à la page d'accueil.
               </q-banner>
               <iframe :src="link" />
+
+              <q-separator />
+              <div
+                class="border q-mt-md"
+                v-html="helloassoURL"
+              />
               <q-checkbox
                 v-model="hasCheckPaid"
-                label="J'ai payé via AssoConnect"
+                label="J'ai créé mon compte sur AssoConnect et payé sur Helloasso si je paye par carte bancaire"
                 color="primary"
               />
 
@@ -135,7 +141,8 @@ export default {
       isReferent: false
     },
     link: '',
-    hasCheckPaid: false
+    hasCheckPaid: false,
+    helloassoURL: ''
   }),
 
   computed: {
@@ -171,6 +178,7 @@ export default {
         this.$router.replace({ name: 'home' });
       }
       this.link = this.settingsRegister.linkToForm;
+      this.helloassoURL = this.settingsRegister.linkToHelloasso;
     });
   },
 
@@ -378,5 +386,9 @@ export default {
     width: 100%;
     display: block;
     margin: auto;
+  }
+
+  .border {
+    border: solid 1px black;
   }
 </style>
