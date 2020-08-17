@@ -1,5 +1,6 @@
 import { Notify } from 'quasar';
 import { db, storage } from '../boot/firebase';
+import { version } from '../../package.json';
 
 
 export default {
@@ -7,12 +8,17 @@ export default {
   state: {
     settingsClub: [],
     settingsRegister: [],
-    isOpen: false
+    isOpen: false,
+    isLastVersion: false
   },
 
   getters: {
     isRegisterOpen(state) {
       return !!state.isOpen;
+    },
+
+    isLastVersion(state) {
+      return state.isLastVersion;
     }
   },
 
@@ -21,6 +27,7 @@ export default {
       state.settingsClub = settings.find((s) => s.type === 'clubSettings');
       state.settingsRegister = settings.find((s) => s.type === 'registerSettings');
       state.isOpen = state.settingsRegister.isOpen;
+      state.isLastVersion = state.settingsRegister.lastVersion === version;
     },
 
     updateIsOpen(state, { isOpen }) {

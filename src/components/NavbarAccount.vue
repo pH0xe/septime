@@ -24,7 +24,7 @@
       color="white"
       text-color="primary"
       :to="{ name: 'register' }"
-      :disable="!isRegisterOpen"
+      :disable="!registerOpen"
     />
 
     <q-separator
@@ -194,7 +194,12 @@ export default {
     ...mapState({
       currentUser: (state) => state.auth.currentUser
     }),
-    ...mapGetters(['isLoggedIn', 'isRegisterOpen'])
+
+    ...mapGetters(['isLoggedIn', 'isRegisterOpen', 'isLastVersion']),
+
+    registerOpen() {
+      return this.isRegisterOpen && this.isLastVersion;
+    }
   },
 
   watch: {

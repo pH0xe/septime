@@ -191,7 +191,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['isLoggedIn', 'isMessagingPossible', 'isMessagingReady']),
+    ...mapGetters(['isLoggedIn', 'isMessagingPossible', 'isMessagingReady', 'isLastVersion']),
 
     ...mapState({
       currentUser: (state) => state.auth.currentUser
