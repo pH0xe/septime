@@ -88,8 +88,16 @@
                     Si vous payez par carte bancaire : <br>
                     1) Créer votre compte sur Assoconnect. <br>
                     2) Choisir le tarif en fonction de la catégorie. <br>
-                    3) Indiquer payement par "Autre". <br>
-                    4) Ensuite, payer par HelloAsso.
+                    3) Indiquer paiement par "Autre". <br>
+                    4) Ensuite, payer par HelloAsso. <br>
+                    <br>
+                    Si vous payez par chéque ou espèces : <br>
+                    1) Créer votre compte sur Assoconnect. <br>
+                    2) Choisir le tarif en fonction de la catégorie. <br>
+                    3) Indiquer paiement par "Chéque" ou "espèces". <br>
+                    4) Remettre le paiement au club à la rentrée. <br>
+                    <br>
+                    Pour finaliser l'inscription cliquer sur le bouton "Terminer" en bas de la page
                   </q-card-section>
 
                   <q-card-actions align="right">
