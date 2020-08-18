@@ -56,7 +56,7 @@
     />
 
 
-    <q-separator />
+    <q-separator class="q-my-md"/>
 
     <div class="text-h6 q-mt-lg">
       Lien de l'iframe du formulaire HelloAsso :
@@ -65,8 +65,7 @@
       href="https://centredaide.helloasso.com/s/article/integrer-helloasso-a-mon-site-internet"
       target="_blank"
     >
-      Cliquez ici pour savoir comment obtenir le code iframe à copier <br>
-      Utiliser le lien sous "Diffusez le lien de votre page de collecte"
+      Cliquez ici pour savoir comment obtenir le code iframe à copier
     </a>
     <q-input
       v-model="helloassoURL"
@@ -133,7 +132,7 @@ export default {
     },
 
     changeHelloasso() {
-      const newLink = `${this.helloassoURL}/widget`;
+      const newLink = this.helloassoURL;
       this.updateHelloassoLink({ setting: this.settingsRegister, value: newLink })
         .then(() => {
           this.$q.notify({
