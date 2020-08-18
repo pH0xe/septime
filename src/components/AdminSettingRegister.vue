@@ -56,7 +56,7 @@
     />
 
 
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" />
 
     <div class="text-h6 q-mt-lg">
       Lien de l'iframe du formulaire HelloAsso :
