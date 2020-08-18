@@ -73,19 +73,85 @@
               icon="mdi-currency-eur"
               :done="step > 4"
             >
+              <q-dialog
+                v-model="warningMessage"
+                persistent
+              >
+                <q-card>
+                  <q-card-section>
+                    <div class="text-h6">
+                      Atention !
+                    </div>
+                  </q-card-section>
+
+                  <q-card-section class="q-pt-none">
+                    Si vous payez par carte bancaire : <br>
+                    1) Créer votre compte sur Assoconnect. <br>
+                    2) Choisir le tarif en fonction de la catégorie. <br>
+                    3) Indiquer paiement par "Autre". <br>
+                    4) Ensuite, payer par HelloAsso. <br>
+                    <br>
+                    Si vous payez par chéque ou espèces : <br>
+                    1) Créer votre compte sur Assoconnect. <br>
+                    2) Choisir le tarif en fonction de la catégorie. <br>
+                    3) Indiquer paiement par "Chéque" ou "espèces". <br>
+                    4) Remettre le paiement au club à la rentrée. <br>
+                    <br>
+                    Pour finaliser l'inscription cliquer sur le bouton "Terminer" en bas de la page
+                  </q-card-section>
+
+                  <q-card-actions align="right">
+                    <q-btn
+                      v-close-popup
+                      flat
+                      label="OK"
+                      color="primary"
+                    />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
+
               <q-banner
                 rounded
                 class="q-ma-lg bg-warning"
               >
-                Adhésion via AssoConnect : <br>
-                Merci de renseigner le formulaire accessible en cliquant sur le bouton "j'adhére" puis cocher la case "j'ai payé via assoconnect". <br>
+                Adhésion via AssoConnect et Helloasso: <br>
+                Merci de renseigner le formulaire accessible en cliquant sur le bouton "j'adhére" puis cocher la case "J'ai créé mon compte sur AssoConnect et payé sur Helloasso si je paye par carte bancaire". <br>
                 Une vérification du paiement sera effectuée avant que votre compte soit validé. <br>
                 Une fois l'inscription terminée vous serez redirigé à la page d'accueil.
               </q-banner>
+              <q-banner
+                rounded
+                class="q-ma-lg bg-negative text-white"
+                inline-actions
+              >
+                <span class="text-weight-bolder">Important</span>
+                Ne pas payer par carte bancaire sur Assoconnect. <br>
+                Utiliser HelloAsso pour cela.
+                <template v-slot:action>
+                  <q-btn
+                    flat
+                    color="white"
+                    label="Plus d'information"
+                    @click="openWarning"
+                  />
+                </template>
+              </q-banner>
               <iframe :src="link" />
+
+              <q-separator class="q-my-md" />
+
+              <h5 class="text-h5">
+                Payement par HelloAsso (carte bancaire)
+              </h5>
+
+              <div
+                class="border q-mt-md"
+                v-html="helloassoURL"
+              />
               <q-checkbox
                 v-model="hasCheckPaid"
-                label="J'ai payé via AssoConnect"
+                label="J'ai créé mon compte sur AssoConnect et payé sur Helloasso si je paye par carte bancaire"
                 color="primary"
               />
 
@@ -135,7 +201,9 @@ export default {
       isReferent: false
     },
     link: '',
-    hasCheckPaid: false
+    hasCheckPaid: false,
+    helloassoURL: '',
+    warningMessage: true
   }),
 
   computed: {
@@ -171,6 +239,7 @@ export default {
         this.$router.replace({ name: 'home' });
       }
       this.link = this.settingsRegister.linkToForm;
+      this.helloassoURL = this.settingsRegister.linkToHelloasso;
     });
   },
 
@@ -202,7 +271,7 @@ export default {
           this.onLastStepSubmit();
         } else {
           Notify.create({
-            message: 'Merci de cocher la case "J\'ai payé via Assoconnect',
+            message: 'Merci de cocher la case "J\'ai payé via Assoconnect"',
             color: 'negative',
             position: 'center',
             icon: 'mdi-warning'
@@ -362,6 +431,10 @@ export default {
 
           this.$q.loading.hide();
         });
+    },
+
+    openWarning() {
+      this.warningMessage = true;
     }
   },
 
@@ -378,5 +451,9 @@ export default {
     width: 100%;
     display: block;
     margin: auto;
+  }
+
+  .border {
+    border: solid 1px black;
   }
 </style>
