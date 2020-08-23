@@ -58,6 +58,8 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated(/* registration */) {
     console.log('New content is available; please refresh.');
+    // eslint-disable-next-line no-restricted-globals
+    location.reload();
   },
 
   offline() {

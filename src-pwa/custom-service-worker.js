@@ -13,6 +13,9 @@ self.addEventListener('message', (event) => {
 
 workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
 
+workbox.core.skipWaiting();
+workbox.core.clientsClaim();
+
 // Setup firebase messaging
 
 firebase.initializeApp({
