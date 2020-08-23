@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="row items-center justify-center">
     <q-img
-      src="statics/banner.png"
+      src="statics/banner.webp"
       :ratio="ratioMainImage"
     >
       <div class="absolute-full flex flex-center column">
