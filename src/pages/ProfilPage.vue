@@ -24,11 +24,13 @@
         </q-splitter>
         <q-separator />
         <profil-view ref="profilView" />
+        <!--
         <q-separator />
         <profil-topics
           :topics="topics"
           :ready="isMessagingReady"
         />
+        -->
       </div>
     </div>
   </q-page>
@@ -38,11 +40,10 @@
 import { mapGetters } from 'vuex';
 import ProfilView from '../components/profilView';
 import { cloudFunctions } from '../boot/firebase';
-import ProfilTopics from '../components/profilTopics';
 
 export default {
   name: 'ProfilPage',
-  components: { ProfilTopics, ProfilView },
+  components: { ProfilView },
 
   data: () => ({
     topics: []

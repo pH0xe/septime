@@ -103,8 +103,11 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
-      workboxPluginMode: 'InjectManifest',
-      workboxOptions: {}, // only for NON InjectManifest
+      workboxPluginMode: 'GenerateSW',
+      workboxOptions: {
+        skipWaiting: true,
+        clientsClaim: true
+      }, // only for NON InjectManifest
       manifest: {
         name: 'Cercle d\'Escrime de Moirans',
         short_name: 'CEM',
