@@ -120,16 +120,18 @@
           >
             {{ footerLink.label }}
           </router-link>
-          <a
-            :href="githubLink"
-            target="_blank"
-            class="link"
-          >
-            <q-icon
-              name="img:statics/github.svg"
-              class="bigger"
-            />
-            V {{ appVersion }}</a>
+          <div>
+            <a
+              :href="githubLink"
+              target="_blank"
+              :class="$q.platform.is.mobile ? 'link' : 'link bottom-right'"
+            >
+              <q-icon
+                name="img:statics/github.svg"
+                class="bigger"
+              />
+              V {{ appVersion }}</a>
+          </div>
         </div>
       </div>
     </q-footer>
@@ -317,12 +319,15 @@ export default {
     padding: 0.5%;
     margin: 0;
     display: inline;
-    position: absolute;
-    bottom: 0;
-    right: 0;
     color: white;
     text-decoration: none;
     font-weight: bold;
+  }
+
+  .bottom-right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 
   .bigger {
