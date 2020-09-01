@@ -20,6 +20,7 @@
             v-model="payments.amount"
             label="Montant"
             type="number"
+            step="any"
             color="admin-primary"
             class="col-12 col-md-6 q-ma-md"
           />
@@ -41,6 +42,12 @@
           <q-checkbox
             v-model="payments.deposit"
             label="Loue une tenus"
+            color="positive"
+          />
+          <br>
+          <q-checkbox
+            v-model="payments.mask"
+            label="Loue un masque"
             color="positive"
           />
         </q-card-section>
@@ -82,7 +89,8 @@ export default {
   }),
 
   mounted() {
-    this.payments = { ...this.user.payments };
+    this.payments = { ...this.user.payments, mask: false };
+    console.log(this.payments);
   },
 
   methods: {
