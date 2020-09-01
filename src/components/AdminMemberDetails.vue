@@ -75,6 +75,15 @@
           <q-separator />
           <q-item>
             <q-item-section>
+              <q-item-label>Adresse :</q-item-label>
+              <q-item-label caption>
+                {{ user.address.street || 'Rue non définit' }}, {{ user.address.city || 'Vile non définit' }}, {{ user.address.zip || 'Code postal non définit' }},
+              </q-item-label>
+            </q-item-section>
+          </q-item> <!-- Adresse -->
+          <q-separator />
+          <q-item>
+            <q-item-section>
               <q-item-label>E-mail :</q-item-label>
               <q-item-label caption>
                 {{ user.email }}
@@ -190,71 +199,78 @@
           </q-item> <!-- Cotisation ? -->
           <q-separator />
           <template v-if="user.payments.paid">
-            <q-item>
-              <q-item-section>
-                <q-item-label>Montant :</q-item-label>
-                <q-item-label caption>
-                  {{ user.payments.amount }}
-                </q-item-label>
-              </q-item-section>
-            </q-item> <!-- Montant -->
-            <q-separator />
-            <q-item>
-              <q-item-section>
-                <q-item-label>Assurance+ :</q-item-label>
-                <div class="row justify-between">
-                  <q-checkbox
-                    v-model="user.payments.assurance"
-                    disable
-                    color="positive"
-                    label="Souscrite"
-                  />
-                </div>
-              </q-item-section>
-            </q-item> <!-- Assurance+ -->
-            <q-separator />
-            <q-item>
-              <q-item-section>
-                <q-item-label>Pass competition:</q-item-label>
-                <div class="row justify-between">
-                  <q-checkbox
-                    v-model="user.payments.competition"
-                    disable
-                    color="positive"
-                    label="Souscrit"
-                  />
-                </div>
-              </q-item-section>
-            </q-item> <!-- Pass competition -->
-            <q-separator />
-            <q-item>
-              <q-item-section>
-                <q-item-label>Loue une tenue:</q-item-label>
-                <div class="row justify-between">
-                  <q-checkbox
-                    v-model="user.payments.deposit"
-                    disable
-                    color="positive"
-                    label="Oui"
-                  />
-                </div>
-              </q-item-section>
-            </q-item> <!-- Loue une tenue -->
-            <q-separator />
-            <q-item>
-              <q-item-section>
-                <q-item-label>Loue un masque:</q-item-label>
-                <div class="row justify-between">
-                  <q-checkbox
-                    v-model="user.payments.mask"
-                    disable
-                    color="positive"
-                    label="Oui"
-                  />
-                </div>
-              </q-item-section>
-            </q-item> <!-- Loue un mask -->
-            <q-separator />
+            <q-expansion-item
+              expand-separator
+              icon="mdi-information"
+              label="Information de cotisation"
+              caption="Cliquer pour plus de détails"
+            >
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Montant :</q-item-label>
+                  <q-item-label caption>
+                    {{ user.payments.amount }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item> <!-- Montant -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Assurance+ :</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.assurance"
+                      disable
+                      color="positive"
+                      label="Souscrite"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Assurance+ -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Pass competition:</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.competition"
+                      disable
+                      color="positive"
+                      label="Souscrit"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Pass competition -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Loue une tenue:</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.deposit"
+                      disable
+                      color="positive"
+                      label="Oui"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Loue une tenue -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Loue un masque:</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.mask"
+                      disable
+                      color="positive"
+                      label="Oui"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Loue un mask -->
+              <q-separator />
+            </q-expansion-item>
           </template> <!-- Info Cotisation -->
           <q-separator />
           <q-item>
