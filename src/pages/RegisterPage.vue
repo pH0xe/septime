@@ -286,7 +286,7 @@ export default {
     onLastStepSubmit() {
       // Prepare data
       const {
-        firstName, lastName, email, password, phone, phoneEmergency,
+        firstName, lastName, email, password, phone, phoneEmergency, relationEmergency,
         birthDate, laterality, certificateDate, gender, weaponsChoice
       } = this.data;
 
@@ -316,7 +316,8 @@ export default {
           deposit: false,
           paid: false
         },
-        weapons: weaponsChoice
+        weapons: weaponsChoice,
+        relationEmergency
       };
 
       // Debug
