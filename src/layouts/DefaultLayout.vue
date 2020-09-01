@@ -99,16 +99,15 @@
       <q-banner
         v-if="canShowBannerRegister"
         inline-actions
-        class="banner-register-background text-white"
+        class="banner-register-background text-black"
       >
-        Pour vous inscrire au club cliquer ici !
         <template v-slot:avatar>
           <q-icon name="mdi-location-enter" />
         </template>
         <template v-slot:action>
           <q-btn
             flat
-            label="S'inscrire"
+            label="Pour vous inscrire au club cliquer ici !"
             @click="onClickBannerRegisterRedirect"
           />
           <q-btn
@@ -248,7 +247,10 @@ export default {
     },
 
     canShowBannerRegister() {
-      return !this.isLoggedIn;
+      const registerBanner = JSON.parse(localStorage.getItem('registerBanner'));
+      return !this.isLoggedIn
+        && this.bannerRegister.show
+        && (registerBanner === null || registerBanner.show);
     },
 
     appVersion() {
@@ -321,6 +323,7 @@ export default {
 
     onClickBannerRegisterDismiss() {
       this.bannerRegister.show = false;
+      localStorage.setItem('registerBanner', JSON.stringify({ show: false }));
     },
 
     onClickBannerRegisterRedirect() {
@@ -374,6 +377,6 @@ export default {
   }
 
   .banner-register-background {
-    background: linear-gradient(145deg, #4d635e 11%, #215a4f 75%);
+    background: linear-gradient(145deg, #f3c264 11%, #ffc23d 75%);
   }
 </style>
