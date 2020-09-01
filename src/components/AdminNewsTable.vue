@@ -11,7 +11,6 @@
     :filter="search"
     :filter-method="filterNews"
   >
-
     <template v-slot:top>
       <q-space />
       <q-btn

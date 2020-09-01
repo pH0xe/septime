@@ -13,7 +13,6 @@
       hide-bottom
       @row-click="toggleDialogEventDetails"
     >
-
       <template v-slot:top>
         <q-space />
         <q-btn
