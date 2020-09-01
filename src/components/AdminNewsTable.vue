@@ -11,6 +11,17 @@
     :filter="search"
     :filter-method="filterNews"
   >
+
+    <template v-slot:top>
+      <q-space />
+      <q-btn
+        flat
+        round
+        icon="mdi-refresh"
+        @click="onClickRefreshTable"
+      />
+    </template>
+
     <template v-slot:body="props">
       <q-tr>
         <q-td
@@ -172,6 +183,10 @@ export default {
         default:
           return 'Autre';
       }
+    },
+
+    onClickRefreshTable() {
+      this.fetchNews();
     }
   }
 };
