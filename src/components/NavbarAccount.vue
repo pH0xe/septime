@@ -69,6 +69,7 @@
         <!--suppress HtmlUnknownTarget -->
         <img
           v-else
+          class="image-cover"
           :src="currentUser.photoURL"
           alt="Photo de profil"
         >
@@ -89,6 +90,7 @@
           <q-avatar v-if="currentUser.photoURL">
             <!--suppress HtmlUnknownTarget -->
             <img
+              class="image-cover"
               :src="currentUser.photoURL"
               alt="Photo de profil"
             >
@@ -277,3 +279,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" >
+.image-cover {
+  object-fit: cover;
+}
+</style>

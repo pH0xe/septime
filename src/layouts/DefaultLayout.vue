@@ -95,6 +95,28 @@
           />
         </template>
       </q-banner>
+
+      <q-banner
+        v-if="canShowBannerRegister"
+        inline-actions
+        class="banner-register-background text-black"
+      >
+        <template v-slot:avatar>
+          <q-icon name="mdi-location-enter" />
+        </template>
+        <template v-slot:action>
+          <q-btn
+            flat
+            label="Pour vous inscrire au club cliquer ici !"
+            @click="onClickBannerRegisterRedirect"
+          />
+          <q-btn
+            flat
+            icon="mdi-close"
+            @click="onClickBannerRegisterDismiss"
+          />
+        </template>
+      </q-banner>
     </q-header>
 
     <q-page-container id="page-container">
@@ -189,6 +211,9 @@ export default {
     },
     bannerMember: {
       show: true
+    },
+    bannerRegister: {
+      show: true
     }
   }),
 
@@ -219,6 +244,13 @@ export default {
       return this.isLoggedIn
         && !(this.currentUser?.isActive || this.currentUser?.isAdmin)
         && this.bannerMember.show;
+    },
+
+    canShowBannerRegister() {
+      const registerBanner = JSON.parse(localStorage.getItem('registerBanner'));
+      return !this.isLoggedIn
+        && this.bannerRegister.show
+        && (registerBanner === null || registerBanner.show);
     },
 
     appVersion() {
@@ -287,6 +319,16 @@ export default {
             color: 'negative'
           });
         });
+    },
+
+    onClickBannerRegisterDismiss() {
+      this.bannerRegister.show = false;
+      localStorage.setItem('registerBanner', JSON.stringify({ show: false }));
+    },
+
+    onClickBannerRegisterRedirect() {
+      this.bannerRegister.show = false;
+      this.$router.push({ name: 'register' });
     }
   }
 };
@@ -332,5 +374,9 @@ export default {
 
   .bigger {
     font-size: large;
+  }
+
+  .banner-register-background {
+    background: linear-gradient(145deg, #f3c264 11%, #ffc23d 75%);
   }
 </style>

@@ -80,11 +80,6 @@
           label="Date d'edition du certificat"
           mask="##/##/####"
           hint="JJ/MM/AAAA"
-          required
-          :error="$v.certificateDate.$error"
-          error-message="Veuillez entrer une date valide"
-          @blur="$v.certificateDate.$touch"
-          @input="$v.certificateDate.$touch"
         >
           <template v-slot:prepend>
             <q-icon
@@ -169,7 +164,7 @@
 import { date } from 'quasar';
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
-import { isLaterality, length } from '../js/vuelidate-custom-validators';
+import { isLaterality } from '../js/vuelidate-custom-validators';
 import { Laterality } from '../js/Laterality';
 import { Group } from '../js/Group';
 import FirebaseUploader from './FirebaseUploader';
@@ -211,10 +206,6 @@ export default {
   }),
 
   validations: {
-    certificateDate: {
-      required,
-      length: length(10)
-    },
     laterality: {
       required,
       isLaterality
@@ -257,17 +248,8 @@ export default {
 
     onSubmit() {
       this.$v.$touch();
-      const fileUploaded = this.fileAreUploded;
 
-      if (!fileUploaded) {
-        this.$q.notify({
-          message: 'Merci de rajouter le certificat',
-          color: 'negative',
-          position: 'center'
-        });
-      }
-
-      if (!this.$v.$invalid && fileUploaded) {
+      if (!this.$v.$invalid) {
         const { certificateDateParsed: certificateDate, laterality, weaponsChoice } = this;
         this.$emit('submit', {
           certificateDate,

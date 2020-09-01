@@ -12,6 +12,16 @@
     bordered
     @row-click="openDialogDetails"
   >
+    <template v-slot:top>
+      <q-space />
+      <q-btn
+        flat
+        round
+        icon="mdi-refresh"
+        @click="onClickRefreshTable"
+      />
+    </template>
+
     <template v-slot:body-cell-type="props">
       <q-td
         :props="props"
@@ -83,6 +93,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { date } from 'quasar';
 import AdminEquipmentDetailsDialog from './AdminEquipmentDetailsDialog';
 import { EquipmentState } from '../js/EquipmentState';
@@ -132,6 +143,7 @@ const columns = [
 ];
 export default {
   name: 'AdminEquipmentTable',
+
   props: {
     filterInput: {
       type: String,
@@ -155,6 +167,7 @@ export default {
       required: true
     }
   },
+
   data: () => ({
     pagination: {
       rowsPerPage: 0
@@ -162,12 +175,17 @@ export default {
     index: 0
 
   }),
+
   computed: {
     columns() {
       return columns;
     }
   },
+
   methods: {
+
+    ...mapActions(['fetchEquipments', 'fetchEquipmentsType']),
+
     openDialogDetails(event, row) {
       this.$q.dialog({
         component: AdminEquipmentDetailsDialog,
@@ -225,6 +243,11 @@ export default {
 
       // Return them
       return results;
+    },
+
+    onClickRefreshTable() {
+      this.fetchEquipments();
+      this.fetchEquipmentsType();
     }
   }
 

@@ -24,7 +24,7 @@
 
       <q-card-section class="text-h5 text-center">
         {{ user.lastName }} {{ user.firstName }}
-      </q-card-section>
+      </q-card-section> <!-- Nom Prenom -->
       <q-separator />
       <q-card-section>
         <q-list>
@@ -35,7 +35,7 @@
                 {{ user.group }}
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Catégorie-->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -44,7 +44,7 @@
                 {{ user.birthDate | dateDMY }}
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Date de naissance-->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -53,7 +53,7 @@
                 {{ user.phone }}
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Numero telephone -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -62,7 +62,25 @@
                 {{ user.phoneEmergency }}
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Numero telephone urgence -->
+          <q-separator />
+          <q-item>
+            <q-item-section>
+              <q-item-label>Lien avec contact d'urgence :</q-item-label>
+              <q-item-label caption>
+                {{ user.relationEmergency || 'Non définit' }}
+              </q-item-label>
+            </q-item-section>
+          </q-item> <!-- Lien avec le contact d'urgence urgence -->
+          <q-separator />
+          <q-item>
+            <q-item-section>
+              <q-item-label>Adresse :</q-item-label>
+              <q-item-label caption>
+                {{ user.address.street || 'Rue non définit' }}, {{ user.address.city || 'Vile non définit' }}, {{ user.address.zip || 'Code postal non définit' }},
+              </q-item-label>
+            </q-item-section>
+          </q-item> <!-- Adresse -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -71,7 +89,7 @@
                 {{ user.email }}
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Email -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -91,7 +109,7 @@
                 Féminin
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Sexe -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -115,7 +133,7 @@
                 Sabre
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Armes -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -143,7 +161,7 @@
                 />
               </div>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Certificat medical-->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -157,7 +175,7 @@
                 />
               </div>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Cerfa -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -178,7 +196,82 @@
                 />
               </div>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Cotisation ? -->
+          <q-separator />
+          <template v-if="user.payments.paid">
+            <q-expansion-item
+              expand-separator
+              icon="mdi-information"
+              label="Information de cotisation"
+              caption="Cliquer pour plus de détails"
+            >
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Montant :</q-item-label>
+                  <q-item-label caption>
+                    {{ user.payments.amount }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item> <!-- Montant -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Assurance+ :</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.assurance"
+                      disable
+                      color="positive"
+                      label="Souscrite"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Assurance+ -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Pass competition:</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.competition"
+                      disable
+                      color="positive"
+                      label="Souscrit"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Pass competition -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Loue une tenue:</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.deposit"
+                      disable
+                      color="positive"
+                      label="Oui"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Loue une tenue -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Loue un masque:</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.mask"
+                      disable
+                      color="positive"
+                      label="Oui"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Loue un mask -->
+              <q-separator />
+            </q-expansion-item>
+          </template> <!-- Info Cotisation -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -215,7 +308,7 @@
                 </q-btn>
               </div>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Administrateur -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -236,7 +329,7 @@
                 />
               </div>
             </q-item-section>
-          </q-item>
+          </q-item> <!-- Activation -->
         </q-list>
       </q-card-section>
       <q-separator />

@@ -88,6 +88,22 @@
             <q-icon name="mdi-phone-alert" />
           </template>
         </q-input>
+      </div> <!-- telephone d'urgence -->
+      <div class="col-12 col-md-6">
+        <!-- lien avec contact d'urgence -->
+        <q-input
+          v-model="relationEmergency"
+          label="Lien avec le contact d'urgence (Père, Mère...)"
+          required
+          :error="$v.relationEmergency.$error"
+          error-message="Veuillez entrer un lien"
+          @blur="$v.relationEmergency.$touch"
+          @input="$v.relationEmergency.$touch"
+        >
+          <template v-slot:prepend>
+            <q-icon name="mdi-link" />
+          </template>
+        </q-input>
       </div>
     </div>
 
@@ -125,7 +141,8 @@ export default {
       zip: null
     },
     phone: null,
-    phoneEmergency: null
+    phoneEmergency: null,
+    relationEmergency: ''
   }),
 
   validations: {
@@ -147,6 +164,9 @@ export default {
       required,
       integer,
       length: length(10)
+    },
+    relationEmergency: {
+      required
     }
   },
 
@@ -155,8 +175,12 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        const { address, phone, phoneEmergency } = this;
-        this.$emit('submit', { address, phone, phoneEmergency });
+        const {
+          address, phone, phoneEmergency, relationEmergency
+        } = this;
+        this.$emit('submit', {
+          address, phone, phoneEmergency, relationEmergency
+        });
       }
     },
 

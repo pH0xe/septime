@@ -13,6 +13,16 @@
       hide-bottom
       @row-click="toggleDialogEventDetails"
     >
+      <template v-slot:top>
+        <q-space />
+        <q-btn
+          flat
+          round
+          icon="mdi-refresh"
+          @click="onClickRefreshTable"
+        />
+      </template>
+
       <template v-slot:body-cell-competition="props">
         <q-td :props="props">
           <q-checkbox
@@ -44,6 +54,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { date } from 'quasar';
 import AdminEventDetails from './AdminEventDetails';
 
@@ -113,6 +124,9 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchEvents']),
+
+
     toggleDialogEventDetails(event, row) {
       this.$q.dialog({
         component: AdminEventDetails,
@@ -149,6 +163,10 @@ export default {
       const end = row.endDate;
 
       return `${date.formatDate(start, 'HH:mm')} - ${date.formatDate(end, 'HH:mm')}`;
+    },
+
+    onClickRefreshTable() {
+      this.fetchEvents();
     }
   }
 

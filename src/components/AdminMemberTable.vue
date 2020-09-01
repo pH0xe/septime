@@ -14,6 +14,16 @@
     bordered
     @row-click="toggleDialogMemberDetails"
   >
+    <template v-slot:top>
+      <q-space />
+      <q-btn
+        flat
+        round
+        icon="mdi-refresh"
+        @click="onClickRefreshTables"
+      />
+    </template>
+
     <template v-slot:body-cell-memberAvatar="props">
       <q-td
         :props="props"
@@ -22,6 +32,7 @@
         <q-avatar>
           <img
             v-if="props.row.memberAvatar"
+            class="image-cover"
             :src="props.row.memberAvatar"
           >
           <img
@@ -64,6 +75,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import AdminMemberDetails from '../components/AdminMemberDetails';
 import { Group } from '../js/Group';
 
@@ -133,6 +145,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchMembers']),
+
     toggleDialogMemberDetails(event, row) {
       this.$q.dialog({
         component: AdminMemberDetails,
@@ -192,7 +206,17 @@ export default {
         default:
           return 'null';
       }
+    },
+
+    onClickRefreshTables() {
+      this.fetchMembers();
     }
   }
 };
 </script>
+
+<style lang="scss" >
+.image-cover {
+  object-fit: cover;
+}
+</style>
