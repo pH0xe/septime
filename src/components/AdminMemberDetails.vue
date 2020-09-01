@@ -66,6 +66,15 @@
           <q-separator />
           <q-item>
             <q-item-section>
+              <q-item-label>Lien avec contact d'urgence :</q-item-label>
+              <q-item-label caption>
+                {{ user.relationEmergency || 'Non définit' }}
+              </q-item-label>
+            </q-item-section>
+          </q-item> <!-- Lien avec le contact d'urgence urgence -->
+          <q-separator />
+          <q-item>
+            <q-item-section>
               <q-item-label>E-mail :</q-item-label>
               <q-item-label caption>
                 {{ user.email }}

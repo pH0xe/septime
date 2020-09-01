@@ -93,7 +93,7 @@
         <!-- lien avec contact d'urgence -->
         <q-input
           v-model="relationEmergency"
-          label="Lien avec le contact d'urgence"
+          label="Lien avec le contact d'urgence (Père, Mère...)"
           required
           :error="$v.relationEmergency.$error"
           error-message="Veuillez entrer un lien"
