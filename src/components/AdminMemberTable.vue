@@ -32,6 +32,7 @@
         <q-avatar>
           <img
             v-if="props.row.memberAvatar"
+            class="image-cover"
             :src="props.row.memberAvatar"
           >
           <img
@@ -213,3 +214,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" >
+.image-cover {
+  object-fit: cover;
+}
+</style>

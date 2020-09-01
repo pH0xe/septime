@@ -16,10 +16,11 @@
     <template v-slot:body-cell-memberAvatar="props">
       <q-td :props="props">
         <q-avatar>
-          <q-img
+          <img
             v-if="props.row.memberAvatar"
+            class="image-cover"
             :src="props.row.memberAvatar"
-          />
+          >
           <q-img
             v-else
             src="~assets/sad.svg"

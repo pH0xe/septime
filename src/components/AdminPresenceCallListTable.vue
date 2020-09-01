@@ -17,7 +17,7 @@
       >
         <q-avatar v-if="props.row.memberAvatar">
           <img
-
+            class="image-cover"
             :src="props.row.memberAvatar"
           >
         </q-avatar>
