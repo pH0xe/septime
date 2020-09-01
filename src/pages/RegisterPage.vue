@@ -343,15 +343,19 @@ export default {
 
           return currentUser;
         }) // Upload profile picture
-        .then((currentUser) => {
+        .then(async (currentUser) => {
           this.$q.loading.show({
             message: 'Upload du certificat médical...'
           });
 
-          const { certificateUploader } = this.data;
+          if (this.$refs.upload.isCertificate === true) {
+            const { certificateUploader } = this.data;
 
-          certificateUploader.extra.filename = currentUser.uid;
-          return certificateUploader.upload();
+            certificateUploader.extra.filename = currentUser.uid;
+            await certificateUploader.upload();
+          }
+
+          return currentUser;
         }) // Upload certificate
         .then(() => {
           this.$q.loading.hide();
