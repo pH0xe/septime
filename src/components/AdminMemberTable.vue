@@ -15,6 +15,9 @@
     @row-click="toggleDialogMemberDetails"
   >
     <template v-slot:top>
+      <h5 class="text-h5 q-ma-none q-pa-none">
+        {{ title }}
+      </h5>
       <q-space />
       <q-btn
         flat

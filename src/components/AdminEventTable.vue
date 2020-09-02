@@ -14,6 +14,9 @@
       @row-click="toggleDialogEventDetails"
     >
       <template v-slot:top>
+        <h5 class="text-h5 q-ma-none q-pa-none">
+          Événements
+        </h5>
         <q-space />
         <q-btn
           flat

@@ -218,7 +218,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['isLoggedIn', 'isMessagingPossible', 'isMessagingReady', 'isLastVersion']),
+    ...mapGetters(['isLoggedIn', 'isMessagingPossible', 'isMessagingReady', 'isLastVersion', 'isRegisterOpen']),
 
     ...mapState({
       currentUser: (state) => state.auth.currentUser
@@ -250,7 +250,9 @@ export default {
       const registerBanner = JSON.parse(localStorage.getItem('registerBanner'));
       return !this.isLoggedIn
         && this.bannerRegister.show
-        && (registerBanner === null || registerBanner.show);
+        && (registerBanner === null || registerBanner.show)
+        && this.isLastVersion
+        && this.isRegisterOpen;
     },
 
     appVersion() {
