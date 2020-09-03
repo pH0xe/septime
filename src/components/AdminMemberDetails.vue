@@ -188,6 +188,17 @@
                   label="Fournis"
                 />
                 <q-btn
+                  v-if="user.payments.paid"
+                  color="negative"
+                  icon="mdi-close"
+                  round
+                  @click="setAsNotPaid"
+                >
+                  <q-tooltip>
+                    J'ai fais une erreur. Remettre a non payé.
+                  </q-tooltip>
+                </q-btn>
+                <q-btn
                   v-if="!user.payments.paid"
                   label="Payement vérifié"
                   icon="mdi-plus"
@@ -209,14 +220,14 @@
                 <q-item-section>
                   <q-item-label>Montant :</q-item-label>
                   <q-item-label caption>
-                    {{ user.payments.amount }}
+                    {{ user.payments.amount }}€ dont base (catégorie) : {{ user.payments.base || 'indéfinit (erreur)' }}€
                   </q-item-label>
                 </q-item-section>
               </q-item> <!-- Montant -->
               <q-separator />
               <q-item>
                 <q-item-section>
-                  <q-item-label>Assurance+ :</q-item-label>
+                  <q-item-label>Assurance+ (1.60€) :</q-item-label>
                   <div class="row justify-between">
                     <q-checkbox
                       v-model="user.payments.assurance"
@@ -230,7 +241,7 @@
               <q-separator />
               <q-item>
                 <q-item-section>
-                  <q-item-label>Pass competition:</q-item-label>
+                  <q-item-label>Pass competition (6€) :</q-item-label>
                   <div class="row justify-between">
                     <q-checkbox
                       v-model="user.payments.competition"
@@ -244,21 +255,49 @@
               <q-separator />
               <q-item>
                 <q-item-section>
-                  <q-item-label>Loue une tenue:</q-item-label>
+                  <q-item-label>Loue une veste (10€) :</q-item-label>
                   <div class="row justify-between">
                     <q-checkbox
-                      v-model="user.payments.deposit"
+                      v-model="user.payments.breastplate"
                       disable
                       color="positive"
                       label="Oui"
                     />
                   </div>
                 </q-item-section>
-              </q-item> <!-- Loue une tenue -->
+              </q-item> <!-- Loue une Veste -->
               <q-separator />
               <q-item>
                 <q-item-section>
-                  <q-item-label>Loue un masque:</q-item-label>
+                  <q-item-label>Loue un pantalon (10€) :</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.pants"
+                      disable
+                      color="positive"
+                      label="Oui"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Loue une pantalon -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Loue une sous-cuirasse (5€):</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.underBreastplate"
+                      disable
+                      color="positive"
+                      label="Oui"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Loue une sous-cuirasse -->
+              <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Loue un masque (25€) :</q-item-label>
                   <div class="row justify-between">
                     <q-checkbox
                       v-model="user.payments.mask"
@@ -407,7 +446,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount', 'removeAccount', 'fetchMembers']),
+    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount', 'removeAccount', 'fetchMembers', 'changePaidInfo']),
     show() {
       this.$refs.dialog.show();
     },
@@ -485,6 +524,12 @@ export default {
         parent: this,
         user: this.user
       });
+    },
+
+    setAsNotPaid() {
+      const newPayments = { ...this.user.payments };
+      newPayments.paid = false;
+      this.changePaidInfo({ member: this.user, newPayments });
     },
 
     addCertificate() {
