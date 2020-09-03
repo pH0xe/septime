@@ -29,7 +29,7 @@
               flat
             />
           </q-card>
-        </q-form>
+        </q-form> <!-- Email -->
         <q-form
           class="q-mt-md"
           @submit="submitPassword"
@@ -69,7 +69,7 @@
               flat
             />
           </q-card>
-        </q-form>
+        </q-form> <!-- Mot de passe -->
         <q-form
           class="q-mt-md"
           @submit="submitAddress"
@@ -128,7 +128,7 @@
               flat
             />
           </q-card>
-        </q-form>
+        </q-form> <!-- Adresse -->
         <q-form
           class="q-mt-md"
           @submit="submitPhone"
@@ -167,6 +167,17 @@
                 @blur="$v.phoneEmergency.$touch"
                 @input="$v.phoneEmergency.$touch"
               />
+              <q-input
+                v-model="relationEmergency"
+                label="Lien avec le contact d'urgence"
+                color="primary"
+                class="w-40 q-ma-md"
+                filled
+                error-message="Champs requis"
+                :error="$v.relationEmergency.$error"
+                @blur="$v.relationEmergency.$touch"
+                @input="$v.relationEmergency.$touch"
+              />
             </div>
             <q-btn
               color="primary"
@@ -175,7 +186,85 @@
               flat
             />
           </q-card>
-        </q-form>
+        </q-form> <!-- Numero de telephone -->
+        <q-form
+          class="q-mt-md"
+          @submit="submitCertificat"
+        >
+          <q-card
+            flat
+            bordered
+          >
+            <q-card-section class="text-weight-bold">
+              Modifier le certificat médical
+            </q-card-section>
+            <div
+              class="q-ma-md"
+              :class="$q.platform.is.mobile ? '' : 'w-40'"
+            >
+              <firebase-uploader
+                ref="certificateUploader"
+                label="Certificat médical (image ou PDF, maximum 1Mio)"
+                accept="image/*, application/pdf"
+                path="certificates"
+                :max-total-size="1048576"
+                :auto-upload="false"
+                hide-upload-btn
+                flat
+                bordered
+                class="full-width"
+                @added="certificateStateChange"
+                @removed="certificateStateChange"
+              />
+            </div>
+            <q-btn
+              color="primary"
+              label="Valider"
+              type="submit"
+              flat
+            />
+          </q-card>
+        </q-form> <!-- Certificat Médical TODO -->
+        <q-form
+          class="q-mt-md"
+          @submit="submitProfilPic"
+        >
+          <q-card
+            flat
+            bordered
+          >
+            <q-card-section class="text-weight-bold">
+              Modifier la photo de profil
+            </q-card-section>
+
+            <div
+              class="q-ma-md"
+              :class="$q.platform.is.mobile ? '' : 'w-40'"
+            >
+              <firebase-uploader
+                ref="photoUploader"
+                label="Photo d'identité (image, maximum 1Mio)"
+                accept="image/*"
+                path="profile_pics"
+                :max-total-size="1048576"
+                :auto-upload="false"
+                hide-upload-btn
+                flat
+                bordered
+                class="full-width"
+                @added="picStateChange"
+                @removed="picStateChange"
+              />
+            </div>
+
+            <q-btn
+              color="primary"
+              label="Valider"
+              type="submit"
+              flat
+            />
+          </q-card>
+        </q-form> <!-- Photo de profil Todo -->
         <div
           align="right"
           class="q-mt-md"
@@ -198,10 +287,13 @@ import { Notify } from 'quasar';
 import { validationMixin } from 'vuelidate';
 import { minLength, required, email } from 'vuelidate/lib/validators';
 import { length } from '../js/vuelidate-custom-validators';
+import FirebaseUploader from '../components/FirebaseUploader';
 
 export default {
   name: 'ProfilUpdatePage',
+  components: { FirebaseUploader },
   mixins: [validationMixin],
+
 
   data: () => ({
     email: '',
@@ -213,7 +305,10 @@ export default {
     phoneEmergency: null,
     phone: null,
     password: '',
-    isPwd: true
+    isPwd: true,
+    relationEmergency: '',
+    isProfilPic: false,
+    isCertificate: false
   }),
 
   validations: {
@@ -240,6 +335,9 @@ export default {
     password: {
       required,
       minLength: minLength(8)
+    },
+    relationEmergency: {
+      required
     }
 
 
@@ -258,10 +356,19 @@ export default {
     this.address.zip = this.currentUser.address.zip;
     this.phone = this.currentUser.phone;
     this.phoneEmergency = this.currentUser.phoneEmergency;
+    this.relationEmergency = this.currentUser.relationEmergency;
   },
 
   methods: {
-    ...mapActions(['changePassword', 'changeEmail', 'fetchCurrentUser', 'changeAddress', 'changePhone', 'fetchMembers']),
+    ...mapActions(['changePassword', 'changeEmail', 'fetchCurrentUser', 'changeAddress', 'changePhone', 'fetchMembers', 'changeRelationEmergency']),
+
+    picStateChange() {
+      this.isProfilPic = !this.isProfilPic;
+    },
+
+    certificateStateChange() {
+      this.isCertificate = !this.isCertificate;
+    },
 
     submitMail() {
       this.$v.email.$touch();
@@ -300,8 +407,9 @@ export default {
     submitPhone() {
       this.$v.phone.$touch();
       this.$v.phoneEmergency.$touch();
+      this.$v.relationEmergency.$touch();
 
-      if (!(this.$v.phone.$invalid || this.$v.phoneEmergency.$invalid)) {
+      if (!(this.$v.phone.$invalid || this.$v.phoneEmergency.$invalid || this.$v.relationEmergency.$invalid)) {
         this.changePhone({
           member: this.currentUser,
           newPhone: this.phone,
@@ -311,6 +419,15 @@ export default {
             this.fetchCurrentUser();
             Notify.create({
               message: 'Les numéro ont été changé avec succès',
+              color: 'positive',
+              position: 'top'
+            });
+          });
+        this.changeRelationEmergency({ member: this.currentUser, newRelation: this.relationEmergency })
+          .then(() => {
+            this.fetchCurrentUser();
+            Notify.create({
+              message: 'Le lien a été changé avec succès',
               color: 'positive',
               position: 'top'
             });
@@ -329,6 +446,55 @@ export default {
               message: 'Mot de passe changé avec succès',
               color: 'positive',
               position: 'top'
+            });
+          });
+      }
+    },
+
+    submitCertificat() {
+      if (this.isCertificate) {
+        this.$q.loading.show({ message: 'Upload du certificat' });
+        /* TODO a partir d'ici */
+        this.$refs.certificateUploader.extra.filename = this.currentUser.uid;
+
+        this.$refs.certificateUploader.upload()
+          .then(() => {
+            this.$q.loading.hide();
+            this.fetchCurrentUser();
+            this.$router.push({ name: 'profil' });
+          })
+          .catch((err) => {
+            this.$q.loading.hide();
+            this.fetchCurrentUser();
+            this.$router.push({ name: 'profil' });
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'bottom'
+            });
+          });
+      }
+    },
+
+    submitProfilPic() {
+      if (this.isProfilPic) {
+        this.$q.loading.show({ message: 'Upload de l\'image' });
+        this.$refs.photoUploader.extra.filename = this.currentUser.uid;
+
+        this.$refs.photoUploader.upload()
+          .then(() => {
+            this.$q.loading.hide();
+            this.fetchCurrentUser();
+            this.$router.push({ name: 'profil' });
+          })
+          .catch((err) => {
+            this.$q.loading.hide();
+            this.fetchCurrentUser();
+            this.$router.push({ name: 'profil' });
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'bottom'
             });
           });
       }

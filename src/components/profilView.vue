@@ -1,6 +1,7 @@
 <template>
   <q-splitter
     :value="20"
+    :horizontal="$q.platform.is.mobile"
   >
     <template v-slot:before>
       <q-tabs
@@ -67,6 +68,12 @@
           </div>
           <p>{{ currentUser.phoneEmergency }}</p>
           <q-separator />
+          <div class="text-h6 q-mb-none">
+            Lien avec le contact d'urgence :
+          </div>
+          <p>{{ currentUser.relationEmergency || 'Non définit' }}</p>
+          <q-separator />
+          <!-- TODO Afficher son certificat -->
           <div
             align="right"
             class="q-mt-md"

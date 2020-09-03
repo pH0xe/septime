@@ -38,6 +38,11 @@ export default {
       state.members[index].payments = newPayments;
     },
 
+    changeRelationState(state, { member, newRelation }) {
+      const index = state.members.indexOf(member);
+      state.members[index].relationEmergency = newRelation;
+    },
+
     deactivateMember(state, { member }) {
       let index = state.members.indexOf(member);
       state.members[index].isActive = false;
@@ -355,6 +360,23 @@ export default {
             });
         }
       });
+    },
+
+    changeRelationEmergency({ commit }, { member, newRelation }) {
+      db.collection('users')
+        .doc(member.uid)
+        .update({ relationEmergency: newRelation })
+        .then(() => {
+          commit('changeRelationState', { member, newRelation });
+        })
+        .catch((err) => {
+          console.log('Error while changing relation information : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
     }
   }
 };

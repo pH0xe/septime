@@ -42,7 +42,7 @@ service firebase.storage {
                     && request.resource.contentType.matches('image/.*');
 
       // Can't be deleted
-      allow delete: if false;
+      allow delete: if (request.auth != null && request.auth.uid == userId) || isAdmin();
     }
 
     match /profile_pics/public_temp/{allFiles=*} {
