@@ -33,6 +33,7 @@
     <admin-member-table
       :filter-input="searchQuery"
       :users="membersActive"
+      :can-download="true"
       title="Comptes validé et administrateur"
     />
   </q-page>

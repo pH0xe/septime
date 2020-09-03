@@ -1,6 +1,6 @@
 {
   "name": "septime",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Le Cercle d'escrime de Moirans propose la pratique de l'escrime à tous les âges et aux trois armes, que ce soit comme loisirs ou en compétition.",
   "productName": "Cercle d'escrime de Moirans",
   "cordovaId": "org.cordova.quasar.app",
@@ -27,7 +27,8 @@
     "firebase": "^7.5.0",
     "quasar": "^1.5.5",
     "uuid": "^3.3.3",
-    "vuelidate": "^0.7.4"
+    "vuelidate": "^0.7.4",
+    "xlsx": "^0.16.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.7.5",

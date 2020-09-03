@@ -25,6 +25,13 @@
         icon="mdi-refresh"
         @click="onClickRefreshTables"
       />
+      <q-btn
+        v-if="canDownload"
+        flat
+        round
+        icon="mdi-download"
+        @click="onClickDownload"
+      />
     </template>
 
     <template v-slot:body-cell-memberAvatar="props">
@@ -79,8 +86,11 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { date } from 'quasar';
+import XLSX from 'xlsx';
 import AdminMemberDetails from '../components/AdminMemberDetails';
 import { Group } from '../js/Group';
+import { Laterality } from '../js/Laterality';
 
 const columns = [
   {
@@ -133,6 +143,11 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    canDownload: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data: () => ({
@@ -213,6 +228,62 @@ export default {
 
     onClickRefreshTables() {
       this.fetchMembers();
+    },
+
+    onClickDownload() {
+      /* Champ Obligatoire :
+      * - Prénom
+      * - Nom
+      * - Email
+      * - Adresse
+      * - Complément d'adresse
+      * - Code postal
+      * - Ville
+      * - Pays
+      * - Date de naissance
+      * - Téléphone
+      * - Sexe
+      * - Organisation
+      * - Catégorie
+      * - Tél en cas d'urgence
+      * - Latéralité
+      * - Paiement
+      * - solde du sur adhesion 2019/2020
+      * - Intitulé
+      * */
+      const items = [];
+
+      this.users.forEach((user) => {
+        const preparUser = {};
+        preparUser.Prénom = user.firstName;
+        preparUser.Nom = user.lastName;
+        preparUser.Email = user.email;
+        preparUser.Adresse = user.address.street;
+        preparUser['Complément d\'adresse'] = null;
+        preparUser['Code postal'] = user.address.zip;
+        preparUser.Ville = user.address.city;
+        preparUser.Pays = 'France';
+        preparUser['Date de naissance'] = date.formatDate(user.birthDate, 'DD/MM/YYYY');
+        preparUser.Téléphone = user.phone;
+        preparUser.Sexe = user.gender;
+        preparUser.Organisation = null;
+        preparUser.Catégorie = user.group;
+        preparUser['Tél en cas d\'urgence'] = user.phoneEmergency;
+        if (user.laterality === Laterality.RIGHT) {
+          preparUser.Latéralité = 'Droitier';
+        } else {
+          preparUser.Latéralité = 'Gaucher';
+        }
+        preparUser.Paiement = null;
+        preparUser['solde du sur adhesion 2019/2020'] = null;
+        preparUser.Intitulé = null;
+
+        items.push(preparUser);
+      });
+      const data = XLSX.utils.json_to_sheet(items);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data);
+      XLSX.writeFile(wb, 'MembresCEM.xlsx');
     }
   }
 };
