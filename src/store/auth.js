@@ -129,11 +129,26 @@ export default {
         }
       }
 
+      let medicalCertificate;
+      try {
+        medicalCertificate = await storage.ref()
+          .child('certificates')
+          .child(state.currentUser.uid)
+          .getDownloadURL();
+      } catch (err) {
+        if (err.code === 'storage/object-not-found') {
+          console.warn('No certificates found');
+        } else {
+          console.error(err);
+        }
+      }
+
       commit('updateCurrentUser', {
         ...data,
         birthDate,
         group,
-        photoURL
+        photoURL,
+        medicalCertificate
       });
     },
 

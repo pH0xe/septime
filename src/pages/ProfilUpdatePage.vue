@@ -224,7 +224,7 @@
               flat
             />
           </q-card>
-        </q-form> <!-- Certificat Médical TODO -->
+        </q-form> <!-- Certificat Médical -->
         <q-form
           class="q-mt-md"
           @submit="submitProfilPic"
@@ -264,7 +264,7 @@
               flat
             />
           </q-card>
-        </q-form> <!-- Photo de profil Todo -->
+        </q-form> <!-- Photo de profil -->
         <div
           align="right"
           class="q-mt-md"
@@ -454,7 +454,6 @@ export default {
     submitCertificat() {
       if (this.isCertificate) {
         this.$q.loading.show({ message: 'Upload du certificat' });
-        /* TODO a partir d'ici */
         this.$refs.certificateUploader.extra.filename = this.currentUser.uid;
 
         this.$refs.certificateUploader.upload()

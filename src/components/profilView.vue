@@ -73,7 +73,22 @@
           </div>
           <p>{{ currentUser.relationEmergency || 'Non définit' }}</p>
           <q-separator />
-          <!-- TODO Afficher son certificat -->
+          <div class="text-h6 q-mb-none">
+            Certificat médical :
+          </div>
+          <q-btn
+            v-if="currentUser.medicalCertificate"
+            label="Voir son certificat médical"
+            icon="mdi-download"
+            color="primary"
+            :disable="!currentUser.medicalCertificate"
+            @click="downloadCertificate"
+          />
+          <p v-else>
+            Aucun certificat télécharger. Merci d'en ajouter un.
+          </p>
+          <q-separator />
+
           <div
             align="right"
             class="q-mt-md"
@@ -200,6 +215,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { openURL } from 'quasar';
 import { Weapons } from '../js/Weapons';
 import { Laterality } from '../js/Laterality';
 
@@ -249,6 +265,10 @@ export default {
   methods: {
     editInformation() {
       this.$router.push({ name: 'profil_update' });
+    },
+
+    downloadCertificate() {
+      openURL(this.currentUser.medicalCertificate);
     }
   }
 };
