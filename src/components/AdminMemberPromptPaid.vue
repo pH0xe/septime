@@ -112,7 +112,6 @@ export default {
     this.payments = {
       ...this.user.payments, mask: false, breastplate: false, underBreastplate: false, pants: false
     };
-    console.log(this.payments);
     this.setAmount();
   },
 

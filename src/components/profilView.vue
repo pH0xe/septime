@@ -106,57 +106,81 @@
           <div v-if="currentUser.payments">
             <div class="text-h6 q-mb-none">
               Cotisation fournis ?
-            </div>
-            <q-badge
-              v-if="currentUser.payments.paid"
-              color="positive"
-              label="Oui"
-            />
-            <q-badge
-              v-else
-              color="negative"
-              label="Non"
-            />
-
+              <q-checkbox
+                v-model="currentUser.payments.deposit"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- Cotisation ? -->
             <q-separator />
-
-            <div class="text-h6 q-mb-none">
-              Montant :
-            </div>
-            <p>{{ currentUser.payments.amount }}€</p>
-
+            <div class="q-my-md">
+              <span class="text-h6">Montant : </span>{{ currentUser.payments.amount }}€ dont base (catégorie) : {{ currentUser.payments.base }}€
+            </div> <!-- Montant -->
             <q-separator />
 
             <div class="text-h6 q-mb-none">
               Caution fournis ?
-            </div>
-            <q-badge
-              v-if="currentUser.payments.deposit"
-              color="positive"
-              label="Oui"
-            />
-            <q-badge
-              v-else
-              color="negative"
-              label="Non"
-            />
-
+              <q-checkbox
+                v-model="currentUser.payments.deposit"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- caution -->
             <q-separator />
 
             <div class="text-h6 q-mb-none">
-              Assurance + :
-            </div>
-            <q-badge
-              v-if="currentUser.payments.assurance"
-              color="positive"
-              label="Oui"
-            />
-            <q-badge
-              v-else
-              color="negative"
-              label="Non"
-            />
-
+              Assurance+ (1.60€) :
+              <q-checkbox
+                v-model="currentUser.payments.assurance"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- assurance+ -->
+            <q-separator />
+            <div class="text-h6 q-mb-none">
+              Pass compétition (6€) :
+              <q-checkbox
+                v-model="currentUser.payments.competition"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- Pass competition -->
+            <q-separator />
+            <div class="text-h6 q-mb-none">
+              Location veste (10€) :
+              <q-checkbox
+                v-model="currentUser.payments.breastplate"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- Veste -->
+            <q-separator />
+            <div class="text-h6 q-mb-none">
+              Location sous-cuirasse (5€) :
+              <q-checkbox
+                v-model="currentUser.payments.underBreastplate"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- Sous-cuirasse-->
+            <q-separator />
+            <div class="text-h6 q-mb-none">
+              Location pantalon (10€) :
+              <q-checkbox
+                v-model="currentUser.payments.pants"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- Pantalon -->
+            <q-separator />
+            <div class="text-h6 q-mb-none">
+              Location masque (25€) :
+              <q-checkbox
+                v-model="currentUser.payments.mask"
+                color="positive"
+                class="q-ma-md"
+              />
+            </div> <!-- Masque -->
             <q-separator />
           </div>
           <div v-else>
@@ -260,6 +284,10 @@ export default {
           return 'Inconnue';
       }
     }
+  },
+
+  mounted() {
+    console.log(this.currentUser);
   },
 
   methods: {
