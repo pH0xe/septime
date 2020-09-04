@@ -107,9 +107,10 @@
             <div class="text-h6 q-mb-none">
               Cotisation fournis ?
               <q-checkbox
-                v-model="currentUser.payments.deposit"
+                v-model="currentUser.payments.paid"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- Cotisation ? -->
             <q-separator />
@@ -124,6 +125,7 @@
                 v-model="currentUser.payments.deposit"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- caution -->
             <q-separator />
@@ -134,6 +136,7 @@
                 v-model="currentUser.payments.assurance"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- assurance+ -->
             <q-separator />
@@ -143,6 +146,7 @@
                 v-model="currentUser.payments.competition"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- Pass competition -->
             <q-separator />
@@ -152,6 +156,7 @@
                 v-model="currentUser.payments.breastplate"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- Veste -->
             <q-separator />
@@ -161,6 +166,7 @@
                 v-model="currentUser.payments.underBreastplate"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- Sous-cuirasse-->
             <q-separator />
@@ -170,6 +176,7 @@
                 v-model="currentUser.payments.pants"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- Pantalon -->
             <q-separator />
@@ -179,6 +186,7 @@
                 v-model="currentUser.payments.mask"
                 color="positive"
                 class="q-ma-md"
+                disable
               />
             </div> <!-- Masque -->
             <q-separator />
