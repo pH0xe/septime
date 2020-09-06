@@ -274,7 +274,7 @@ export default {
         } else {
           preparUser.Latéralité = 'Gaucher';
         }
-        preparUser.Paiement = null;
+        preparUser.Paiement = `${user.payments.amount}€`;
         preparUser['solde du sur adhesion 2019/2020'] = null;
         preparUser.Intitulé = null;
 
