@@ -88,12 +88,11 @@
                     Si vous payez par carte bancaire : <br>
                     1) Choisir le tarif en fonction de la catégorie. <br>
                     2) Payer par HelloAsso. <br>
-                    3) Valider l'inscription avec le bouton "Terminer en bas de page" <br>
+                    3) Valider l'inscription avec le bouton "Terminer" en bas de page <br>
                     <br>
-                    Si vous payez par chéque, espèces ou chéque vacance : <br>
-                    1) Ignorer cette page et helloAsso. <br>
-                    2) Valider l'inscription avec le bouton "Terminer en bas de page" <br>
-                    3) Remettre le paiement au club à la rentrée. <br>
+                    Si vous payez par chéque, espèces ou chéques vacances : <br>
+                    1) Ignorer le paiement par HelloAsso et cliquer sur "Terminer" en bas de page <br>
+                    2) Remettre le paiement au club à la rentrée. <br>
                     <br>
                     Pour finaliser l'inscription cliquer sur le bouton "Terminer" en bas de la page
                   </q-card-section>
