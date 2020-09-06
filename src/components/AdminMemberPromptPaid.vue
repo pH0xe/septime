@@ -69,6 +69,13 @@
             color="positive"
             @input="setAmount"
           />
+          <br>
+          <q-checkbox
+            v-model="payments.childKit"
+            label="Loue un kit première touche (20€)"
+            color="positive"
+            @input="setAmount"
+          />
         </q-card-section>
 
         <q-card-actions align="right">
@@ -110,7 +117,7 @@ export default {
 
   mounted() {
     this.payments = {
-      ...this.user.payments, mask: false, breastplate: false, underBreastplate: false, pants: false
+      ...this.user.payments, mask: false, breastplate: false, underBreastplate: false, pants: false, childKit: false
     };
     this.setAmount();
   },
@@ -152,6 +159,7 @@ export default {
     },
 
     setAmount() {
+      this.payments.deposit = false;
       switch (this.user.group) {
         case Group.M5:
         case Group.M7:
@@ -205,6 +213,11 @@ export default {
 
       if (this.payments.mask) {
         this.payments.amount += 25;
+        this.payments.deposit = true;
+      }
+
+      if (this.payments.childKit) {
+        this.payments.amount += 20;
         this.payments.deposit = true;
       }
     }

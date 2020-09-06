@@ -309,6 +309,20 @@
                 </q-item-section>
               </q-item> <!-- Loue un mask -->
               <q-separator />
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Loue un kit première touche (20€) :</q-item-label>
+                  <div class="row justify-between">
+                    <q-checkbox
+                      v-model="user.payments.childKit"
+                      disable
+                      color="positive"
+                      label="Oui"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item> <!-- Loue un kit première touche -->
+              <q-separator />
             </q-expansion-item>
           </template> <!-- Info Cotisation -->
           <q-separator />

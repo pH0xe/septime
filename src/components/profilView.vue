@@ -190,6 +190,16 @@
               />
             </div> <!-- Masque -->
             <q-separator />
+            <div class="text-h6 q-mb-none">
+              Kit première touche (20€) :
+              <q-checkbox
+                v-model="payments.childKit"
+                color="positive"
+                class="q-ma-md"
+                disable
+              />
+            </div> <!-- Kit première touche -->
+            <q-separator />
           </div>
           <div v-else>
             <div class="text-h4 q-mb-md">
@@ -266,7 +276,8 @@ export default {
       mask: false,
       pants: false,
       underBreastplate: false,
-      breastplate: false
+      breastplate: false,
+      childKit: false
     }
   }),
 
