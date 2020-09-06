@@ -72,6 +72,7 @@
         </template>
       </q-banner>
 
+      <!--
       <q-banner
         v-if="canShowBannerNotification"
         inline-actions
@@ -95,6 +96,7 @@
           />
         </template>
       </q-banner>
+      -->
 
       <q-banner
         v-if="canShowBannerRegister"
