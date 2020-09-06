@@ -23,8 +23,7 @@
       @click="deactivate"
     />
 
-    <q-separator />
-
+    <!--
     <div class="text-h6 q-mt-lg">
       Lien de l'adhésion AssoConnect
     </div>
@@ -54,9 +53,9 @@
       outline
       @click="changeIframe"
     />
+   -->
 
-
-    <q-separator class="q-my-md" />
+    <q-separator class="" />
 
     <div class="text-h6 q-mt-lg">
       Lien de l'iframe du formulaire HelloAsso :
