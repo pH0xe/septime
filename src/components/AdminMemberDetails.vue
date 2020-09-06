@@ -314,7 +314,7 @@
                   <q-item-label>Loue un kit première touche (20€) :</q-item-label>
                   <div class="row justify-between">
                     <q-checkbox
-                      v-model="user.payments.childKit"
+                      :value="user.payments.childKit !== null && user.payments.childKit !== undefined ? user.payments.childKit : false"
                       disable
                       color="positive"
                       label="Oui"
