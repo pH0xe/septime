@@ -86,16 +86,14 @@
 
                   <q-card-section class="q-pt-none">
                     Si vous payez par carte bancaire : <br>
-                    1) Créer votre compte sur Assoconnect. <br>
-                    2) Choisir le tarif en fonction de la catégorie. <br>
-                    3) Indiquer paiement par "Autre". <br>
-                    4) Ensuite, payer par HelloAsso. <br>
+                    1) Choisir le tarif en fonction de la catégorie. <br>
+                    2) Payer par HelloAsso. <br>
+                    3) Valider l'inscription avec le bouton "Terminer en bas de page" <br>
                     <br>
-                    Si vous payez par chéque ou espèces : <br>
-                    1) Créer votre compte sur Assoconnect. <br>
-                    2) Choisir le tarif en fonction de la catégorie. <br>
-                    3) Indiquer paiement par "Chéque" ou "espèces". <br>
-                    4) Remettre le paiement au club à la rentrée. <br>
+                    Si vous payez par chéque, espèces ou chéque vacance : <br>
+                    1) Ignorer cette page et helloAsso. <br>
+                    2) Valider l'inscription avec le bouton "Terminer en bas de page" <br>
+                    3) Remettre le paiement au club à la rentrée. <br>
                     <br>
                     Pour finaliser l'inscription cliquer sur le bouton "Terminer" en bas de la page
                   </q-card-section>
@@ -115,8 +113,7 @@
                 rounded
                 class="q-ma-lg bg-warning"
               >
-                Adhésion via AssoConnect et Helloasso: <br>
-                Merci de renseigner le formulaire accessible en cliquant sur le bouton "j'adhére" puis cocher la case "J'ai créé mon compte sur AssoConnect et payé sur Helloasso si je paye par carte bancaire". <br>
+                Le paiement via carte bancaire se fait sur Helloasso. <br>
                 Une vérification du paiement sera effectuée avant que votre compte soit validé. <br>
                 Une fois l'inscription terminée vous serez redirigé à la page d'accueil.
               </q-banner>
@@ -125,9 +122,9 @@
                 class="q-ma-lg bg-negative text-white"
                 inline-actions
               >
-                <span class="text-weight-bolder">Important</span>
-                Ne pas payer par carte bancaire sur Assoconnect. <br>
-                Utiliser HelloAsso pour cela.
+                <span class="text-weight-bolder">Important</span> <br>
+                Si vous ne payez pas par carte cliquer sur "Terminer" en bas de page. <br>
+                Si vous payez par carte, suivre la procédure HelloAsso puis cliquer sur "Terminer" en bas de page.
                 <template v-slot:action>
                   <q-btn
                     flat
@@ -137,9 +134,6 @@
                   />
                 </template>
               </q-banner>
-              <iframe :src="link" />
-
-              <q-separator class="q-my-md" />
 
               <h5 class="text-h5">
                 Payement par HelloAsso (carte bancaire)
@@ -148,11 +142,6 @@
               <div
                 class="border q-mt-md"
                 v-html="helloassoURL"
-              />
-              <q-checkbox
-                v-model="hasCheckPaid"
-                label="J'ai créé mon compte sur AssoConnect et payé sur Helloasso si je paye par carte bancaire"
-                color="primary"
               />
 
               <q-stepper-navigation>
@@ -267,16 +256,7 @@ export default {
 
       // If not the last step
       if (this.isLastStep) {
-        if (this.hasCheckPaid) {
-          this.onLastStepSubmit();
-        } else {
-          Notify.create({
-            message: 'Merci de cocher la case "J\'ai payé via Assoconnect"',
-            color: 'negative',
-            position: 'center',
-            icon: 'mdi-warning'
-          });
-        }
+        this.onLastStepSubmit();
       } else {
         // Goto the next step
         this.next();
