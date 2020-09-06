@@ -103,7 +103,7 @@
         </q-tab-panel>
 
         <q-tab-panel name="payment">
-          <div v-if="currentUser.payments">
+          <div v-if="payments">
             <div class="text-h6 q-mb-none">
               Cotisation fournis ?
               <q-checkbox
@@ -115,14 +115,14 @@
             </div> <!-- Cotisation ? -->
             <q-separator />
             <div class="q-my-md">
-              <span class="text-h6">Montant : </span>{{ currentUser.payments.amount }}€ dont base (catégorie) : {{ currentUser.payments.base }}€
+              <span class="text-h6">Montant : </span>{{ payments.amount }}€ dont base (catégorie) : {{ payments.base }}€
             </div> <!-- Montant -->
             <q-separator />
 
             <div class="text-h6 q-mb-none">
               Caution fournis ?
               <q-checkbox
-                v-model="currentUser.payments.deposit"
+                v-model="payments.deposit"
                 color="positive"
                 class="q-ma-md"
                 disable
@@ -133,7 +133,7 @@
             <div class="text-h6 q-mb-none">
               Assurance+ (1.60€) :
               <q-checkbox
-                v-model="currentUser.payments.assurance"
+                v-model="payments.assurance"
                 color="positive"
                 class="q-ma-md"
                 disable
@@ -143,7 +143,7 @@
             <div class="text-h6 q-mb-none">
               Pass compétition (6€) :
               <q-checkbox
-                v-model="currentUser.payments.competition"
+                v-model="payments.competition"
                 color="positive"
                 class="q-ma-md"
                 disable
@@ -153,7 +153,7 @@
             <div class="text-h6 q-mb-none">
               Location veste (10€) :
               <q-checkbox
-                v-model="currentUser.payments.breastplate"
+                v-model="payments.breastplate"
                 color="positive"
                 class="q-ma-md"
                 disable
@@ -163,7 +163,7 @@
             <div class="text-h6 q-mb-none">
               Location sous-cuirasse (5€) :
               <q-checkbox
-                v-model="currentUser.payments.underBreastplate"
+                v-model="payments.underBreastplate"
                 color="positive"
                 class="q-ma-md"
                 disable
@@ -173,7 +173,7 @@
             <div class="text-h6 q-mb-none">
               Location pantalon (10€) :
               <q-checkbox
-                v-model="currentUser.payments.pants"
+                v-model="payments.pants"
                 color="positive"
                 class="q-ma-md"
                 disable
@@ -183,7 +183,7 @@
             <div class="text-h6 q-mb-none">
               Location masque (25€) :
               <q-checkbox
-                v-model="currentUser.payments.mask"
+                v-model="payments.mask"
                 color="positive"
                 class="q-ma-md"
                 disable
@@ -213,14 +213,14 @@
 
           <q-separator />
 
-          <div v-if="currentUser.payments">
+          <div v-if="payments">
             <div
               class="text-h6 q-mb-none"
             >
               Pass compétition :
             </div>
             <q-badge
-              v-if="currentUser.payments.competition"
+              v-if="payments.competition"
               color="positive"
               label="Oui"
             />
@@ -255,7 +255,19 @@ export default {
   name: 'ProfilView',
 
   data: () => ({
-    tab: 'personnal'
+    tab: 'personnal',
+    payments: {
+      amount: 0,
+      base: 0,
+      assurance: false,
+      competion: false,
+      deposit: false,
+      paid: false,
+      mask: false,
+      pants: false,
+      underBreastplate: false,
+      breastplate: false
+    }
   }),
 
   computed: {
@@ -295,7 +307,8 @@ export default {
   },
 
   mounted() {
-    console.log(this.currentUser);
+    this.payments = Object.assign(this.payments, this.currentUser.payments);
+    console.log(this.payments);
   },
 
   methods: {
