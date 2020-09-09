@@ -253,7 +253,7 @@ export default {
 
   async beforeMount() {
     this.fetchNews();
-    this.fetchTrainings();
+    // this.fetchTrainings();
     this.fetchEvents();
   },
 

@@ -53,7 +53,7 @@ export default {
 
   beforeMount() {
     this.fetchEventsCalendar();
-    this.fetchTrainingCalendar();
+    // this.fetchTrainingCalendar();
   },
 
   methods: {
