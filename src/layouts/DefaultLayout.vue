@@ -253,7 +253,7 @@ export default {
       return !this.isLoggedIn
         && this.bannerRegister.show
         && (registerBanner === null || registerBanner.show)
-        && this.isLastVersion
+        // && this.isLastVersion
         && this.isRegisterOpen;
     },
 
