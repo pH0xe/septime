@@ -22,15 +22,15 @@ export default {
   computed: {
     ...mapState({
       currentUser: (state) => state.auth.currentUser,
-      events: (state) => JSON.parse(JSON.stringify(state.calendar.events)),
-      trainings: (state) => JSON.parse(JSON.stringify(state.calendar.trainings))
+      eventsCalendar: (state) => JSON.parse(JSON.stringify(state.calendar.eventsCalendar)),
+      trainingsCalendar: (state) => JSON.parse(JSON.stringify(state.calendar.trainingsCalendar))
     }),
 
     ...mapGetters(['isLoggedIn']),
 
     copyEvents() {
       // prepare event to calendar format
-      const copyEvent = Array.from(this.events);
+      const copyEvent = Array.from(this.eventsCalendar);
 
       // prepare trainings to calendar format if user is logged in
       let copyTrainings = [];
@@ -38,7 +38,7 @@ export default {
         return copyEvent;
       }
 
-      copyTrainings = Array.from(this.trainings);
+      copyTrainings = Array.from(this.trainingsCalendar);
 
       // filter trainings to display only trainings where currentUser is register
       copyTrainings = copyTrainings
@@ -57,11 +57,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchEventsCalendar', 'fetchTrainingCalendar']),
-
-    test() {
-      console.log(this.calendarEvents);
-    }
+    ...mapActions(['fetchEventsCalendar', 'fetchTrainingCalendar'])
   },
 
   meta: {

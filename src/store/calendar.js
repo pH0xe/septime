@@ -4,17 +4,17 @@ import { Weapons } from '../js/Weapons';
 
 export default {
   state: {
-    events: [],
-    trainings: []
+    eventsCalendar: [],
+    trainingsCalendar: []
   },
 
   mutations: {
-    setEvents(state, { events }) {
-      state.events = events;
+    setEventsCalendar(state, { events }) {
+      state.eventsCalendar = events;
     },
 
-    setTrainings(state, { trainings }) {
-      state.trainings = trainings;
+    setTrainingsCalendar(state, { trainings }) {
+      state.trainingsCalendar = trainings;
     }
 
   },
@@ -63,7 +63,7 @@ export default {
           return event;
         }))
         .then((events) => {
-          commit('setEvents', { events });
+          commit('setEventsCalendar', { events });
         })
         .catch((err) => {
           console.error('Error while fetching event calendar list', err);
@@ -106,7 +106,7 @@ export default {
           return training;
         }))
         .then((trainings) => {
-          commit('setTrainings', { trainings });
+          commit('setTrainingsCalendar', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainingsEvent list', err);

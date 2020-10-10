@@ -473,8 +473,6 @@ export default {
           laterality: this.laterality
         };
 
-        console.log(userData);
-
         this.$q.loading.show({
           message: 'Création du compte...'
         });
