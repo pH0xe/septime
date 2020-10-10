@@ -3,13 +3,20 @@
     <h5 class="text-h5 q-my-md">
       Liste des membres
     </h5>
-    <div class="row q-mb-md">
+    <div class="row items-center q-mb-md">
       <q-btn
         class="col-12 col-md-auto q-mb-sm q-mr-sm"
         label="Ajouter"
         icon-right="mdi-plus"
         color="admin-primary"
         @click="openDialogMemberNew"
+      />
+      <q-btn
+        class="col-12 col-md-auto q-mb-sm q-mr-sm"
+        label="Extraire les inscrits"
+        icon-right="mdi-download"
+        color="admin-primary"
+        @click="downloadAll"
       />
       <div class="col">
         <q-input
@@ -41,8 +48,11 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import { date } from 'quasar';
+import XLSX from 'xlsx';
 import AdminMemberTable from '../components/AdminMemberTable';
 import AdminMemberNew from '../components/AdminMemberNew';
+import { Laterality } from '../js/Laterality';
 
 export default {
   name: 'AdminMemberPage',
@@ -68,6 +78,44 @@ export default {
         component: AdminMemberNew,
         parent: this
       });
+    },
+
+    downloadAll() {
+      const allMembers = [...this.membersActive, ...this.membersInactive];
+
+      const items = [];
+
+      allMembers.forEach((user) => {
+        const preparUser = {};
+        preparUser.Prénom = user.firstName;
+        preparUser.Nom = user.lastName;
+        preparUser.Email = user.email;
+        preparUser.Adresse = user.address.street;
+        preparUser['Complément d\'adresse'] = null;
+        preparUser['Code postal'] = user.address.zip;
+        preparUser.Ville = user.address.city;
+        preparUser.Pays = 'France';
+        preparUser['Date de naissance'] = date.formatDate(user.birthDate, 'DD/MM/YYYY');
+        preparUser.Téléphone = user.phone;
+        preparUser.Sexe = user.gender;
+        preparUser.Organisation = null;
+        preparUser.Catégorie = user.group;
+        preparUser['Tél en cas d\'urgence'] = user.phoneEmergency;
+        if (user.laterality === Laterality.RIGHT) {
+          preparUser.Latéralité = 'Droitier';
+        } else {
+          preparUser.Latéralité = 'Gaucher';
+        }
+        preparUser.Paiement = `${user.payments.amount}€`;
+        preparUser['solde du sur adhesion 2019/2020'] = null;
+        preparUser.Intitulé = null;
+
+        items.push(preparUser);
+      });
+      const data = XLSX.utils.json_to_sheet(items);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data);
+      XLSX.writeFile(wb, 'MembresCEM.xlsx');
     }
   },
 
