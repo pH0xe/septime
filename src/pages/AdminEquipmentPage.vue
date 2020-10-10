@@ -3,7 +3,7 @@
     <h5 class="text-h5 q-my-md">
       Liste du matériel
     </h5>
-    <div class="row q-pb-lg">
+    <div class="row items-center q-pb-lg">
       <q-btn
         label="Ajouter"
         icon-right="mdi-plus"

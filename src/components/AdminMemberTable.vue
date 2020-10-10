@@ -26,7 +26,6 @@
         @click="onClickRefreshTables"
       />
       <q-btn
-        v-if="canDownload"
         flat
         round
         icon="mdi-download"

@@ -45,3 +45,9 @@ export const cloudFunctions = {
 Vue.prototype.$firebase = firebase;
 
 // Setup messaging in src-pwa/register-service-worker.js
+firebase.getCurrentUser = () => new Promise((resolve, reject) => {
+  const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+    unsubscribe();
+    resolve(user);
+  }, reject);
+});

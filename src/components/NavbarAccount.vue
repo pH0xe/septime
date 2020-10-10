@@ -200,7 +200,7 @@ export default {
     ...mapGetters(['isLoggedIn', 'isRegisterOpen', 'isLastVersion']),
 
     registerOpen() {
-      return this.isRegisterOpen && this.isLastVersion;
+      return this.isRegisterOpen;
     }
   },
 

@@ -265,7 +265,6 @@ export default {
       item = JSON.parse(item);
       let diff = 0;
       if (item) diff = date.getDateDiff(Date(), item.date, 'days');
-      console.log(diff);
       if (!item || diff >= 10) this.showInstallPromotion();
     });
   },
