@@ -21,7 +21,9 @@ export default {
 
   actions: {
     fetchEventsCalendar({ commit }) {
-      db.collection('events').get()
+      db.collection('events')
+        .orderBy('endDate').startAt(new Date(new Date().getTime()))
+        .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
@@ -31,7 +33,8 @@ export default {
             collector.push({ id: item.id, origin, ...item.data() });
           });
           return collector;
-        }).then((events) => events.map((event) => {
+        })
+        .then((events) => events.map((event) => {
           event.summary = event.title;
           delete event.title;
           event.start = {
@@ -78,8 +81,12 @@ export default {
         });
     },
 
-    fetchTrainingCalendar({ commit }) {
-      db.collection('trainings').get()
+    fetchTrainingCalendar({ commit }, { uid }) {
+      db.collection('trainings')
+        .where('students', 'array-contains', { isPresent: 'here', uid })
+        .orderBy('startDate').startAt(new Date(new Date().getTime()))
+        .limit(10)
+        .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
@@ -89,7 +96,8 @@ export default {
             collector.push({ id: item.id, origin, ...item.data() });
           });
           return collector;
-        }).then((trainings) => trainings.map((training) => {
+        })
+        .then((trainings) => trainings.map((training) => {
           training.summary = `Cours pour : ${training.group.toString()}`;
           training.description = '';
           training.start = {

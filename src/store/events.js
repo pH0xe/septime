@@ -4,12 +4,17 @@ import { db, auth } from '../boot/firebase';
 
 export default {
   state: {
-    events: []
+    events: [],
+    nextEvents: []
   },
 
   mutations: {
     setEvents(state, { events }) {
       state.events = events;
+    },
+
+    setNextEvents(state, { events }) {
+      state.nextEvents = events;
     },
 
     addEvent(state, { event }) {
@@ -39,6 +44,36 @@ export default {
         }))
         .then((events) => {
           commit('setEvents', { events });
+        })
+        .catch((err) => {
+          console.log('Error while fetching events list : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'bottom'
+          });
+        });
+    },
+
+    fetchNextEvents({ commit }) {
+      return db.collection('events')
+        .orderBy('startDate').startAt(new Date(new Date().getTime()))
+        .limit(3)
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((doc) => {
+            collector.push({ id: doc.id, ...doc.data() });
+          });
+          return collector;
+        })
+        .then((events) => events.map((event) => {
+          event.startDate = event.startDate.toDate();
+          event.endDate = event.endDate.toDate();
+          return event;
+        }))
+        .then((events) => {
+          commit('setNextEvents', { events });
         })
         .catch((err) => {
           console.log('Error while fetching events list : ', err);

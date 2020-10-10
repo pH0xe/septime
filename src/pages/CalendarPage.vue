@@ -16,6 +16,7 @@
 <script lang="js">
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { DaykeepCalendar } from '@daykeep/calendar-quasar';
+import * as firebase from 'firebase';
 import EventMoreInformation from '../components/EventMoreInformation';
 
 export default {
@@ -67,9 +68,13 @@ export default {
     );
   },
 
-  beforeMount() {
+  async beforeMount() {
     this.fetchEventsCalendar();
-    this.fetchTrainingCalendar();
+    await firebase.getCurrentUser().then((user) => {
+      if (user) {
+        this.fetchTrainingCalendar({ uid: user.uid });
+      }
+    });
   },
 
   methods: {
