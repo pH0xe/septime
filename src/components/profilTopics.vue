@@ -110,7 +110,6 @@ export default {
     ...mapActions(['setupMessagingRoutine']),
 
     subscribeTo(topic) {
-      console.log('sub to', topic);
       cloudFunctions.subscribeToTopic({ topic })
         .then(() => {
           Notify.create({
@@ -129,7 +128,6 @@ export default {
     },
 
     unsubscribeFrom(topic) {
-      console.log('unsub from', topic);
       cloudFunctions.unsubscribeFromTopic({ topic })
         .then(() => {
           Notify.create({

@@ -95,7 +95,6 @@ export default {
     },
 
     deleteThisTrainings() {
-      console.log(this.training);
       this.deleteTraining({ training: this.training }).then(() => {
         this.$router.replace({ name: 'admin_presence' });
       });

@@ -147,12 +147,6 @@ export default {
         component: EventMoreInformation,
         parent: this,
         event: this.event
-      }).onOk(() => {
-        console.log('OK');
-      }).onCancel(() => {
-        console.log('Cancel');
-      }).onDismiss(() => {
-        console.log('Called on OK or Cancel');
       });
     }
   }
