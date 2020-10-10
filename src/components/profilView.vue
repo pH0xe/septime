@@ -319,7 +319,6 @@ export default {
 
   mounted() {
     this.payments = Object.assign(this.payments, this.currentUser.payments);
-    console.log(this.payments);
   },
 
   methods: {
