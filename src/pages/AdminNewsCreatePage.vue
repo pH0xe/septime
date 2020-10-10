@@ -268,10 +268,6 @@ export default {
 
     picUploader() {
       this.isPic = !this.isPic;
-    },
-
-    test() {
-      console.log(this.newsTypeSelect);
     }
   },
 

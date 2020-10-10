@@ -4,31 +4,37 @@ import { Weapons } from '../js/Weapons';
 
 export default {
   state: {
-    events: [],
-    trainings: []
+    eventsCalendar: [],
+    trainingsCalendar: []
   },
 
   mutations: {
-    setEvents(state, { events }) {
-      state.events = events;
+    setEventsCalendar(state, { events }) {
+      state.eventsCalendar = events;
     },
 
-    setTrainings(state, { trainings }) {
-      state.trainings = trainings;
+    setTrainingsCalendar(state, { trainings }) {
+      state.trainingsCalendar = trainings;
     }
 
   },
 
   actions: {
     fetchEventsCalendar({ commit }) {
-      db.collection('events').get()
+      db.collection('events')
+        .orderBy('endDate').startAt(new Date(new Date().getTime()))
+        .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            collector.push({ id: item.id, ...item.data() });
+            const origin = item.data();
+            origin.startDate = origin.startDate.toDate();
+            origin.endDate = origin.endDate.toDate();
+            collector.push({ id: item.id, origin, ...item.data() });
           });
           return collector;
-        }).then((events) => events.map((event) => {
+        })
+        .then((events) => events.map((event) => {
           event.summary = event.title;
           delete event.title;
           event.start = {
@@ -63,7 +69,7 @@ export default {
           return event;
         }))
         .then((events) => {
-          commit('setEvents', { events });
+          commit('setEventsCalendar', { events });
         })
         .catch((err) => {
           console.error('Error while fetching event calendar list', err);
@@ -75,15 +81,23 @@ export default {
         });
     },
 
-    fetchTrainingCalendar({ commit }) {
-      db.collection('trainings').get()
+    fetchTrainingCalendar({ commit }, { uid }) {
+      db.collection('trainings')
+        .where('students', 'array-contains', { isPresent: 'here', uid })
+        .orderBy('startDate').startAt(new Date(new Date().getTime()))
+        .limit(10)
+        .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            collector.push({ id: item.id, ...item.data() });
+            const origin = item.data();
+            origin.startDate = origin.startDate.toDate();
+            origin.endDate = origin.endDate.toDate();
+            collector.push({ id: item.id, origin, ...item.data() });
           });
           return collector;
-        }).then((trainings) => trainings.map((training) => {
+        })
+        .then((trainings) => trainings.map((training) => {
           training.summary = `Cours pour : ${training.group.toString()}`;
           training.description = '';
           training.start = {
@@ -106,7 +120,7 @@ export default {
           return training;
         }))
         .then((trainings) => {
-          commit('setTrainings', { trainings });
+          commit('setTrainingsCalendar', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainingsEvent list', err);

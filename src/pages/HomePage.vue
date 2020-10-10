@@ -161,6 +161,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 import { date } from 'quasar';
+import * as firebase from 'firebase';
 import NewsCard from '../components/NewsCard';
 import LessonCard from '../components/LessonCard';
 import EventCard from '../components/EventCard';
@@ -177,8 +178,8 @@ export default {
     ...mapState({
       currentUser: (state) => state.auth.currentUser,
       news: (state) => state.news.news,
-      trainings: (state) => state.trainings.trainings,
-      events: (state) => state.events.events,
+      currentUserTrainings: (state) => state.trainings.currentUserTrainings,
+      events: (state) => state.events.nextEvents,
       newsFFE: (state) => state.news.ffeInfo
     }),
 
@@ -213,7 +214,7 @@ export default {
         return [];
       }
 
-      let filtered = Array.from(this.trainings);
+      let filtered = Array.from(this.currentUserTrainings);
       filtered = filtered.filter((t) => t.endDate > new Date());
 
       filtered = filtered
@@ -251,10 +252,9 @@ export default {
     }
   },
 
-  async beforeMount() {
+  beforeMount() {
     this.fetchNews();
-    // this.fetchTrainings();
-    this.fetchEvents();
+    this.fetchNextEvents();
   },
 
   mounted() {
@@ -267,10 +267,11 @@ export default {
       if (item) diff = date.getDateDiff(Date(), item.date, 'days');
       if (!item || diff >= 10) this.showInstallPromotion();
     });
+    this.displayTrainings();
   },
 
   methods: {
-    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchEvents']),
+    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchNextEvents', 'fetchCurrentUserTrainings']),
 
     showInstallPromotion() {
       this.$q.notify({
@@ -304,6 +305,12 @@ export default {
           { label: 'Oui', color: 'amber', handler: () => { /* ... */ } },
           { label: 'Non', color: 'white', handler: () => { /* ... */ } }
         ]
+      });
+    },
+
+    async displayTrainings() {
+      await firebase.getCurrentUser().then((user) => {
+        if (user) { this.fetchCurrentUserTrainings({ uid: user.uid }); }
       });
     }
   },

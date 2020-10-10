@@ -6,6 +6,7 @@ export default {
   namespaced: false,
   state: {
     trainings: [],
+    currentUserTrainings: [],
     maxID: null
   },
 
@@ -23,6 +24,9 @@ export default {
         if (max < training.internalId) max = training.internalId;
       });
       state.maxID = max;
+    },
+    setCurrentUserTrainings(state, { trainings }) {
+      state.currentUserTrainings = trainings;
     },
 
     updateStudent(state, { training }) {
@@ -52,6 +56,37 @@ export default {
         }))
         .then((trainings) => {
           commit('setTrainings', { trainings });
+        })
+        .catch((err) => {
+          console.error('Error while fetching trainings list', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'bottom'
+          });
+        });
+    },
+
+    fetchCurrentUserTrainings({ commit }, { uid }) {
+      return db.collection('trainings')
+        .where('students', 'array-contains', { isPresent: 'here', uid })
+        .orderBy('startDate').startAt(new Date(new Date().getTime()))
+        .limit(3)
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((item) => {
+            collector.push({ uid: item.id, ...item.data() });
+          });
+          return collector;
+        })
+        .then((trainings) => trainings.map((training) => {
+          training.startDate = training.startDate.toDate();
+          training.endDate = training.endDate.toDate();
+          return training;
+        }))
+        .then((trainings) => {
+          commit('setCurrentUserTrainings', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainings list', err);

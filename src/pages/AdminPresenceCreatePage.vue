@@ -351,7 +351,6 @@ export default {
     ...mapGetters(['maxID']),
 
     onSubmit() {
-      console.log(this.maxID());
       this.$v.$touch();
       if (!this.$v.$error) {
         const trainingsToAdd = [];
@@ -388,7 +387,6 @@ export default {
           trainingsToAdd.push(currentTraining);
           currentDate = quasarDate.addToDate(currentDate, { days: 7 });
         }
-        console.log(trainingsToAdd);
         this.createMultipleTraining({ trainings: trainingsToAdd })
           .then(() => { this.$router.replace({ name: 'admin_presence' }); });
       }
