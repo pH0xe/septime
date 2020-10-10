@@ -25,7 +25,10 @@ export default {
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            collector.push({ id: item.id, ...item.data() });
+            const origin = item.data();
+            origin.startDate = origin.startDate.toDate();
+            origin.endDate = origin.endDate.toDate();
+            collector.push({ id: item.id, origin, ...item.data() });
           });
           return collector;
         }).then((events) => events.map((event) => {
@@ -80,7 +83,10 @@ export default {
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            collector.push({ id: item.id, ...item.data() });
+            const origin = item.data();
+            origin.startDate = origin.startDate.toDate();
+            origin.endDate = origin.endDate.toDate();
+            collector.push({ id: item.id, origin, ...item.data() });
           });
           return collector;
         }).then((trainings) => trainings.map((training) => {

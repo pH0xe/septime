@@ -3,6 +3,8 @@
     <daykeep-calendar
       :allow-editing="false"
       :event-array="copyEvents"
+      event-ref="calendarEvent"
+      :prevent-event-detail="true"
       calendar-locale="fr"
       calendar-timezone="Europe/Paris"
       :tab-labels="{month: 'Mois', week: 'Semaine',
@@ -14,6 +16,7 @@
 <script lang="js">
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { DaykeepCalendar } from '@daykeep/calendar-quasar';
+import EventMoreInformation from '../components/EventMoreInformation';
 
 export default {
   name: 'CalendarPage',
@@ -51,13 +54,43 @@ export default {
     }
   },
 
+  created() {
+    this.$root.$on(
+      'click-event-calendarEvent',
+      this.onCalendarClick
+    );
+  },
+  beforeDestroy() {
+    this.$root.$off(
+      'click-event-calendarEvent',
+      this.onCalendarClick
+    );
+  },
+
   beforeMount() {
     this.fetchEventsCalendar();
-    // this.fetchTrainingCalendar();
+    this.fetchTrainingCalendar();
   },
 
   methods: {
-    ...mapActions(['fetchEventsCalendar', 'fetchTrainingCalendar'])
+    ...mapActions(['fetchEventsCalendar', 'fetchTrainingCalendar']),
+
+    onCalendarClick(event) {
+      if (event.origin.neededRole) {
+        this.$q.dialog({
+          component: EventMoreInformation,
+          parent: this,
+          event: event.origin
+        });
+      } else {
+        this.$q.dialog({
+          component: EventMoreInformation,
+          parent: this,
+          event: event.origin,
+          isTraining: true
+        });
+      }
+    }
   },
 
   meta: {
