@@ -8,7 +8,8 @@
         <q-tabs
           v-model="tab"
           vertical
-          class="text-primary q-pa-md"
+          class="q-pa-md"
+          :class="$q.dark.isActive ? 'text-secondary' : 'text-primary '"
         >
           <q-tab
             name="legalNotice"

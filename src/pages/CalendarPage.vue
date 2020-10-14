@@ -1,6 +1,7 @@
 <template lang="html">
   <q-page>
     <daykeep-calendar
+      class="calendar"
       :allow-editing="false"
       :event-array="copyEvents"
       event-ref="calendarEvent"

@@ -11,9 +11,24 @@
         <div class="text-h6">
           Site et réseaux sociaux :
         </div>
-        <div>Site : <a href="https://escrime-moirans.web.app/">https://escrime-moirans.web.app/</a> </div>
-        <div>Facebook : <a href="https://fr-fr.facebook.com/CercleEscrimeDeMoirans">https://fr-fr.facebook.com/CercleEscrimeDeMoirans/</a> </div>
-        <div>Instagram : <a href="https://www.instagram.com/escrime_moirans/">https://www.instagram.com/escrime_moirans/</a></div>
+        <div>
+          Site : <a
+            :class="$q.dark.isActive? 'aDark': 'aLight'"
+            href="https://escrime-moirans.web.app/"
+          >https://escrime-moirans.web.app/</a>
+        </div>
+        <div>
+          Facebook : <a
+            :class="$q.dark.isActive? 'aDark': 'aLight'"
+            href="https://fr-fr.facebook.com/CercleEscrimeDeMoirans"
+          >https://fr-fr.facebook.com/CercleEscrimeDeMoirans/</a>
+        </div>
+        <div>
+          Instagram : <a
+            :class="$q.dark.isActive? 'aDark': 'aLight'"
+            href="https://www.instagram.com/escrime_moirans/"
+          >https://www.instagram.com/escrime_moirans/</a>
+        </div>
       </q-card-section>
       <q-card-section>
         <div class="text-h6">
@@ -99,6 +114,7 @@
         <div class="text-h6">
           Cliquer ici pour envoyer un mail à :
           <a
+            :class="$q.dark.isActive? 'aDark': 'aLight'"
             target="_blank"
             :href="url"
           >escrime.moirans@free.fr</a>
@@ -128,9 +144,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  a{
+  .aLight{
     text-decoration: none;
     color: black;
+  }
+  .aDark {
+    text-decoration: none;
+    color: #6a6967;
   }
   .underline{
     text-decoration: underline;

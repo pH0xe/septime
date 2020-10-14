@@ -16,3 +16,41 @@
 .image-cover {
   object-fit: cover;
 }
+
+/*******************************************
+DARK MODE OPTION
+*******************************************/
+body.body--dark {
+  --q-color-primary: #801a0e !important;
+  --q-color-secondary: #dc3c2e !important;
+  --q-color-accent: #9C27B0 !important;
+
+  --q-color-dark: #121212 !important;
+
+  background: #121212;
+
+  --q-color-positive: #178233 !important;
+  --q-color-negative: #a00013 !important;
+  --q-color-info: #31CCEC !important;
+  --q-color-warning: #bb9609 !important;
+}
+
+body.body--dark .calendar-day-current {
+  background-color: #000 !important;
+}
+
+body.body--dark .calendar-day-weekend {
+  background-color: #1a1a1a !important;
+}
+
+body.body--dark .calendar-tabs {
+  color: #dc3c2e !important;
+}
+
+body.body--dark .text-admin-primary {
+  color: #4692fc !important;;
+}
+body.body--dark .bg-admin-primary {
+  background: #093066 !important;;
+
+}

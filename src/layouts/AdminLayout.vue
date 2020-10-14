@@ -23,7 +23,7 @@
       show-if-above
       :mini="miniState"
       bordered
-      content-class="bg-grey-3"
+      :content-class="$q.dark.isActive ? 'bg-grey-10' : 'bg-grey-3'"
       @mouseover="toggleMini"
       @mouseout="toggleMini"
     >

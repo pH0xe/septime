@@ -10,7 +10,7 @@
             <q-tabs
               v-model="tab"
               vertical
-              class="text-primary"
+              :class="$q.dark.isActive ? 'text-secondary' : 'text-primary'"
             >
               <q-tab
                 name="news"
