@@ -82,11 +82,15 @@ export default {
     },
 
     fetchMembers({ commit }) {
-      db.collection('users').get()
+      db.collection('users')
+        .where('subUsers', '>', [])
+        .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            collector.push({ uid: item.id, ...item.data() });
+            item.data().subUsers.forEach((user) => {
+              collector.push({ uid: item.id, ...user });
+            });
           });
           return collector;
         })
@@ -97,7 +101,7 @@ export default {
         }))
         .then((members) => Promise.all(members.map(async (member) => {
           await storage.ref()
-            .child(`profile_pics/${member.uid}`)
+            .child(`profile_pics/${member.uid}/${member.firstName}_${member.lastName}`)
             .getDownloadURL()
             .then((url) => { member.memberAvatar = url; })
             .catch(() => { member.memberAvatar = ''; });

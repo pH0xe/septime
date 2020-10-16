@@ -87,16 +87,7 @@
         :to="{name: 'profil'}"
       >
         <q-item-section avatar>
-          <q-avatar v-if="currentUser.photoURL">
-            <!--suppress HtmlUnknownTarget -->
-            <img
-              class="image-cover"
-              :src="currentUser.photoURL"
-              alt="Photo de profil"
-            >
-          </q-avatar>
           <q-avatar
-            v-else
             icon="mdi-account-circle"
             color="primary"
             text-color="white"
@@ -104,11 +95,33 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>
-            {{ currentUser.firstName }} {{ currentUser.lastName }}
-            <q-badge :label="currentUser.group" />
+            {{ currentUser.email }}
           </q-item-label>
           <q-item-label caption>
-            Cliquez pour accéder au profil
+            Cliquez pour accéder aux profils
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        v-close-popup
+        v-ripple
+        clickable
+        :to="{name: 'addAdherent'}"
+      >
+        <q-item-section avatar>
+          <q-avatar
+            icon="mdi-plus"
+            color="primary"
+            text-color="white"
+          />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            Nouveau profil
+          </q-item-label>
+          <q-item-label caption>
+            Cliquez pour ajouter un adhérent
           </q-item-label>
         </q-item-section>
       </q-item>

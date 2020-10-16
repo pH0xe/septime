@@ -181,7 +181,7 @@ exports.addClaimsAdmin = functions.https.onCall(async (data, context) => {
   try {
     const { uid, isAdmin } = data;
 
-    admin.auth().setCustomUserClaims(uid, {isAdmin: isAdmin})
+    const responseData = admin.auth().setCustomUserClaims(uid, {isAdmin: isAdmin})
       .then(() => {
         return { isAdmin };
       })
@@ -189,7 +189,7 @@ exports.addClaimsAdmin = functions.https.onCall(async (data, context) => {
         return err;
       });
 
-    return uid;
+    return responseData;
 
   } catch (err) {
     return {

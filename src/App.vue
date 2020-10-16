@@ -14,11 +14,7 @@ export default {
     auth.onAuthStateChanged((user) => {
       if (user) {
         this.$store.commit('updateCurrentUserWithFirebase');
-        this.$store.dispatch('fetchCurrentUser').then((data) => {
-          if (data.subUsers.length === 0) {
-            this.$router.push({ name: 'addAdherent' });
-          }
-        });
+        this.$store.dispatch('fetchCurrentUser');
       }
     }, (error) => {
       console.error(error);
