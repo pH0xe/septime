@@ -23,7 +23,7 @@ async function isAdmin(uid) {
 
 exports.adminCreateMember = functions.https.onCall(async (data, context) => {
 
-  const { email, firstName, lastName } = data;
+  const { email } = data;
 
   // Generate a random password if not provided
   let password;
@@ -41,7 +41,6 @@ exports.adminCreateMember = functions.https.onCall(async (data, context) => {
       .createUser({
         email,
         password,
-        displayName: `${firstName} ${lastName}`,
         disabled: false,
         emailVerified: false
       });
@@ -50,21 +49,7 @@ exports.adminCreateMember = functions.https.onCall(async (data, context) => {
 
     const toStore = {
       isAdmin: false,
-      isActive: false,
-      email, // Duplicate the email here too so we can query it easily from the admin page
-      address: data.address,
-      birthDate: new Date(data.birthDate),
-      certificateDate: new Date(data.certificateDate),
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phone: data.phone,
-      phoneEmergency: data.phoneEmergency,
-      cerfa: data.cerfa,
-      gender: data.gender,
-      payments: data.payments,
-      weapons: data.weapons,
-      laterality: data.laterality,
-      relationEmergency: data.relationEmergency
+      subUsers : []
     };
 
     await admin.firestore()

@@ -1,4 +1,6 @@
 import { Notify } from 'quasar';
+import * as firebase from 'firebase';
+import authStore from './auth.js';
 import { auth, db, storage } from '../boot/firebase';
 import { Group } from '../js/Group';
 
@@ -52,10 +54,33 @@ export default {
         state.membersActive.splice(index, 1);
       }
       state.membersInactive = [...state.membersInactive, member];
+    },
+
+    updateSubUsers(state, { uid, data }) {
+      if (authStore.state.currentUser.uid === uid) {
+        authStore.state.currentUser.subUsers.push(data);
+      }
     }
   },
 
   actions: {
+    createSubUser({ commit }, { uid, data }) {
+      db.collection('users')
+        .doc(uid)
+        .update({ subUsers: firebase.firestore.FieldValue.arrayUnion(data) })
+        .then(() => {
+          commit('updateSubUsers', { uid, data });
+        })
+        .catch((err) => {
+          console.log('Error while adding profil : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
     fetchMembers({ commit }) {
       db.collection('users').get()
         .then((querySnapshot) => {

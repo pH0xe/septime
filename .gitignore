@@ -25,5 +25,6 @@ yarn-error.log*
 # Env files
 .env
 .env.dev
+dev-adminsdk.json
 
 stale_outputs_checked

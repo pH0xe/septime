@@ -101,37 +101,6 @@
       </template>
     </q-input>
 
-    <q-input
-      v-model.trim="password"
-      :type="isPasswordVisible ? 'text' : 'password'"
-      label="Mot de passe"
-      required
-      minlengh="8"
-      autocomplete="new-password"
-      error-message="Le mot de passe doit faire plus de 8 caractères"
-      :error="$v.password.$error"
-      @blur="$v.password.$touch"
-      @input="$v.password.$touch"
-    >
-      <template v-slot:prepend>
-        <q-icon name="mdi-key" />
-      </template>
-      <template v-slot:append>
-        <q-icon
-          :name="isPasswordVisible ? 'mdi-eye' : 'mdi-eye-off'"
-          class="cursor-pointer"
-          @click="isPasswordVisible = !isPasswordVisible"
-        />
-      </template>
-    </q-input>
-
-    <!--
-    <q-checkbox
-      v-model="isReferent"
-      :label="isReferent ? 'Je suis un parent référent' : 'Je ne suis pas un parent référent'"
-    />
-    -->
-
     <q-stepper-navigation>
       <q-btn
         label="Suivant"
@@ -146,7 +115,7 @@
 <script lang="js">
 import { date } from 'quasar';
 import { validationMixin } from 'vuelidate';
-import { minLength, required, email } from 'vuelidate/lib/validators';
+import { required, email } from 'vuelidate/lib/validators';
 import { length } from '../js/vuelidate-custom-validators';
 import { Gender } from '../js/Gender';
 
@@ -158,17 +127,13 @@ const genderOpt = [
 export default {
   name: 'RegisterStepAccount',
   mixins: [validationMixin],
-  data: () => ({
-    isPasswordVisible: false,
 
+  data: () => ({
     lastName: null,
     firstName: null,
     gender: null,
     email: null,
-    password: null,
-    birthDate: null,
-
-    isReferent: false
+    birthDate: null
   }),
 
   validations: {
@@ -178,10 +143,6 @@ export default {
     email: {
       required,
       email
-    },
-    password: {
-      required,
-      minLength: minLength(8)
     },
     birthDate: {
       required,

@@ -8,6 +8,7 @@ import ProfilPage from '../pages/ProfilPage';
 import ProfilUpdatePage from '../pages/ProfilUpdatePage';
 import ContactPage from '../pages/ContactPage';
 import UsefulInformationPage from '../pages/UsefulInformationPage';
+import ProfilNewPage from '../pages/ProfilNewPage';
 
 
 const routes = [
@@ -72,6 +73,14 @@ const routes = [
         path: 'useful',
         name: 'usefulInfo',
         component: UsefulInformationPage
+      },
+      {
+        path: 'profil/new',
+        name: 'addAdherent',
+        component: ProfilNewPage,
+        meta: {
+          requiresAuth: true
+        }
       }
     ]
   },

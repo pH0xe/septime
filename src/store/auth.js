@@ -1,7 +1,6 @@
 import {
-  auth, cloudFunctions, db, storage
+  auth, cloudFunctions, db
 } from '../boot/firebase';
-import { Group } from '../js/Group';
 
 export default {
   namespaced: false,
@@ -31,18 +30,13 @@ export default {
     updateCurrentUserWithFirebase(state) {
       // Gather some information to keep in the store
       const {
-        isAnonymous, emailVerified, refreshToken, tenantId, photoURL, uid, displayName, email
+        emailVerified, uid, email
       } = auth.currentUser;
 
       state.currentUser = {
         ...state.currentUser,
-        isAnonymous,
         emailVerified,
-        refreshToken,
-        tenantId,
-        photoURL,
         uid,
-        displayName,
         email
       };
     }
@@ -52,18 +46,15 @@ export default {
     /**
      * Create a firebase user, then upload the data of the user to firestore.
      */
-    async signup({ state, getters, dispatch }, { email, password, ...data }) {
+    async signup({ state, getters, dispatch }, { email, password }) {
       if (getters.isLoggedIn) {
         await auth.signOut();
       }
 
       // Pass all of the information to a cloud function
       const toData = {
-        ...data,
         email,
-        password,
-        birthDate: data.birthDate.toJSON(),
-        certificateDate: data.certificateDate.toJSON()
+        password
       };
 
       const responseData = (await cloudFunctions.adminCreateMember(toData)).data;
@@ -111,45 +102,11 @@ export default {
 
       const data = querySnapshot.data();
 
-      const birthDate = data.birthDate.toDate();
-      const group = Group.from(birthDate);
-
-      let photoURL;
-
-      try {
-        photoURL = await storage.ref()
-          .child('profile_pics')
-          .child(state.currentUser.uid)
-          .getDownloadURL();
-      } catch (err) {
-        if (err.code === 'storage/object-not-found') {
-          console.warn('No profile picture found');
-        } else {
-          console.error(err);
-        }
-      }
-
-      let medicalCertificate;
-      try {
-        medicalCertificate = await storage.ref()
-          .child('certificates')
-          .child(state.currentUser.uid)
-          .getDownloadURL();
-      } catch (err) {
-        if (err.code === 'storage/object-not-found') {
-          console.warn('No certificates found');
-        } else {
-          console.error(err);
-        }
-      }
-
       commit('updateCurrentUser', {
-        ...data,
-        birthDate,
-        group,
-        photoURL,
-        medicalCertificate
+        ...data
       });
+
+      return data;
     },
 
     async updateCurrentUserData({ state, getters, dispatch }, { data }) {
