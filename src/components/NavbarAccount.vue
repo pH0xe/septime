@@ -23,8 +23,8 @@
       :label="mobile ? undefined : 'Inscription'"
       color="white"
       text-color="primary"
-      :to="{ name: 'register' }"
       :disable="!registerOpen"
+      @click="onClickRegister"
     />
 
     <q-separator
@@ -188,7 +188,9 @@
 
 <script lang="js">
 import { mapState, mapGetters, mapActions } from 'vuex';
+import { Notify, QSpinnerPie } from 'quasar';
 import LoginDialog from './LoginDialog';
+import RegisterDialog from './RegisterDialog';
 
 export default {
   name: 'NavbarAccount',
@@ -234,6 +236,93 @@ export default {
 
   methods: {
     ...mapActions(['fetchSettings']),
+
+    onClickRegister() {
+      this.$q.dialog({
+        component: RegisterDialog,
+        parent: this
+      }).onOk(({ email, password }) => {
+        this.$q.loading.show({
+          message: 'Création du compte ...',
+          spinner: QSpinnerPie,
+          spinnerColor: 'primary'
+        });
+        this.$store.dispatch('signup', { email, password })
+          .then(() => {
+            this.$q.notify({
+              message: 'Création du compte réussie !',
+              icon: 'mdi-check'
+            });
+          })
+          .catch((err) => {
+            switch (err.code) {
+              // Authentication errors
+              case 'auth/email-already-in-use':
+              case 'auth/invalid-email':
+                Notify.create({
+                  message: 'Cet email n\'est pas valide',
+                  color: 'negative',
+                  icon: 'mdi-alert'
+                });
+                break;
+              case 'auth/weak-password':
+                Notify.create({
+                  message: 'Mot de passe trop faible',
+                  color: 'negative',
+                  icon: 'mdi-alert'
+                });
+                break;
+
+              // Storage errors
+              case 'storage/quota-exceeded':
+                Notify.create({
+                  message: 'Quota expiré. Veuillez contacter un administrateur !',
+                  color: 'negative',
+                  icon: 'mdi-alert'
+                });
+                break;
+              case 'storage/unauthenticated':
+              case 'storage/unauthorized':
+                Notify.create({
+                  message: 'Upload non autorisée. Veuillez contacter un administrteur !',
+                  color: 'negative',
+                  icon: 'mdi-alert'
+                });
+                break;
+              case 'storage/retry-limit-exceeded':
+                Notify.create({
+                  message: 'Limite d\'upload dépassée, veuillez réessayer plus tard.',
+                  color: 'negative',
+                  icon: 'mdi-alert'
+                });
+                break;
+              case 'storage/invalid-checksum':
+              case 'storage/canceled':
+              case 'storage/invalid-event-name':
+              case 'storage/server-file-wrong-size':
+                Notify.create({
+                  message: 'Une erreur technique est survenue. Veuillez réessayez.',
+                  color: 'negative',
+                  icon: 'mdi-alert'
+                });
+                break;
+
+              // Unknown errors
+              default:
+                console.error(err);
+                Notify.create({
+                  message: `Une erreur inconnue est survenue: ${err.code}`,
+                  color: 'negative',
+                  icon: 'mdi-alert'
+                });
+                this.$router.replace({ name: 'home' });
+            }
+
+            this.$q.loading.hide();
+          });
+        this.$q.loading.hide();
+      });
+    },
 
     onClickLogin() {
       this.$q.dialog({
