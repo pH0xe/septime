@@ -151,7 +151,8 @@ export default {
   },
   data: () => ({
     pagination: {
-      rowsPerPage: 0
+      rowsPerPage: 0,
+      sortBy: 'lastName'
     }
   }),
 

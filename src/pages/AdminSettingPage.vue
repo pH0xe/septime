@@ -14,6 +14,10 @@
         name="register"
         label="Inscription"
       />
+      <q-tab
+        name="permissions"
+        label="Administrateurs"
+      />
     </q-tabs>
 
     <q-separator />
@@ -28,6 +32,9 @@
       <q-tab-panel name="register">
         <admin-setting-register />
       </q-tab-panel>
+      <q-tab-panel name="permissions">
+        <admin-setting-permissions />
+      </q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
@@ -35,10 +42,11 @@
 import { mapActions } from 'vuex';
 import AdminSettingClub from '../components/AdminSettingClub';
 import AdminSettingRegister from '../components/AdminSettingRegister';
+import AdminSettingPermissions from '../components/AdminSettingPermissions';
 
 export default {
   name: 'SettingPage',
-  components: { AdminSettingRegister, AdminSettingClub },
+  components: { AdminSettingPermissions, AdminSettingRegister, AdminSettingClub },
 
   data: () => ({
     tab: 'club'

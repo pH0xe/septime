@@ -48,6 +48,7 @@ exports.adminCreateMember = functions.https.onCall(async (data, context) => {
     // The verification email need to be sent from the client
 
     const toStore = {
+      email,
       isAdmin: false,
       subUsers : []
     };

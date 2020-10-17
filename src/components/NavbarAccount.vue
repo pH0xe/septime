@@ -253,6 +253,7 @@ export default {
               message: 'Création du compte réussie !',
               icon: 'mdi-check'
             });
+            this.$q.loading.hide();
           })
           .catch((err) => {
             switch (err.code) {
@@ -320,7 +321,6 @@ export default {
 
             this.$q.loading.hide();
           });
-        this.$q.loading.hide();
       });
     },
 

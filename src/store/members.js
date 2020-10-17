@@ -10,7 +10,8 @@ export default {
   state: {
     members: [],
     membersActive: [],
-    membersInactive: []
+    membersInactive: [],
+    accounts: []
   },
 
   mutations: {
@@ -20,14 +21,13 @@ export default {
       state.membersInactive = members.filter((user) => !user.isActive && !user.isAdmin);
     },
 
-    setMemberAdmin(state, member) {
-      const index = state.members.indexOf(member);
-      state.members[index].isAdmin = true;
+    setAccounts(state, { members }) {
+      state.accounts = members;
     },
 
-    removeMemberAdmin(state, member) {
-      const index = state.members.indexOf(member);
-      state.members[index].isAdmin = false;
+    setMemberAdmin(state, { member, value }) {
+      const index = state.accounts.indexOf(member);
+      state.members[index].isAdmin = value;
     },
 
     activateMember(state, member) {
@@ -128,15 +128,31 @@ export default {
         });
     },
 
-    setAdmin({ commit }, { member }) {
+    fetchAccounts({ commit }) {
       db.collection('users')
-        .doc(member.uid)
-        .update({ isAdmin: true })
-        .then(() => {
-          commit('setMemberAdmin', member);
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((item) => {
+            collector.push({ uid: item.id, ...item.data() });
+          });
+          return collector;
+        })
+        .then((members) => Promise.all(members.map(async (member) => {
+          member.subUsers.forEach((subUser) => {
+            if (member.subUsersName) {
+              member.subUsersName = `${member.subUsersName} - ${subUser.firstName} ${subUser.lastName}`;
+            } else {
+              member.subUsersName = `${subUser.firstName} ${subUser.lastName}`;
+            }
+          });
+          return member;
+        })))
+        .then((members) => {
+          commit('setAccounts', { members });
         })
         .catch((err) => {
-          console.log('Error while setting Admin : ', err);
+          console.error('Error while fetching account list', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
@@ -145,15 +161,15 @@ export default {
         });
     },
 
-    removeAdmin({ commit }, { member }) {
+    setAdmin({ commit }, { member, value }) {
       db.collection('users')
         .doc(member.uid)
-        .update({ isAdmin: false })
+        .update({ isAdmin: value })
         .then(() => {
-          commit('removeMemberAdmin', member);
+          commit('setMemberAdmin', { member, value });
         })
         .catch((err) => {
-          console.log('Error while removing Admin : ', err);
+          console.log('Error while setting Admin : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
