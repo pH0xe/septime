@@ -1,9 +1,9 @@
 import { Notify } from 'quasar';
-import * as firebase from 'firebase';
-import authStore from './auth.js';
 import { auth, db, storage } from '../boot/firebase';
 import { Group } from '../js/Group';
-
+import { Laterality } from '../js/Laterality';
+import { Gender } from '../js/Gender';
+import { Weapons } from '../js/Weapons';
 
 export default {
   namespaced: false,
@@ -21,7 +21,20 @@ export default {
       state.membersInactive = members.filter((user) => !user.isActive && !user.isAdmin);
     },
 
-    setAccounts(state, { members }) {
+    setAccounts(state, { members, subUsers }) {
+      members.forEach((member) => {
+        let subUsersName = '';
+        const filterRes = subUsers.filter((sub) => sub.parentUid === member.uid);
+        member.subUsers = filterRes;
+        filterRes.forEach((sub) => {
+          if (subUsersName !== '') {
+            subUsersName = `${subUsersName} - ${sub.firstName} ${sub.lastName}`;
+          } else {
+            subUsersName = `${sub.firstName} ${sub.lastName}`;
+          }
+        });
+        member.subUsersName = subUsersName;
+      });
       state.accounts = members;
     },
 
@@ -54,23 +67,16 @@ export default {
         state.membersActive.splice(index, 1);
       }
       state.membersInactive = [...state.membersInactive, member];
-    },
-
-    updateSubUsers(state, { uid, data }) {
-      if (authStore.state.currentUser.uid === uid) {
-        authStore.state.currentUser.subUsers.push(data);
-      }
     }
   },
 
   actions: {
+    // eslint-disable-next-line no-unused-vars
     createSubUser({ commit }, { uid, data }) {
       db.collection('users')
         .doc(uid)
-        .update({ subUsers: firebase.firestore.FieldValue.arrayUnion(data) })
-        .then(() => {
-          commit('updateSubUsers', { uid, data });
-        })
+        .collection('subUsers')
+        .add(data)
         .catch((err) => {
           console.log('Error while adding profil : ', err);
           Notify.create({
@@ -82,21 +88,23 @@ export default {
     },
 
     fetchMembers({ commit }) {
-      db.collection('users')
-        .where('subUsers', '>', [])
+      db.collectionGroup('subUsers')
         .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            item.data().subUsers.forEach((user) => {
-              collector.push({ uid: item.id, ...user });
-            });
+            const parentUid = item.ref.parent.parent.id;
+            const uid = item.id;
+            collector.push({ parentUid, uid, ...item.data() });
           });
           return collector;
         })
         .then((members) => members.map((member) => {
           member.birthDate = member.birthDate.toDate();
           member.group = Group.from(member.birthDate);
+          member.gender = Gender.from(member.gender);
+          member.laterality = Laterality.from(member.laterality);
+          member.weapons = Weapons.from(member.weapons);
           return member;
         }))
         .then((members) => Promise.all(members.map(async (member) => {
@@ -129,35 +137,37 @@ export default {
     },
 
     fetchAccounts({ commit }) {
-      db.collection('users')
+      db.collectionGroup('subUsers')
         .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            collector.push({ uid: item.id, ...item.data() });
+            const parentUid = item.ref.parent.parent.id;
+            const uid = item.id;
+            collector.push({ parentUid, uid, ...item.data() });
           });
           return collector;
-        })
-        .then((members) => Promise.all(members.map(async (member) => {
-          member.subUsers.forEach((subUser) => {
-            if (member.subUsersName) {
-              member.subUsersName = `${member.subUsersName} - ${subUser.firstName} ${subUser.lastName}`;
-            } else {
-              member.subUsersName = `${subUser.firstName} ${subUser.lastName}`;
-            }
-          });
-          return member;
-        })))
-        .then((members) => {
-          commit('setAccounts', { members });
-        })
-        .catch((err) => {
-          console.error('Error while fetching account list', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'top-left'
-          });
+        }).then((subUsers) => {
+          db.collection('users')
+            .get()
+            .then((querySnapshot) => {
+              const collector = [];
+              querySnapshot.forEach((item) => {
+                collector.push({ uid: item.id, ...item.data() });
+              });
+              return collector;
+            })
+            .then((members) => {
+              commit('setAccounts', { members, subUsers });
+            })
+            .catch((err) => {
+              console.error('Error while fetching account list', err);
+              Notify.create({
+                message: `Une erreur s'est produite: ${err}`,
+                color: 'negative',
+                position: 'top-left'
+              });
+            });
         });
     },
 

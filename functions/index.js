@@ -49,8 +49,7 @@ exports.adminCreateMember = functions.https.onCall(async (data, context) => {
 
     const toStore = {
       email,
-      isAdmin: false,
-      subUsers : []
+      isAdmin: false
     };
 
     await admin.firestore()

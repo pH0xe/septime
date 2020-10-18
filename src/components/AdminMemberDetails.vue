@@ -59,7 +59,7 @@
             <q-item-section>
               <q-item-label>Numéro de téléphone d'urgence :</q-item-label>
               <q-item-label caption>
-                {{ user.phoneEmergency }}
+                {{ user.emergency.phone }}
               </q-item-label>
             </q-item-section>
           </q-item> <!-- Numero telephone urgence -->
@@ -68,7 +68,7 @@
             <q-item-section>
               <q-item-label>Lien avec contact d'urgence :</q-item-label>
               <q-item-label caption>
-                {{ user.relationEmergency || 'Non définit' }}
+                {{ user.emergency.relation || 'Non définit' }}
               </q-item-label>
             </q-item-section>
           </q-item> <!-- Lien avec le contact d'urgence urgence -->
@@ -94,43 +94,28 @@
           <q-item>
             <q-item-section>
               <q-item-label>Sexe :</q-item-label>
-              <!-- Masculin -->
-              <q-item-label
-                v-if="user.gender === Gender.MALE"
-                caption
-              >
-                Masculin
-              </q-item-label>
-              <!-- Feminin -->
-              <q-item-label
-                v-else
-                caption
-              >
-                Féminin
+              <q-item-label caption>
+                {{ user.gender }}
               </q-item-label>
             </q-item-section>
           </q-item> <!-- Sexe -->
           <q-separator />
           <q-item>
             <q-item-section>
+              <q-item-label>Latéralité :</q-item-label>
+              <q-item-label caption>
+                {{ user.laterality }}
+              </q-item-label>
+            </q-item-section>
+          </q-item> <!-- Laterality -->
+          <q-separator />
+          <q-item>
+            <q-item-section>
               <q-item-label>Armes :</q-item-label>
               <q-item-label
-                v-if="user.weapons.includes(Weapons.FOIL)"
                 caption
               >
-                Fleuret
-              </q-item-label>
-              <q-item-label
-                v-if="user.weapons.includes(Weapons.EPEE)"
-                caption
-              >
-                Epée
-              </q-item-label>
-              <q-item-label
-                v-if="user.weapons.includes(Weapons.SABRE)"
-                caption
-              >
-                Sabre
+                {{ user.weapons }}
               </q-item-label>
             </q-item-section>
           </q-item> <!-- Armes -->
@@ -159,6 +144,9 @@
                   :disable="!user.medicalCertificate"
                   @click="downloadCertificate"
                 />
+              </div>
+              <div v-if="user.medicalCertificate">
+                Date du certificat : {{ user.certificateDate }}
               </div>
             </q-item-section>
           </q-item> <!-- Certificat medical-->
@@ -195,7 +183,7 @@
                   @click="setAsNotPaid"
                 >
                   <q-tooltip>
-                    J'ai fais une erreur. Remettre a non payé.
+                    J'ai fais une erreur. Remettre à non payé.
                   </q-tooltip>
                 </q-btn>
                 <q-btn
@@ -433,8 +421,6 @@
 <script>
 import { openURL } from 'quasar';
 import { mapActions } from 'vuex';
-import { Weapons } from '../js/Weapons';
-import { Gender } from '../js/Gender';
 import { cloudFunctions } from '../boot/firebase';
 import AdminMemberPromptPaid from './AdminMemberPromptPaid';
 import AdminMemberAddCertificate from './AdminMemberAddCertificate';
@@ -447,20 +433,18 @@ export default {
       required: true
     }
   },
+
   data: () => ({
     dialogDetails: false,
     confirmDelete: false
   }),
-  computed: {
-    Gender() {
-      return Gender;
-    },
-    Weapons() {
-      return Weapons;
-    }
+
+  mounted() {
+    console.log(this.user);
   },
+
   methods: {
-    ...mapActions(['setAdmin', 'removeAdmin', 'activateAccount', 'removeAccount', 'fetchMembers', 'changePaidInfo']),
+    ...mapActions(['setAdmin', 'activateAccount', 'removeAccount', 'fetchMembers', 'changePaidInfo']),
     show() {
       this.$refs.dialog.show();
     },
@@ -488,18 +472,6 @@ export default {
         .then(() => {
           this.$q.notify({
             message: 'Rôle ajouté avec succès',
-            icon: 'mdi-check',
-            color: 'positive'
-          });
-        });
-    },
-
-    removeFromAdmin() {
-      this.removeAdmin({ member: this.user });
-      cloudFunctions.addClaimsAdmin({ uid: this.user.uid, isAdmin: false })
-        .then(() => {
-          this.$q.notify({
-            message: 'Rôle supprimé avec succès',
             icon: 'mdi-check',
             color: 'positive'
           });

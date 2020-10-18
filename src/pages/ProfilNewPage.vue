@@ -168,7 +168,7 @@
 </template>
 
 <script>
-import { Notify } from 'quasar';
+import { Notify, QSpinnerPie } from 'quasar';
 import { mapActions, mapState } from 'vuex';
 import RegisterStepAccount from '../components/RegisterStepAccount';
 import RegisterStepCoordinates from '../components/RegisterStepCoordinates';
@@ -298,7 +298,9 @@ export default {
 
       // Create user
       this.$q.loading.show({
-        message: 'Création du profil...'
+        message: 'Création du profil...',
+        spinner: QSpinnerPie,
+        spinnerColor: 'primary'
       });
 
       // Signup on firebase
@@ -311,6 +313,7 @@ export default {
             icon: 'mdi-check'
           });
 
+          // TODO upload certificat, cerfa et pp si sont present.
           this.$router.replace({ name: 'home' });
         })
 

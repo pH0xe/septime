@@ -129,7 +129,6 @@ export default {
               position: 'bottom'
             });
 
-            // TODO: ugly af
             return this.$store.dispatch('fetchEvents');
           })
           .catch((err) => {

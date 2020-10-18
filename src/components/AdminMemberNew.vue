@@ -293,7 +293,6 @@
               </div>
             </div>
             <q-item>
-              <!--TODO je sais pas si sa marche comme ca-->
               <firebase-uploader
                 ref="profileUploader"
                 path="profile_pics/public_temp"

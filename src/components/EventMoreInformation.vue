@@ -296,7 +296,6 @@ export default {
             });
 
             this.hide();
-            // TODO: ugly af
             return this.$store.dispatch('fetchEvents');
           })
           .catch((err) => {
