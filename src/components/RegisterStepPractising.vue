@@ -1,27 +1,7 @@
 <template lang="html">
   <q-form @submit="onSubmit">
-    <!--
-    <q-banner
-      rounded
-      class="bg-warning"
-    >
-      Cette partie ne concerne que les partiquants.
-      <br>
-      Si vous êtes un parent référent ne pratiquant pas,
-      veuillez revenir à la première étape et cocher la case correspondante.
-
-      <template v-slot:action>
-        <q-btn
-          flat
-          label="Revenir en arrière"
-          @click="onJumpBack"
-        />
-      </template>
-    </q-banner>
-    -->
-
     <div class="text-body2 q-my-md">
-      Veuillez fournir une photo récente du nouvel adhérent.
+      Photo récente du nouvel adhérent. (Optionnel)
     </div>
 
     <firebase-uploader
@@ -35,8 +15,8 @@
       flat
       bordered
       class="full-width"
-      @added="picAdded"
-      @removed="picRemoved"
+      @added="picModified"
+      @removed="picModified"
     />
 
     <div class="text-body2 q-my-md">
@@ -63,15 +43,14 @@
           ref="certificateUploader"
           label="Certificat médical (image ou PDF, maximum 1Mio)"
           accept="image/*, application/pdf"
-          path="certificates"
           :max-total-size="1048576"
           :auto-upload="false"
           hide-upload-btn
           flat
           bordered
           class="full-width"
-          @added="certificateAdded"
-          @removed="certificateRemoved"
+          @added="certificateModified"
+          @removed="certificateModified"
         />
       </div>
       <div class="col-12 col-md-6">
@@ -100,6 +79,25 @@
             </q-icon>
           </template>
         </q-input>
+      </div>
+    </div>
+
+    <div class="row q-col-gutter-md">
+      <div class="col-12 col-md-6">
+        <!-- Max 1Mio -->
+        <firebase-uploader
+          ref="cerfaUploader"
+          label="Attestation cerfa (image ou PDF, maximum 1Mio)"
+          accept="image/*, application/pdf"
+          :max-total-size="1048576"
+          :auto-upload="false"
+          hide-upload-btn
+          flat
+          bordered
+          class="full-width"
+          @added="cerfaModified"
+          @removed="cerfaModified"
+        />
       </div>
     </div>
 
@@ -200,6 +198,7 @@ export default {
   data: () => ({
     isCertificate: false,
     isProfilPic: false,
+    isCerfa: false,
     certificateDate: null,
     laterality: Laterality.RIGHT,
     weaponsChoice: []
@@ -250,31 +249,33 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        const { certificateDateParsed: certificateDate, laterality, weaponsChoice } = this;
+        const {
+          certificateDateParsed: certificateDate, laterality, weaponsChoice, isCertificate, isProfilPic, isCerfa
+        } = this;
         this.$emit('submit', {
           certificateDate,
           laterality,
           photoUploader: this.$refs.photoUploader,
           certificateUploader: this.$refs.certificateUploader,
-          weaponsChoice
+          cerfaUploader: this.$refs.cerfaUploader,
+          weaponsChoice,
+          isCertificate,
+          isProfilPic,
+          isCerfa
         });
       }
     },
 
-    certificateAdded() {
-      this.isCertificate = true;
+    certificateModified() {
+      this.isCertificate = !this.isCertificate;
     },
 
-    certificateRemoved() {
-      this.isCertificate = false;
+    picModified() {
+      this.isProfilPic = !this.isProfilPic;
     },
 
-    picAdded() {
-      this.isProfilPic = true;
-    },
-
-    picRemoved() {
-      this.isProfilPic = false;
+    cerfaModified() {
+      this.isCerfa = !this.isCerfa;
     }
   }
 };

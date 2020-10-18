@@ -10,17 +10,17 @@
       >
         <q-card-section>
           <firebase-uploader
-            ref="certificateUploader"
+            ref="cerfaUploader"
             color="admin-primary"
-            label="Certificat médical (image ou PDF; maximum 1Mio)"
+            label="Cerfa(image ou PDF; maximum 1Mio)"
             accept="image/*, application/pdf"
             :max-total-size="1048576"
             :auto-upload="false"
             hide-upload-btn
             flat
             bordered
-            @added="certificateChange"
-            @removed="certificateChange"
+            @added="cerfaChange"
+            @removed="cerfaChange"
           />
         </q-card-section>
 
@@ -47,7 +47,7 @@
 import FirebaseUploader from './FirebaseUploader';
 
 export default {
-  name: 'AdminMemberAddCertificate',
+  name: 'AdminMemberAddCerfa',
   components: { FirebaseUploader },
   props: {
     user: {
@@ -57,11 +57,11 @@ export default {
   },
 
   data: () => ({
-    isCertificate: false
+    isCerfa: false
   }),
 
   methods: {
-    // <editor-fold desc="Dialog Utils" defaultstate="collapsed">
+    // <editor-fold desc="Utils dialog" defaultstate="collapsed">
     show() {
       this.$refs.dialog.show();
     },
@@ -82,7 +82,6 @@ export default {
     onCancelClick() {
       this.hide();
     },
-
     onReset() {
       this.hide();
     },
@@ -90,15 +89,15 @@ export default {
 
     // <editor-fold desc="onSubmit" defaultstate="collapsed">
     async onSubmit() {
-      if (this.isCertificate) {
+      if (this.isCerfa) {
         this.$q.loading.show({
           message: 'Upload du certificat'
         });
-        this.$refs.certificateUploader.extra.filename = this.user.uid;
-        this.$refs.certificateUploader.extra.path = `certificates/${this.user.parentUid}`;
-        await this.$refs.certificateUploader.upload()
+        this.$refs.cerfaUploader.extra.filename = this.user.uid;
+        this.$refs.cerfaUploader.extra.path = `cerfa/${this.user.parentUid}`;
+        await this.$refs.cerfaUploader.upload()
           .catch(() => {
-            console.error('Certificate not uploaded');
+            console.error('Cerfa not uploaded');
           });
         this.$q.loading.hide();
         this.onOKClick();
@@ -106,9 +105,9 @@ export default {
     },
     // </editor-fold>
 
-    // <editor-fold desc="certificateChange" defaultstate="collapsed">
-    certificateChange() {
-      this.isCertificate = !this.isCertificate;
+    // <editor-fold desc="cerfaChange" defaultstate="collapsed">
+    cerfaChange() {
+      this.isCerfa = !this.isCerfa;
     }
     // </editor-fold>
   }

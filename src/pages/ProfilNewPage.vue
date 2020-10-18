@@ -305,15 +305,83 @@ export default {
 
       // Signup on firebase
       this.$store.dispatch('createSubUser', { uid: this.currentUser.uid, data: userData })
-        .then(() => {
-          this.$q.loading.hide();
+        .then(async (subUid) => {
           this.$q.notify({
             message: 'Création du profil avec succès !',
             color: 'positive',
             icon: 'mdi-check'
           });
 
-          // TODO upload certificat, cerfa et pp si sont present.
+          if (this.data.isCertificate) {
+            this.$q.loading.show({
+              message: 'Upload du certificat médical...'
+            });
+            const { certificateUploader } = this.data;
+
+            certificateUploader.extra.path = `certificates/${this.currentUser.uid}`;
+            certificateUploader.extra.filename = subUid;
+
+            await certificateUploader.upload().catch((err) => {
+              console.log(err);
+              console.error('Certificate not uploaded');
+            });
+          }
+          // this.$refs.profileUploader.extra.filename = uid;
+          return subUid;
+        })
+        .then(async (subUid) => {
+          this.$q.notify({
+            message: 'Upload du certificat avec succès !',
+            color: 'positive',
+            icon: 'mdi-check'
+          });
+
+          if (this.data.isProfilPic) {
+            this.$q.loading.show({
+              message: 'Upload de la photo de profil...'
+            });
+            const { photoUploader } = this.data;
+
+            photoUploader.extra.path = `profile_pics/${this.currentUser.uid}`;
+            photoUploader.extra.filename = subUid;
+
+            await photoUploader.upload().catch((err) => {
+              console.log(err);
+              console.error('Picture not uploaded');
+            });
+          }
+          return subUid;
+        })
+        .then(async (subUid) => {
+          this.$q.notify({
+            message: 'Upload de la photo avec succès !',
+            color: 'positive',
+            icon: 'mdi-check'
+          });
+
+          if (this.data.isCerfa) {
+            this.$q.loading.show({
+              message: 'Upload du Cerfa...'
+            });
+            const { cerfaUploader } = this.data;
+
+            cerfaUploader.extra.path = `cerfa/${this.currentUser.uid}`;
+            cerfaUploader.extra.filename = subUid;
+
+            await cerfaUploader.upload().catch((err) => {
+              console.log(err);
+              console.error('Cerfa not uploaded');
+            });
+          }
+          return subUid;
+        })
+        .then(() => {
+          this.$q.notify({
+            message: 'Upload du cerfa avec succès !',
+            color: 'positive',
+            icon: 'mdi-check'
+          });
+          this.$q.loading.hide();
           this.$router.replace({ name: 'home' });
         })
 

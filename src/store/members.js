@@ -72,11 +72,15 @@ export default {
 
   actions: {
     // eslint-disable-next-line no-unused-vars
-    createSubUser({ commit }, { uid, data }) {
-      db.collection('users')
+    async createSubUser({ commit }, { uid, data }) {
+      let newUid;
+      await db.collection('users')
         .doc(uid)
         .collection('subUsers')
         .add(data)
+        .then((res) => {
+          newUid = res.id;
+        })
         .catch((err) => {
           console.log('Error while adding profil : ', err);
           Notify.create({
@@ -85,6 +89,7 @@ export default {
             position: 'top-left'
           });
         });
+      return newUid;
     },
 
     fetchMembers({ commit }) {
@@ -101,6 +106,7 @@ export default {
         })
         .then((members) => members.map((member) => {
           member.birthDate = member.birthDate.toDate();
+          member.certificateDate = member.certificateDate.toDate();
           member.group = Group.from(member.birthDate);
           member.gender = Gender.from(member.gender);
           member.laterality = Laterality.from(member.laterality);
@@ -109,18 +115,26 @@ export default {
         }))
         .then((members) => Promise.all(members.map(async (member) => {
           await storage.ref()
-            .child(`profile_pics/${member.uid}/${member.firstName}_${member.lastName}`)
+            .child(`profile_pics/${member.parentUid}/${member.uid}`)
             .getDownloadURL()
             .then((url) => { member.memberAvatar = url; })
-            .catch(() => { member.memberAvatar = ''; });
+            .catch(() => { member.memberAvatar = undefined; });
           return member;
         })))
         .then((members) => Promise.all(members.map(async (member) => {
           await storage.ref()
-            .child(`certificates/${member.uid}`)
+            .child(`certificates/${member.parentUid}/${member.uid}`)
             .getDownloadURL()
             .then((url) => { member.medicalCertificate = url; })
             .catch(() => { member.medicalCertificate = undefined; });
+          return member;
+        })))
+        .then((members) => Promise.all(members.map(async (member) => {
+          await storage.ref()
+            .child(`cerfa/${member.parentUid}/${member.uid}`)
+            .getDownloadURL()
+            .then((url) => { member.cerfa = url; })
+            .catch(() => { member.cerfa = undefined; });
           return member;
         })))
         .then((members) => {

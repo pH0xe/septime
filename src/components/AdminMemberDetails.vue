@@ -146,7 +146,7 @@
                 />
               </div>
               <div v-if="user.medicalCertificate">
-                Date du certificat : {{ user.certificateDate }}
+                Date du certificat : {{ user.certificateDate | dateDMY }}
               </div>
             </q-item-section>
           </q-item> <!-- Certificat medical-->
@@ -160,6 +160,20 @@
                   disable
                   color="positive"
                   label="Fournis"
+                />
+                <q-btn
+                  v-if="!user.cerfa"
+                  label="Ajouter"
+                  icon="mdi-file-upload"
+                  color="admin-primary"
+                  @click="addCerfa"
+                />
+                <q-btn
+                  round
+                  icon="mdi-download"
+                  color="admin-primary"
+                  :disable="!user.cerfa"
+                  @click="downloadCerfa"
                 />
               </div>
             </q-item-section>
@@ -424,6 +438,7 @@ import { mapActions } from 'vuex';
 import { cloudFunctions } from '../boot/firebase';
 import AdminMemberPromptPaid from './AdminMemberPromptPaid';
 import AdminMemberAddCertificate from './AdminMemberAddCertificate';
+import AdminMemberAddCertfa from './AdminMemberAddCertfa';
 
 export default {
   name: 'AdminMemberDetails',
@@ -439,12 +454,10 @@ export default {
     confirmDelete: false
   }),
 
-  mounted() {
-    console.log(this.user);
-  },
-
   methods: {
     ...mapActions(['setAdmin', 'activateAccount', 'removeAccount', 'fetchMembers', 'changePaidInfo']),
+
+    // <editor-fold desc="Dialog Utils" defaultstate="collapsed">
     show() {
       this.$refs.dialog.show();
     },
@@ -461,11 +474,15 @@ export default {
       this.$emit('ok');
       this.hide();
     },
+    // </editor-fold>
 
+    // <editor-fold desc="downloadCertificate" defaultstate="collapsed">
     downloadCertificate() {
       openURL(this.user.medicalCertificate);
     },
+    // </editor-fold>
 
+    // <editor-fold desc="setAsAdmin" defaultstate="collapsed">
     setAsAdmin() {
       this.setAdmin({ member: this.user });
       cloudFunctions.addClaimsAdmin({ uid: this.user.uid, isAdmin: true })
@@ -477,15 +494,21 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="activateMember" defaultstate="collapsed">
     activateMember() {
       this.activateAccount({ member: this.user });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="confirmDeleteAccount" defaultstate="collapsed">
     confirmDeleteAccount() {
       this.confirmDelete = true;
     },
+    // </editor-fold>
 
+    // <editor-fold desc="deleteAccount" defaultstate="collapsed">
     deleteAccount() {
       const data = {
         uid: this.user.uid
@@ -503,7 +526,9 @@ export default {
           console.log(err);
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="setAsPaid" defaultstate="collapsed">
     setAsPaid() {
       this.$q.dialog({
         component: AdminMemberPromptPaid,
@@ -511,13 +536,17 @@ export default {
         user: this.user
       });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="setAsNotPaid" defaultstate="collapsed">
     setAsNotPaid() {
       const newPayments = { ...this.user.payments };
       newPayments.paid = false;
       this.changePaidInfo({ member: this.user, newPayments });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="addCertificate" defaultstate="collapsed">
     addCertificate() {
       this.$q.dialog({
         component: AdminMemberAddCertificate,
@@ -531,7 +560,31 @@ export default {
           color: 'positive'
         });
       });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="addCerfa" defaultstate="collapsed">
+    addCerfa() {
+      this.$q.dialog({
+        component: AdminMemberAddCertfa,
+        parent: this,
+        user: this.user
+      }).onOk(() => {
+        this.fetchMembers();
+        this.$q.notify({
+          message: 'Cerfa ajouté avec succès (un rafraîchissement de la page peut être nécessaire)',
+          icon: 'mdi-check',
+          color: 'positive'
+        });
+      });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="downloadCerfa" defaultstate="collapsed">
+    downloadCerfa() {
+      openURL(this.user.cerfa);
     }
+    // </editor-fold>
   }
 };
 </script>
