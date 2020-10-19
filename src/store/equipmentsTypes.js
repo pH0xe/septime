@@ -1,5 +1,4 @@
 import { Notify } from 'quasar';
-import * as firebase from 'firebase/app';
 import { db } from '../boot/firebase';
 
 export default {
@@ -64,7 +63,7 @@ export default {
 
     addNewSize({ commit }, { equipmentType, newSize }) {
       db.collection('equipmentsType').doc(equipmentType.uid)
-        .update({ sizeOption: firebase.firestore.FieldValue.arrayUnion(newSize) })
+        .update({ sizeOption: newSize })
         .then(() => {
           commit('addSize', { equipmentType, newSize });
         })

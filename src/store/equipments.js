@@ -1,5 +1,4 @@
 import { Notify } from 'quasar';
-import * as firebase from 'firebase/app';
 import { db } from '../boot/firebase';
 
 export default {
@@ -118,7 +117,7 @@ export default {
 
     stopRentEquipment({ commit }, { equipment }) {
       return db.collection('equipments').doc(equipment.uid)
-        .update({ renterId: firebase.firestore.FieldValue.delete() })
+        .update({ renterId: null })
         .then(() => {
           commit('resetMember', { equipment });
         })

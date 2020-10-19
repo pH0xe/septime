@@ -280,7 +280,8 @@ export default {
     createNewSize(val, done) {
       if (val.length > 0) {
         if (!this.sizesOptions.includes(val)) {
-          this.addNewSize({ equipmentType: this.equipmentChoice, newSize: val });
+          const newSize = [...this.sizesOptions, val];
+          this.addNewSize({ equipmentType: this.equipmentChoice, newSize });
         }
         done(val, 'toggle');
       }

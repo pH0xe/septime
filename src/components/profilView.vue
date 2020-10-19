@@ -1,338 +1,312 @@
 <template>
-  <q-splitter
-    :value="20"
-    :horizontal="$q.platform.is.mobile"
+  <q-list
+    bordered
+    class="rounded-borders"
   >
-    <template v-slot:before>
-      <q-tabs
-        v-model="tab"
-        vertical
-        class="text-primary"
-      >
-        <q-tab
-          name="personnal"
-          icon="mdi-account"
-          label="Information personnelle"
-        />
-        <q-tab
-          name="payment"
-          icon="mdi-credit-card-outline"
-          label="Information de payement"
-        />
-        <q-tab
-          name="sport"
-          icon="mdi-sword-cross"
-          label="Information sportive"
-        />
-      </q-tabs>
-    </template>
-
-    <template v-slot:after>
-      <q-tab-panels
-        v-model="tab"
-        animated
-        transition-prev="fade"
-        transition-next="fade"
-      >
-        <q-tab-panel name="personnal">
-          <div class="text-h6 q-mb-none">
-            Nom - prénom :
-          </div>
-          <p>{{ currentUser.lastName }} - {{ currentUser.firstName }}</p>
-          <q-separator />
-          <div class="text-h6 q-mb-none">
-            Email :
-          </div>
-          <p>{{ currentUser.email }}</p>
-          <q-separator />
-          <div class="text-h6 q-mb-none">
-            Date de naissance :
-          </div>
-          <p>{{ currentUser.birthDate | dateDMY }}</p>
-          <q-separator />
-          <div class="text-h6 q-mb-none">
-            Adresse :
-          </div>
-          <p>
-            {{ currentUser.address.street }}, {{ currentUser.address.city }},
-            {{ currentUser.address.zip }}
-          </p>
-          <q-separator />
-          <div class="text-h6 q-mb-none">
-            Numéro de téléphone :
-          </div>
-          <p>{{ currentUser.phone }}</p>
-          <q-separator />
-          <div class="text-h6 q-mb-none">
-            Numéro de téléphone d'urgence :
-          </div>
-          <p>{{ currentUser.phoneEmergency }}</p>
-          <q-separator />
-          <div class="text-h6 q-mb-none">
-            Lien avec le contact d'urgence :
-          </div>
-          <p>{{ currentUser.relationEmergency || 'Non définit' }}</p>
-          <q-separator />
-          <div class="text-h6 q-mb-none">
-            Certificat médical :
-          </div>
+    <!-- <editor-fold desc="Informations personnelles" defaultstate="collapsed"> -->
+    <q-expansion-item
+      :header-inset-level="1"
+      :content-inset-level="2"
+      expand-separator
+      icon="mdi-account"
+      label="Informations personnelles"
+    >
+      <q-card>
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Email :</span> {{ user.email }}
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Date de naissance :</span> {{ user.birthDate | dateDMY }}
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Adresse :</span> {{ user.address.street }}, {{ user.address.city }}, {{ user.address.zip }}
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Numéro de téléphone :</span> {{ user.phone }}
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Numéro de téléphone d'urgence :</span> {{ user.emergency.phone }}
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Lien avec le contact d'urgence :</span> {{ user.emergency.relation }}
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Certificat médical :</span>
           <q-btn
-            v-if="currentUser.medicalCertificate"
+            v-if="user.medicalCertificate"
             label="Voir son certificat médical"
             icon="mdi-download"
             color="primary"
-            :disable="!currentUser.medicalCertificate"
+            :disable="!user.medicalCertificate"
             @click="downloadCertificate"
           />
-          <p v-else>
-            Aucun certificat télécharger. Merci d'en ajouter un.
-          </p>
-          <q-separator />
+          <span v-else>
+            Aucun certificat téléchargé. Merci d'en ajouter un.
+          </span>
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Cerfa :</span>
+          <q-btn
+            v-if="user.cerfa"
+            label="Voir son cerfa"
+            icon="mdi-download"
+            color="primary"
+            :disable="!user.cerfa"
+            @click="downloadCerfa"
+          />
+          <span v-else>
+            Aucune attestation de cerfa téléchargé. Merci d'en ajouter un.
+            <a
+              class="cursor-pointer"
+              @click="openCerfaTemplate"
+            >Template de l'attestation à fournir disponible ici.</a>
+            <br>
+            <a
+              class="cursor-pointer"
+              @click="openMedicalTemplate"
+            >Questionnaire de santé à remplir disponible ici <span class="text-weight-bold">(NE PAS LE DONNER AU CLUB)</span>.</a>
+          </span>
+        </q-card-section>
+        <q-separator />
 
-          <div
-            align="right"
-            class="q-mt-md"
-          >
-            <q-btn
-              label="Editer"
-              color="primary"
-              flat
-              @click="editInformation"
-            />
-          </div>
-        </q-tab-panel>
+        <div
+          align="right"
+          class="q-mt-md"
+        >
+          <q-btn
+            label="Editer"
+            color="primary"
+            flat
+            @click="editInformation"
+          />
+        </div>
+      </q-card>
+    </q-expansion-item>
+    <!-- // </editor-fold> -->
 
-        <q-tab-panel name="payment">
-          <div v-if="payments">
-            <div class="text-h6 q-mb-none">
-              Cotisation fournis ?
-              <q-checkbox
-                v-model="currentUser.payments.paid"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- Cotisation ? -->
-            <q-separator />
-            <div class="q-my-md">
-              <span class="text-h6">Montant : </span>{{ payments.amount }}€ dont base (catégorie) : {{ payments.base }}€
-            </div> <!-- Montant -->
-            <q-separator />
+    <!-- <editor-fold desc="Informations de payements" defaultstate="collapsed"> -->
+    <q-expansion-item
+      :header-inset-level="1"
+      :content-inset-level="2"
+      expand-separator
+      icon="mdi-credit-card-outline"
+      label="Information de payement"
+    >
+      <q-card v-if="user.payments">
+        <!-- // <editor-fold desc="Cotisation ?" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Cotisation fournis ?</span>
+          <q-checkbox
+            :value="user.payments.paid"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- // </editor-fold> -->
+        <q-separator />
+        <!-- // <editor-fold desc="Montant" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Montant : </span>{{ user.payments.amount }}€ dont base (catégorie) : {{ user.payments.base }}€
+        </q-card-section>
+        <!-- // </editor-fold> -->
+        <q-separator />
+        <!-- // <editor-fold desc="caution" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Caution fournis ?</span>
+          <q-checkbox
+            :value="user.payments.deposit"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- // </editor-fold> -->
+        <q-separator />
+        <!-- // <editor-fold desc="Assurance+" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Assurance+ (1.60€) :</span>
+          <q-checkbox
+            :value="user.payments.assurance"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- // </editor-fold> -->
+        <q-separator />
+        <!-- // <editor-fold desc="Pass competition" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Pass compétition (6€) :</span>
+          <q-checkbox
+            :value="user.payments.competition"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- // </editor-fold> -->
+        <q-separator />
+        <!-- <editor-fold desc="Veste" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Location veste (10€) :</span>
+          <q-checkbox
+            :value="user.payments.breastplate"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- // </editor-fold> -->
+        <q-separator />
+        <!-- <editor-fold desc="Sous-cuirasse" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Location sous-cuirasse (5€) :</span>
+          <q-checkbox
+            :value="user.payments.underBreastplate"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- </editor-fold> -->
+        <q-separator />
+        <!-- <editor-fold desc="Pantalon" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Location pantalon (10€) :</span>
+          <q-checkbox
+            :value="user.payments.pants"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- </editor-fold> -->
+        <q-separator />
+        <!-- <editor-fold desc="Masque" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Location masque (25€) :</span>
+          <q-checkbox
+            :value="user.payments.mask"
+            color="positive"
+            disable
+          />
+        </q-card-section>
+        <!-- </editor-fold> -->
+        <q-separator />
+        <!-- <editor-fold desc="Kit première touche" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Kit première touche (20€) :</span>
+          <q-checkbox
+            :value="user.payments.childKit"
+            color="positive"
+            disable
+          />
+        </q-card-section> <!-- Kit première touche -->
+        <!-- </editor-fold> -->
+        <q-separator />
+      </q-card>
+      <q-card v-else>
+        <q-card-section class="text-h4 q-mb-md">
+          Aucune information de payement trouvé pour ce compte !
+        </q-card-section>
+      </q-card>
+    </q-expansion-item>
+    <!-- // </editor-fold> -->
 
-            <div class="text-h6 q-mb-none">
-              Caution fournis ?
-              <q-checkbox
-                v-model="payments.deposit"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- caution -->
-            <q-separator />
-
-            <div class="text-h6 q-mb-none">
-              Assurance+ (1.60€) :
-              <q-checkbox
-                v-model="payments.assurance"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- assurance+ -->
-            <q-separator />
-            <div class="text-h6 q-mb-none">
-              Pass compétition (6€) :
-              <q-checkbox
-                v-model="payments.competition"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- Pass competition -->
-            <q-separator />
-            <div class="text-h6 q-mb-none">
-              Location veste (10€) :
-              <q-checkbox
-                v-model="payments.breastplate"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- Veste -->
-            <q-separator />
-            <div class="text-h6 q-mb-none">
-              Location sous-cuirasse (5€) :
-              <q-checkbox
-                v-model="payments.underBreastplate"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- Sous-cuirasse-->
-            <q-separator />
-            <div class="text-h6 q-mb-none">
-              Location pantalon (10€) :
-              <q-checkbox
-                v-model="payments.pants"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- Pantalon -->
-            <q-separator />
-            <div class="text-h6 q-mb-none">
-              Location masque (25€) :
-              <q-checkbox
-                v-model="payments.mask"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- Masque -->
-            <q-separator />
-            <div class="text-h6 q-mb-none">
-              Kit première touche (20€) :
-              <q-checkbox
-                v-model="payments.childKit"
-                color="positive"
-                class="q-ma-md"
-                disable
-              />
-            </div> <!-- Kit première touche -->
-            <q-separator />
-          </div>
-          <div v-else>
-            <div class="text-h4 q-mb-md">
-              Aucune information de payement trouvé pour ce compte !
-            </div>
-          </div>
-        </q-tab-panel>
-
-        <q-tab-panel name="sport">
-          <div class="text-h6 q-mb-none">
-            Catégorie :
-          </div>
-          <p>{{ currentUser.group }}</p>
-
-          <q-separator />
-
-          <div class="text-h6 q-mb-none">
-            Armes :
-          </div>
-          <p>{{ getWeapons }}</p>
-
-          <q-separator />
-
-          <div v-if="payments">
-            <div
-              class="text-h6 q-mb-none"
-            >
-              Pass compétition :
-            </div>
-            <q-badge
-              v-if="payments.competition"
-              color="positive"
-              label="Oui"
-            />
-            <q-badge
-              v-else
-              color="negative"
-              label="Non"
-            />
-          </div>
-
-          <q-separator />
-
-          <div class="text-h6 q-mb-none">
-            Lateralité :
-          </div>
-          <p>{{ getLaterality }}</p>
-
-          <q-separator />
-        </q-tab-panel>
-      </q-tab-panels>
-    </template>
-  </q-splitter>
+    <!-- <editor-fold desc="Informations sportive" defaultstate="collapsed"> -->
+    <q-expansion-item
+      :header-inset-level="1"
+      :content-inset-level="2"
+      expand-separator
+      icon="mdi-sword-cross"
+      label="Information sportive"
+    >
+      <q-card>
+        <!-- <editor-fold desc="Categorie" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Catégorie :</span> {{ user.group }}
+        </q-card-section>
+        <!-- </editor-fold> -->
+        <q-separator />
+        <!-- <editor-fold desc="Armes" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Armes :</span> {{ user.weapons }}
+        </q-card-section>
+        <!-- </editor-fold> -->
+        <q-separator />
+        <!-- <editor-fold desc="Latéralité" defaultstate="collapsed"> -->
+        <q-card-section>
+          <span class="text-weight-bold q-pr-sm">Lateralité :</span> {{ user.laterality }}
+        </q-card-section>
+        <!-- </editor-fold> -->
+      </q-card>
+    </q-expansion-item>
+    <!-- // </editor-fold> -->
+  </q-list>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import { openURL } from 'quasar';
-import { Weapons } from '../js/Weapons';
-import { Laterality } from '../js/Laterality';
+import { mapGetters } from 'vuex';
+
 
 export default {
   name: 'ProfilView',
 
-  data: () => ({
-    tab: 'personnal',
-    payments: {
-      amount: 0,
-      base: 0,
-      assurance: false,
-      competion: false,
-      deposit: false,
-      paid: false,
-      mask: false,
-      pants: false,
-      underBreastplate: false,
-      breastplate: false,
-      childKit: false
+  props: {
+    user: {
+      type: Object,
+      required: true
     }
+  },
+
+  data: () => ({
+    tab: 'personnal'
   }),
 
   computed: {
-    ...mapState({
-      currentUser: (state) => state.auth.currentUser
-    }),
-
-    getWeapons() {
-      let weaponsString = '';
-      this.currentUser.weapons.forEach((weapon) => {
-        switch (weapon) {
-          case Weapons.EPEE:
-            weaponsString = `${weaponsString} épée`;
-            break;
-          case Weapons.FOIL:
-            weaponsString = `${weaponsString} fleuret`;
-            break;
-          case Weapons.SABRE:
-            weaponsString = `${weaponsString} sabre`;
-            break;
-          default:
-        }
-      });
-      return weaponsString;
-    },
-
-    getLaterality() {
-      switch (this.currentUser.laterality) {
-        case Laterality.RIGHT:
-          return 'Droitier';
-        case Laterality.LEFT:
-          return 'Gaucher';
-        default:
-          return 'Inconnue';
-      }
-    }
-  },
-
-  mounted() {
-    this.payments = Object.assign(this.payments, this.currentUser.payments);
+    ...mapGetters(['cerfaLink', 'medicalTemplateLink'])
   },
 
   methods: {
+    // <editor-fold desc="editInformation" defaultstate="collapsed">
     editInformation() {
-      this.$router.push({ name: 'profil_update' });
+      this.$router.push({ name: 'profil_update', params: { id: this.user.uid } });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="downloadCertificate" defaultstate="collapsed">
     downloadCertificate() {
-      openURL(this.currentUser.medicalCertificate);
+      openURL(this.user.medicalCertificate);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="downloadCerfa" defaultstate="collapsed">
+    downloadCerfa() {
+      openURL(this.user.cerfa);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="openCerfaTemplate" defaultstate="collapsed">
+    openCerfaTemplate() {
+      openURL(this.cerfaLink);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="openMedicalTemplate" defaultstate="collapsed">
+    openMedicalTemplate() {
+      openURL(this.medicalTemplateLink);
     }
+    // </editor-fold>
   }
 };
 </script>
 
 <style scoped>
+a {
+  color: blue;
+  text-decoration: underline;
+}
 
 </style>

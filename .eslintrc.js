@@ -50,7 +50,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'off',
     'prefer-promise-reject-errors': 'error',
-
+    'vue/no-v-html': 'off',
     'vue/component-name-in-template-casing': ['error', 'kebab-case', {
       registeredComponentsOnly: false
     }],

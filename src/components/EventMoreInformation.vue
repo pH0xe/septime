@@ -286,7 +286,21 @@ export default {
         roles: this.event.neededRole
       }).onOk(({ role: { value } }) => {
         this.isSubscribing = true;
-        this.$store.dispatch('subscribeToEvent', { id: this.event.id, role: value, displayName: `${this.currentUser.firstName} ${this.currentUser.lastName}` })
+        let newRegisterMember;
+        if (this.event.registerMember) {
+          newRegisterMember = [...this.event.registerMember, {
+            name: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
+            role: value,
+            uid: this.currentUser.uid
+          }];
+        } else {
+          newRegisterMember = [{
+            name: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
+            role: value,
+            uid: this.currentUser.uid
+          }];
+        }
+        this.$store.dispatch('subscribeToEvent', { id: this.event.id, newRegisterMember })
           .then(() => {
             this.isSubscribing = false;
             this.$q.notify({

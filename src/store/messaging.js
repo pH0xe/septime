@@ -1,5 +1,4 @@
-import * as firebase from 'firebase/app';
-import { auth, db, messaging } from '../boot/firebase';
+import { auth, messaging } from '../boot/firebase';
 
 export default {
   namespaced: false,
@@ -52,12 +51,12 @@ export default {
       });
     },
 
-    pushMessagingToken({ commit }, { token }) {
+    /* pushMessagingToken({ commit }, { token }) {
       commit('setMessagingToken', { token });
       return db.collection('users')
         .doc(auth.currentUser.uid)
         .update({ fcmTokens: firebase.firestore.FieldValue.arrayUnion(token) });
-    },
+    }, */
 
     requestNotificationPermission() {
       return Notification.requestPermission((permission) => {

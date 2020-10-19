@@ -1,5 +1,5 @@
 import { Notify } from 'quasar';
-import { auth, db, storage } from '../boot/firebase';
+import { db, storage } from '../boot/firebase';
 import { Group } from '../js/Group';
 import { Laterality } from '../js/Laterality';
 import { Gender } from '../js/Gender';
@@ -220,138 +220,11 @@ export default {
     },
 
     // eslint-disable-next-line no-unused-vars
-    changePassword({ commit }, { newPassword }) {
-      const user = auth.currentUser;
-      user.updatePassword(newPassword)
-        .then(() => {
-          Notify.create({
-            message: 'Le mot de passe a été mis à jours',
-            color: 'positive',
-            position: 'top'
-          });
-        })
-        .catch((err) => {
-          switch (err.code) {
-            case 'auth/invalid-user-token':
-            case 'auth/requires-recent-login':
-              Notify.create({
-                message: 'Vous n\'êtes pas connecté',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/network-request-failed':
-              Notify.create({
-                message: 'Problème de réseau, vérifier votre connexion',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/too-many-requests':
-              Notify.create({
-                message: 'Erreur : trop de requête',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/user-token-expired':
-              Notify.create({
-                message: 'Erreur : reconnectez-vous',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/operation-not-allowed':
-              Notify.create({
-                message: 'Erreur : Opération interdite, contactez un administrateur',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'Thrown if a method is called with incorrect arguments.':
-              Notify.create({
-                message: 'Erreur : Le mot de passe saisie est invalide',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            default:
-              Notify.create({
-                message: 'Une erreur inconnu est survenue',
-                color: 'negative',
-                position: 'top'
-              });
-          }
-        });
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    changeEmail({ commit }, { newEmail }) {
-      const user = auth.currentUser;
-      user.updateEmail(newEmail)
-        .then(() => {
-          Notify.create({
-            message: 'L\'email a été changer',
-            color: 'positive',
-            position: 'top'
-          });
-        })
-        .catch((err) => {
-          switch (err.code) {
-            case 'auth/invalid-user-token':
-            case 'auth/requires-recent-login':
-              Notify.create({
-                message: 'Vous n\'êtes pas connecté',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/network-request-failed':
-              Notify.create({
-                message: 'Problème de réseau, vérifier votre connexion',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/too-many-requests':
-              Notify.create({
-                message: 'Erreur : trop de requête',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/user-token-expired':
-              Notify.create({
-                message: 'Erreur : reconnectez-vous',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/operation-not-allowed':
-              Notify.create({
-                message: 'Erreur : Opération interdite, contactez un administrateur',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'Thrown if a method is called with incorrect arguments.':
-              Notify.create({
-                message: 'Erreur : Le mot de passe saisie est invalide',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            default:
-              Notify.create({
-                message: 'Une erreur inconnu est survenue',
-                color: 'negative',
-                position: 'top'
-              });
-          }
-        });
-
+    changeEmail({ commit }, { newEmail, parentUid, uid }) {
       db.collection('users')
-        .doc(user.uid)
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
         .update({ email: newEmail })
         .catch((err) => {
           console.log('Error while updating email: ', err);
@@ -364,9 +237,11 @@ export default {
     },
 
     // eslint-disable-next-line no-unused-vars
-    changeAddress({ commit }, { member, newAddress }) {
+    changeAddress({ commit }, { uid, parentUid, newAddress }) {
       db.collection('users')
-        .doc(member.uid)
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
         .update({ address: newAddress })
         .catch((err) => {
           console.log('Error while updating address: ', err);
@@ -379,10 +254,12 @@ export default {
     },
 
     // eslint-disable-next-line no-unused-vars
-    changePhone({ commit }, { member, newPhone, newPhoneEmergency }) {
+    changePhone({ commit }, { uid, parentUid, newPhone }) {
       db.collection('users')
-        .doc(member.uid)
-        .update({ phone: newPhone, phoneEmergency: newPhoneEmergency })
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .update({ phone: newPhone })
         .catch((err) => {
           console.log('Error while updating phone : ', err);
           Notify.create({
@@ -431,13 +308,13 @@ export default {
       });
     },
 
-    changeRelationEmergency({ commit }, { member, newRelation }) {
+    // eslint-disable-next-line no-unused-vars
+    changeEmergency({ commit }, { uid, parentUid, newEmergency }) {
       db.collection('users')
-        .doc(member.uid)
-        .update({ relationEmergency: newRelation })
-        .then(() => {
-          commit('changeRelationState', { member, newRelation });
-        })
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .update({ emergency: newEmergency })
         .catch((err) => {
           console.log('Error while changing relation information : ', err);
           Notify.create({

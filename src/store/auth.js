@@ -1,6 +1,10 @@
 import {
-  auth, cloudFunctions, db
+  auth, cloudFunctions, db, storage
 } from '../boot/firebase';
+import { Group } from '../js/Group';
+import { Gender } from '../js/Gender';
+import { Laterality } from '../js/Laterality';
+import { Weapons } from '../js/Weapons';
 
 export default {
   namespaced: false,
@@ -95,13 +99,55 @@ export default {
         throw err;
       }
 
-      const querySnapshot = await db
-        .collection('users')
-        .doc(state.currentUser.uid)
-        .get();
+      const userRef = db.collection('users').doc(state.currentUser.uid);
 
-      const data = querySnapshot.data();
+      const querySnapshot = await userRef.get();
+      let data = querySnapshot.data();
 
+      const collections = [];
+
+      await userRef.collection('subUsers').get()
+        .then((query) => {
+          query.forEach((item) => {
+            collections.push({ uid: item.id, parentUid: item.ref.parent.parent.id, ...item.data() });
+          });
+          return collections;
+        })
+        .then((members) => members.map((member) => {
+          member.birthDate = member.birthDate.toDate();
+          member.certificateDate = member.certificateDate.toDate();
+          member.group = Group.from(member.birthDate);
+          member.gender = Gender.from(member.gender);
+          member.laterality = Laterality.from(member.laterality);
+          member.weapons = Weapons.from(member.weapons);
+          return member;
+        }))
+        .then((members) => Promise.all(members.map(async (member) => {
+          await storage.ref()
+            .child(`profile_pics/${member.parentUid}/${member.uid}`)
+            .getDownloadURL()
+            .then((url) => { member.memberAvatar = url; })
+            .catch(() => { member.memberAvatar = undefined; });
+          return member;
+        })))
+        .then((members) => Promise.all(members.map(async (member) => {
+          await storage.ref()
+            .child(`certificates/${member.parentUid}/${member.uid}`)
+            .getDownloadURL()
+            .then((url) => { member.medicalCertificate = url; })
+            .catch(() => { member.medicalCertificate = undefined; });
+          return member;
+        })))
+        .then((members) => Promise.all(members.map(async (member) => {
+          await storage.ref()
+            .child(`cerfa/${member.parentUid}/${member.uid}`)
+            .getDownloadURL()
+            .then((url) => { member.cerfa = url; })
+            .catch(() => { member.cerfa = undefined; });
+          return member;
+        })));
+
+      data = { ...data, subUsers: collections };
       commit('updateCurrentUser', {
         ...data
       });

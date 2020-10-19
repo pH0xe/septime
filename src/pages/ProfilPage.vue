@@ -2,42 +2,27 @@
   <q-page class="q-ma-md">
     <div class="row justify-center q-mx-sm">
       <div class="page-padded col-12 col-md-8">
-        <q-splitter
-          :value="20"
-          :horizontal="$q.platform.is.mobile"
+        <q-list
+          bordered
+          class="rounded-borders"
         >
-          <template v-slot:before>
-            <div align="center">
-              <h5 class="text-h5 q-ma-none">
-                Profil
-              </h5>
-            </div>
-          </template>
-
-          <template v-slot:after>
-            <div>
-              <h5 class="text-h5 q-ma-none q-ml-md">
-                {{ getSectionName }}
-              </h5>
-            </div>
-          </template>
-        </q-splitter>
-        <q-separator />
-        <profil-view ref="profilView" />
-        <!--
-        <q-separator />
-        <profil-topics
-          :topics="topics"
-          :ready="isMessagingReady"
-        />
-        -->
+          <q-expansion-item
+            v-for="user in currentUser.subUsers"
+            :key="user.uid"
+            expand-separator
+            icon="mdi-account"
+            :label="getName(user)"
+          >
+            <profil-view :user="user" />
+          </q-expansion-item>
+        </q-list>
       </div>
     </div>
   </q-page>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import ProfilView from '../components/profilView';
 import { cloudFunctions } from '../boot/firebase';
 
@@ -50,20 +35,20 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['isMessagingReady']),
+    ...mapGetters(['isMessagingReady', 'cerfaLink', 'medicalTemplateLink']),
 
-    getSectionName() {
-      const name = this.$refs.profilView?.tab;
-      switch (name) {
-        case 'personnal':
-          return 'Information personnel';
-        case 'payment':
-          return 'Information de payement';
-        case 'sport':
-          return 'Information sportive';
-        default:
-          return 'Compte';
-      }
+    ...mapState({
+      currentUser: (state) => state.auth.currentUser
+    })
+  },
+
+  async mounted() {
+    if (this.cerfaLink === null) {
+      await this.fetchCerfa();
+    }
+
+    if (this.medicalTemplateLink === null) {
+      await this.fetchMedicalTemplate();
     }
   },
 
@@ -71,6 +56,14 @@ export default {
     cloudFunctions.getTopics().then((topics) => {
       this.topics = topics.data.topics;
     });
+  },
+
+  methods: {
+    ...mapActions(['fetchCerfa', 'fetchMedicalTemplate']),
+
+    getName(user) {
+      return `${user.firstName} ${user.lastName}`;
+    }
   },
 
   meta: {

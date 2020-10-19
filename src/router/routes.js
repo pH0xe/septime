@@ -57,7 +57,7 @@ const routes = [
         }
       },
       {
-        path: 'profil/update',
+        path: 'profil/update/:id',
         name: 'profil_update',
         component: ProfilUpdatePage,
         meta: {

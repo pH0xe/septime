@@ -9,7 +9,9 @@ export default {
     settingsClub: [],
     settingsRegister: [],
     isOpen: false,
-    isLastVersion: false
+    isLastVersion: false,
+    cerfa: null,
+    medicalTemplate: null
   },
 
   getters: {
@@ -19,6 +21,14 @@ export default {
 
     isLastVersion(state) {
       return state.isLastVersion;
+    },
+
+    cerfaLink(state) {
+      return state.cerfa;
+    },
+
+    medicalTemplateLink(state) {
+      return state.medicalTemplate;
     }
   },
 
@@ -49,6 +59,14 @@ export default {
 
     updateHelloasso(state, { linkToForm }) {
       state.settingsRegister.linkToHelloasso = linkToForm;
+    },
+
+    setCerfaLink(state, { link }) {
+      state.cerfa = link;
+    },
+
+    setMedicalLink(state, { link }) {
+      state.medicalTemplate = link;
     }
   },
 
@@ -184,6 +202,32 @@ export default {
             position: 'top-left'
           });
         });
+    },
+
+    async fetchCerfa({ commit }) {
+      const result = await storage.ref()
+        .child('important/attestation_cerfa.pdf')
+        .getDownloadURL()
+        .catch((err) => {
+          console.error('Cerfa pdf not found :', err);
+        });
+
+      if (result) {
+        await commit('setCerfaLink', { link: result });
+      }
+    },
+
+    async fetchMedicalTemplate({ commit }) {
+      const result = await storage.ref()
+        .child('important/questionnaire_medical.pdf')
+        .getDownloadURL()
+        .catch((err) => {
+          console.error('Medical template pdf not found :', err);
+        });
+
+      if (result) {
+        await commit('setMedicalLink', { link: result });
+      }
     }
   }
 };

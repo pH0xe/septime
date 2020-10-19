@@ -1,6 +1,5 @@
 import { Notify } from 'quasar';
-import * as firebase from 'firebase/app';
-import { db, auth } from '../boot/firebase';
+import { db } from '../boot/firebase';
 
 export default {
   state: {
@@ -85,15 +84,9 @@ export default {
         });
     },
 
-    subscribeToEvent(_, { id, role, displayName }) {
+    subscribeToEvent(_, { id, newRegisterMember }) {
       return db.collection('events').doc(id)
-        .update({
-          registerMember: firebase.firestore.FieldValue.arrayUnion({
-            uid: auth.currentUser.uid,
-            name: displayName,
-            role
-          })
-        });
+        .update({ registerMember: newRegisterMember });
     },
 
     postNewEvent({ commit }, { event }) {
