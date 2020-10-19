@@ -144,6 +144,19 @@
           >
             {{ footerLink.label }}
           </router-link>
+
+          <div>
+            <q-toggle
+              :value="$q.dark.isActive"
+              :class="$q.platform.is.mobile ? '' : 'bottom-left'"
+              color="accent"
+              icon-color="black"
+              checked-icon="mdi-weather-night"
+              unchecked-icon="mdi-white-balance-sunny"
+              @input="toggleDarkMode"
+            />
+          </div>
+
           <div>
             <a
               :href="githubLink"
@@ -271,6 +284,11 @@ export default {
   },
 
   methods: {
+    toggleDarkMode() {
+      this.$q.dark.toggle();
+      localStorage.setItem('darkMode', `${this.$q.dark.isActive}`);
+    },
+
     onClickBannerMailDismiss() {
       this.bannerMail.show = false;
     },
@@ -374,6 +392,11 @@ export default {
     position: absolute;
     bottom: 0;
     right: 0;
+  }
+  .bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   .bigger {

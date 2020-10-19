@@ -1,7 +1,32 @@
 <template lang="html">
-  <q-page class="q-ma-md">
-    <div class="row justify-center q-mx-sm">
-      <div class="page-padded col-12 col-md-8">
+  <q-page class="q-ma-md q-my-lg">
+    <div class="row items-center justify-center">
+      <div class="page-padded col-12 col-md-8 q-px-sm">
+        <!-- <editor-fold desc="Compte de connexion" defaultstate="collapsed"> -->
+        <div class="row">
+          <div class="col">
+            <h5 class="text-h5">
+              Compte de connexion
+            </h5>
+            <q-separator class="separator-margin" />
+          </div>
+        </div>
+
+        <div class="row q-col-gutter-md">
+          <div>TEXTE</div>
+          <!-- TODO Info + changement -->
+        </div>
+        <!-- </editor-fold> -->
+
+        <!-- <editor-fold desc="subUsers" defaultstate="collapsed"> -->
+        <div class="row">
+          <div class="col">
+            <h5 class="text-h5">
+              Adhérents sous ce compte
+            </h5>
+            <q-separator class="separator-margin" />
+          </div>
+        </div>
         <q-list
           bordered
           class="rounded-borders"
@@ -16,6 +41,7 @@
             <profil-view :user="user" />
           </q-expansion-item>
         </q-list>
+        <!-- </editor-fold> -->
       </div>
     </div>
   </q-page>
@@ -73,5 +99,16 @@ export default {
 </script>
 
 <style scoped>
+  .text-h5 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 
+  .separator-margin {
+    margin-bottom: 1rem;
+  }
+
+  .small-padding {
+    padding: 2%;
+  }
 </style>
