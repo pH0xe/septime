@@ -1,5 +1,5 @@
 import { Notify } from 'quasar';
-import { db, storage } from '../boot/firebase';
+import { auth, db, storage } from '../boot/firebase';
 import { Group } from '../js/Group';
 import { Laterality } from '../js/Laterality';
 import { Gender } from '../js/Gender';
@@ -322,6 +322,152 @@ export default {
             color: 'negative',
             position: 'top-left'
           });
+        });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    changeLoginEmail({ commit }, { newEmail }) {
+      const user = auth.currentUser;
+      user.updateEmail(newEmail)
+        .then(() => {
+          Notify.create({
+            message: 'L\'email a été changer',
+            color: 'positive',
+            position: 'top'
+          });
+        })
+        .catch((err) => {
+          switch (err.code) {
+            case 'auth/invalid-user-token':
+            case 'auth/requires-recent-login':
+              Notify.create({
+                message: 'Erreur, déconnectez-vous et reconnectez vous, puis recommencez',
+                caption: 'Avec l\'ancien email',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/network-request-failed':
+              Notify.create({
+                message: 'Problème de réseau, vérifier votre connexion',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/too-many-requests':
+              Notify.create({
+                message: 'Erreur : trop de requête',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/user-token-expired':
+              Notify.create({
+                message: 'Erreur : reconnectez-vous',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/operation-not-allowed':
+              Notify.create({
+                message: 'Erreur : Opération interdite, contactez un administrateur',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'Thrown if a method is called with incorrect arguments.':
+              Notify.create({
+                message: 'Erreur : Le mot de passe saisie est invalide',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            default:
+              Notify.create({
+                message: 'Une erreur inconnu est survenue',
+                color: 'negative',
+                position: 'top'
+              });
+          }
+        });
+
+      db.collection('users')
+        .doc(user.uid)
+        .update({ email: newEmail })
+        .catch((err) => {
+          console.log('Error while updating email: ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    changePassword({ commit }, { newPassword }) {
+      const user = auth.currentUser;
+      user.updatePassword(newPassword)
+        .then(() => {
+          Notify.create({
+            message: 'Le mot de passe a été mis à jours',
+            color: 'positive',
+            position: 'top'
+          });
+        })
+        .catch((err) => {
+          switch (err.code) {
+            case 'auth/invalid-user-token':
+            case 'auth/requires-recent-login':
+              Notify.create({
+                message: 'Erreur, déconnectez-vous et reconnectez vous',
+                caption: 'Avec l\'ancien email',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/network-request-failed':
+              Notify.create({
+                message: 'Problème de réseau, vérifier votre connexion',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/too-many-requests':
+              Notify.create({
+                message: 'Erreur : trop de requête',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/user-token-expired':
+              Notify.create({
+                message: 'Erreur : reconnectez-vous',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/operation-not-allowed':
+              Notify.create({
+                message: 'Erreur : Opération interdite, contactez un administrateur',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'Thrown if a method is called with incorrect arguments.':
+              Notify.create({
+                message: 'Erreur : Le mot de passe saisie est invalide',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            default:
+              Notify.create({
+                message: 'Une erreur inconnu est survenue',
+                color: 'negative',
+                position: 'top'
+              });
+          }
         });
     }
   }
