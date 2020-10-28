@@ -37,7 +37,7 @@
       icon="mdi-information-outline"
       text-color="primary"
       color="white"
-      :to="{name: 'contact', params: {to: 'legalNotice'}}"
+      :to="{name: 'contact_club'}"
     />
   </q-btn-group>
 
@@ -169,7 +169,7 @@
         v-ripple
         v-close-popup
         clickable
-        :to="{name: 'contact', params: {to: 'legalNotice'}}"
+        :to="{name: 'contact_club'}"
       >
         <q-item-section avatar>
           <q-avatar

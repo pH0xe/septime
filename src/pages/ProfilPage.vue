@@ -83,17 +83,6 @@
                   disable
                 />
               </q-card-section>
-              <q-separator />
-              <q-card-actions
-                align="right"
-              >
-                <q-btn
-                  label="Editer"
-                  color="primary"
-                  flat
-                  @click="editCurrentUser"
-                />
-              </q-card-actions>
             </q-card-section>
           </q-card>
         </q-list>
@@ -195,12 +184,6 @@ export default {
     // <editor-fold desc="getName" defaultstate="collapsed">
     getName(user) {
       return `${user.firstName} ${user.lastName}`;
-    },
-    // </editor-fold>
-
-    // <editor-fold desc="editCurrentUser" defaultstate="collapsed">
-    editCurrentUser() {
-      console.log('edit');
     },
     // </editor-fold>
 

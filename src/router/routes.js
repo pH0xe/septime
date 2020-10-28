@@ -6,9 +6,12 @@ import CalendarPage from '../pages/CalendarPage';
 import NewsArticlePage from '../pages/NewsArticlePage';
 import ProfilPage from '../pages/ProfilPage';
 import ProfilUpdatePage from '../pages/ProfilUpdatePage';
-import ContactPage from '../pages/ContactPage';
 import UsefulInformationPage from '../pages/UsefulInformationPage';
 import ProfilNewPage from '../pages/ProfilNewPage';
+import ContactClubPage from '../pages/ContactClubPage';
+import TCUPage from '../pages/ContactTCUPage';
+import ContactWebmasterPage from '../pages/ContactWebmasterPage';
+import ContactAccessPage from '../pages/ContactAccessPage';
 
 
 const routes = [
@@ -65,9 +68,24 @@ const routes = [
         }
       },
       {
-        path: 'contact/:to',
-        name: 'contact',
-        component: ContactPage
+        path: 'contact/clubContact',
+        name: 'contact_club',
+        component: ContactClubPage
+      },
+      {
+        path: 'contact/legalNotice',
+        name: 'contact_tcu',
+        component: TCUPage
+      },
+      {
+        path: 'contact/webmasterContact',
+        name: 'contact_webmaster',
+        component: ContactWebmasterPage
+      },
+      {
+        path: 'contact/access',
+        name: 'contact_access',
+        component: ContactAccessPage
       },
       {
         path: 'useful',

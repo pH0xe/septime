@@ -188,22 +188,22 @@ import partners from '../js/partners';
 const footerLinks = [
   {
     id: 0,
-    link: { name: 'contact', params: { to: 'legalNotice' } },
+    link: { name: 'contact_tcu' },
     label: 'Mentions légales'
   },
   {
     id: 1,
-    link: { name: 'contact', params: { to: 'webmasterContact' } },
+    link: { name: 'contact_webmaster' },
     label: '● Contact webmaster'
   },
   {
     id: 2,
-    link: { name: 'contact', params: { to: 'clubContact' } },
+    link: { name: 'contact_club' },
     label: '● Contact Cercle d\'escrime de Moirans'
   },
   {
     id: 3,
-    link: { name: 'contact', params: { to: 'access' } },
+    link: { name: 'contact_access' },
     label: '● Accès Cercle d\'escrime de Moirans'
   }
 ];

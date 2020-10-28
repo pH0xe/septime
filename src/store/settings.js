@@ -1,26 +1,19 @@
 import { Notify } from 'quasar';
 import { db, storage } from '../boot/firebase';
-import { version } from '../../package.json';
-
 
 export default {
   namespaced: false,
   state: {
-    settingsClub: [],
-    settingsRegister: [],
+    settings: [],
     isOpen: false,
-    isLastVersion: false,
-    cerfa: null,
-    medicalTemplate: null
+    cerfa: null, // lien vers le questionnaire cerfa
+    medicalTemplate: null, // lien vers le template d'attestation de cerfa
+    tcu: null // lien vers les cgu
   },
 
   getters: {
     isRegisterOpen(state) {
       return !!state.isOpen;
-    },
-
-    isLastVersion(state) {
-      return state.isLastVersion;
     },
 
     cerfaLink(state) {
@@ -29,21 +22,24 @@ export default {
 
     medicalTemplateLink(state) {
       return state.medicalTemplate;
+    },
+
+    tcuLink(state) {
+      return state.tcu;
     }
   },
 
   mutations: {
     setSettings(state, { settings }) {
-      state.settingsClub = settings.find((s) => s.type === 'clubSettings');
-      state.settingsRegister = settings.find((s) => s.type === 'registerSettings');
-      state.isOpen = state.settingsRegister.isOpen;
-      state.isLastVersion = state.settingsRegister.lastVersion === version;
+      state.settings = settings;
+      state.isOpen = state.settings.registerOpen;
     },
 
     updateIsOpen(state, { isOpen }) {
       state.isOpen = isOpen;
     },
 
+    // todo
     updateClubState(state, {
       president, treasurer, master, secretary
     }) {
@@ -53,10 +49,7 @@ export default {
       state.settingsClub.secretary = secretary;
     },
 
-    updateIframe(state, { linkToForm }) {
-      state.settingsRegister.linkToForm = linkToForm;
-    },
-
+    // todo
     updateHelloasso(state, { linkToForm }) {
       state.settingsRegister.linkToHelloasso = linkToForm;
     },
@@ -67,6 +60,10 @@ export default {
 
     setMedicalLink(state, { link }) {
       state.medicalTemplate = link;
+    },
+
+    setTCULink(state, { link }) {
+      state.tcu = link;
     }
   },
 
@@ -81,36 +78,42 @@ export default {
           return collector;
         })
         .then((settings) => Promise.all(settings.map(async (item) => {
-          if (item.type === 'clubSettings') {
-            try {
-              item.president.picture = await storage.ref()
-                .child('important/president')
-                .getDownloadURL();
-            } catch (_e) {
-              // Ignore
-            }
-            try {
-              item.master.picture = await storage.ref()
-                .child('important/master')
-                .getDownloadURL();
-            } catch (_e) {
-              // Ignore
-            }
-            try {
-              item.treasurer.picture = await storage.ref()
-                .child('important/treasurer')
-                .getDownloadURL();
-            } catch (_e) {
-              // Ignore
-            }
-            try {
-              item.secretary.picture = await storage.ref()
-                .child('important/secretary')
-                .getDownloadURL();
-            } catch (_e) {
-              // Ignore
-            }
+          // <editor-fold desc="President pict" defaultstate="collapsed">
+          try {
+            item.president.picture = await storage.ref()
+              .child('important/president')
+              .getDownloadURL();
+          } catch (_e) {
+            // Ignore
           }
+          // </editor-fold>
+          // <editor-fold desc="master pict" defaultstate="collapsed">
+          try {
+            item.master.picture = await storage.ref()
+              .child('important/master')
+              .getDownloadURL();
+          } catch (_e) {
+            // Ignore
+          }
+          // </editor-fold>
+          // <editor-fold desc="treasurer pict" defaultstate="collapsed">
+          try {
+            item.treasurer.picture = await storage.ref()
+              .child('important/treasurer')
+              .getDownloadURL();
+          } catch (_e) {
+            // Ignore
+          }
+          // </editor-fold>
+          // <editor-fold desc="secretary pict" defaultstate="collapsed">
+          try {
+            item.secretary.picture = await storage.ref()
+              .child('important/secretary')
+              .getDownloadURL();
+          } catch (_e) {
+            // Ignore
+          }
+          // </editor-fold>
           return item;
         })))
         .then((settings) => {
@@ -227,6 +230,19 @@ export default {
 
       if (result) {
         await commit('setMedicalLink', { link: result });
+      }
+    },
+
+    async fetchTCU({ commit }) {
+      const result = await storage.ref()
+        .child('important/cgu.pdf')
+        .getDownloadURL()
+        .catch((err) => {
+          console.error('Terms and Conditions of Use pdf not found :', err);
+        });
+
+      if (result) {
+        await commit('setTCULink', { link: result });
       }
     }
   }
