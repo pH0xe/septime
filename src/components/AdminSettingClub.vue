@@ -212,16 +212,90 @@
           </q-btn>
         </q-card-section>
       </q-card>
-
-      <div>
-        <q-btn
-          label="Valider"
-          type="submit"
-          flat
+      <q-card
+        flat
+        bordered
+        class="q-pa-sm"
+      >
+        <div class="row items-center">
+          <q-input
+            v-model="newMember.roleName"
+            class="q-mr-md q-my-sm col-12 col-md-5"
+            color="admin-primary"
+            label="Rôle"
+            filled
+          />
+          <q-input
+            v-model="newMember.firstName"
+            class="q-mr-md q-my-sm col-12 col-md-5"
+            color="admin-primary"
+            label="Prénom"
+            filled
+          />
+          <q-input
+            v-model="newMember.lastName"
+            class="q-mr-md q-my-sm col-12 col-md-5"
+            color="admin-primary"
+            label="Nom"
+            filled
+          />
+          <q-input
+            v-model="newMember.phone"
+            class="q-mr-md q-my-sm col-12 col-md-5"
+            label="Numéro de téléphone"
+            filled
+            color="admin-primary"
+            mask="## ## ## ## ##"
+            unmasked-value
+          />
+          <q-btn
+            class="q-ma-sm"
+            icon="mdi-plus"
+            color="positive"
+            round
+            @click="addOfficeMember"
+          />
+        </div>
+      </q-card>
+      <div
+        v-for="office in settings.offices"
+        :key="office.id"
+        class="row items-baseline q-my-sm"
+      >
+        <q-input
+          v-model="office.name"
+          class="q-mr-md col-5"
           color="admin-primary"
+          label="Rôle"
+          filled
+          readonly
+        />
+        <q-input
+          v-model="office.persons"
+          class="q-mr-lg col-5"
+          color="admin-primary"
+          label="Nombre de personnes"
+          type="number"
+          filled
+          readonly
+        />
+        <q-btn
+          class="q-ma-sm"
+          icon="close"
+          color="negative"
+          flat
+          round
         />
       </div>
     </q-form>
+    <div>
+      <q-btn
+        label="Valider"
+        type="submit"
+        flat
+        color="admin-primary"
+      />
+    </div>
   </div>
 </template>
 <script>
@@ -252,13 +326,18 @@ export default {
       lastName: '',
       firstName: '',
       phone: ''
+    },
+    newMember: {
+      lastName: '',
+      firstName: '',
+      roleName: '',
+      phone: null
     }
   }),
 
   computed: {
     ...mapState({
-      settingsClub: (state) => state.settings.settingsClub,
-      settingsRegister: (state) => state.settings.settingsRegister
+      settings: (state) => state.settings.settings[0]
     })
   },
 
@@ -315,6 +394,24 @@ export default {
         parent: this,
         regarding: who
       });
+    },
+
+    addOfficeMember() {
+      const {
+        lastName, firstName, roleName, phone
+      } = this.newMember;
+      if (lastName && firstName && roleName) {
+        console.log('lastName : ', lastName);
+        console.log('firstName : ', firstName);
+        console.log('role name : ', roleName);
+        console.log('phone : ', phone);
+
+        // todo ajouter a firebase
+
+        this.newMember = {
+          lastName: '', firstName: '', roleName: '', phone: null
+        };
+      }
     }
   }
 };

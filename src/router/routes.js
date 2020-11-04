@@ -181,14 +181,32 @@ const routes = [
       },
       {
         path: 'settings',
-        name: 'admin_settings',
-        component: () => import('../pages/AdminSettingPage.vue')
+        redirect: { name: 'admin_settings_club' }
       },
       {
-        path: 'news/create', name: 'admin_news_create', component: () => import('pages/AdminNewsCreatePage.vue')
+        path: 'settings/club',
+        name: 'admin_settings_club',
+        component: () => import('../pages/AdminSettingClubPage.vue')
       },
       {
-        path: 'news/modify/:id', name: 'admin_news_modify', component: () => import('pages/AdminNewsModifyPage.vue')
+        path: 'settings/register',
+        name: 'admin_settings_register',
+        component: () => import('../pages/AdminSettingRegisterPage.vue')
+      },
+      {
+        path: 'settings/permissions',
+        name: 'admin_settings_permission',
+        component: () => import('../pages/AdminSettingPermissionPage.vue')
+      },
+      {
+        path: 'news/create',
+        name: 'admin_news_create',
+        component: () => import('pages/AdminNewsCreatePage.vue')
+      },
+      {
+        path: 'news/modify/:id',
+        name: 'admin_news_modify',
+        component: () => import('pages/AdminNewsModifyPage.vue')
       }
     ]
   }

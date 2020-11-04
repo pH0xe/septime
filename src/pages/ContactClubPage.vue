@@ -18,8 +18,13 @@
             class="q-ma-md"
           >
             <q-card-section>
-              <div class="text-h6">
-                Site et réseaux sociaux :
+              <div class="row">
+                <div class="col">
+                  <h5 class="text-h5">
+                    Site et réseaux sociaux :
+                  </h5>
+                  <q-separator class="separator-margin" />
+                </div>
               </div>
               <div>
                 Site : <a
@@ -40,9 +45,15 @@
                 >https://www.instagram.com/escrime_moirans/</a>
               </div>
             </q-card-section>
-            <q-card-section>
-              <div class="text-h6">
-                Le bureau :
+            <q-card-section v-if="settings">
+              <!-- <editor-fold desc="Le bureau" defaultstate="collapsed"> -->
+              <div class="row">
+                <div class="col">
+                  <h5 class="text-h5">
+                    Les membres bureau :
+                  </h5>
+                  <q-separator class="separator-margin" />
+                </div>
               </div>
               <div
                 v-if="settings.president"
@@ -53,7 +64,7 @@
                   <ul class="q-ma-none">
                     <li>Nom : {{ settings.president.lastName }}</li>
                     <li>Prénom : {{ settings.president.firstName }}</li>
-                    <li>Téléphone : {{ settings.president.phone }}</li>
+                    <li>Téléphone : {{ settings.president.phone || "Non communiqué" }}</li>
                   </ul>
                 </div>
                 <q-img
@@ -72,7 +83,7 @@
                   <ul class="q-ma-none">
                     <li>Nom : {{ settings.treasurer.lastName }}</li>
                     <li>Prénom : {{ settings.treasurer.firstName }}</li>
-                    <li>Téléphone : {{ settings.treasurer.phone }}</li>
+                    <li>Téléphone : {{ settings.treasurer.phone || "Non communiqué" }}</li>
                   </ul>
                 </div>
                 <q-img
@@ -91,7 +102,7 @@
                   <ul class="q-ma-none">
                     <li>Nom : {{ settings.secretary.lastName }}</li>
                     <li>Prénom : {{ settings.secretary.firstName }}</li>
-                    <li>Téléphone : {{ settings.secretary.phone }}</li>
+                    <li>Téléphone : {{ settings.secretary.phone || "Non communiqué" }}</li>
                   </ul>
                 </div>
                 <q-img
@@ -110,7 +121,7 @@
                   <ul class="q-ma-none">
                     <li>Nom : {{ settings.master.lastName }}</li>
                     <li>Prénom : {{ settings.master.firstName }}</li>
-                    <li>Téléphone : {{ settings.master.phone }}</li>
+                    <li>Téléphone : {{ settings.master.phone || "Non communiqué" }}</li>
                   </ul>
                 </div>
                 <q-img
@@ -119,6 +130,32 @@
                   class="clubImage rounded-borders"
                 />
               </div>
+              <!-- </editor-fold> -->
+
+              <!-- <editor-fold desc="Autres membres du bureau" defaultstate="collapsed"> -->
+              <div class="row">
+                <div class="col">
+                  <h5 class="text-h5">
+                    Autres membres du bureau :
+                  </h5>
+                  <q-separator class="separator-margin" />
+                </div>
+              </div>
+              <div
+                v-for="officeMember in settings.office"
+                :key="officeMember.id"
+                class="flex items-center justify-between"
+              >
+                <div class="q-mb-md">
+                  <span class="underline"> {{ officeMember.role }} :</span>
+                  <ul class="q-ma-none">
+                    <li>Nom : {{ officeMember.lastName }}</li>
+                    <li>Prénom : {{ officeMember.firstName }}</li>
+                    <li>Téléphone : {{ officeMember.phone || "Non communiqué" }}</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- </editor-fold> -->
             </q-card-section>
             <q-card-section>
               <div class="text-h6">
@@ -185,5 +222,14 @@ export default {
   width: 30%;
   margin-right: 5%;
   margin-bottom: 2%;
+}
+
+.separator-margin {
+  margin-bottom: 1rem;
+}
+
+.text-h5 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 </style>

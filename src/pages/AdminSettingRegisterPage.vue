@@ -1,0 +1,33 @@
+<template>
+  <q-page class="q-ma-md q-my-lg">
+    <h5 class="text-h4 q-my-md">
+      Paramètre d'inscription
+    </h5>
+    <admin-setting-register />
+  </q-page>
+</template>
+<script>
+import { mapActions } from 'vuex';
+import AdminSettingRegister from '../components/AdminSettingRegister';
+
+export default {
+  name: 'AdminSettingRegisterPage',
+  components: { AdminSettingRegister },
+
+  data: () => ({
+    tab: 'club'
+  }),
+
+  beforeMount() {
+    this.fetchSettings();
+  },
+
+  methods: {
+    ...mapActions(['fetchSettings'])
+  },
+
+  meta: {
+    title: 'Admin - Paramètres'
+  }
+};
+</script>

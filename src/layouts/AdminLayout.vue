@@ -29,7 +29,7 @@
     >
       <q-scroll-area class="fit">
         <q-list padding>
-          <!-- Members -->
+          <!-- <editor-fold desc="Members" defaultstate="collapsed"> -->
           <q-item
             v-ripple
             :to="{ name: 'admin_members' }"
@@ -44,7 +44,8 @@
               Membres
             </q-item-section>
           </q-item>
-          <!-- Attendance -->
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Presence" defaultstate="collapsed"> -->
           <q-item
             v-ripple
             :to="{ name: 'admin_presence' }"
@@ -59,7 +60,8 @@
               Entraînements
             </q-item-section>
           </q-item>
-          <!-- Equipment -->
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Equipment" defaultstate="collapsed"> -->
           <q-item
             v-ripple
             :to="{ name: 'admin_equipment' }"
@@ -74,8 +76,8 @@
               Matériels
             </q-item-section>
           </q-item>
-
-          <!-- Events -->
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Event" defaultstate="collapsed"> -->
           <q-item
             v-ripple
             :to="{ name: 'admin_events' }"
@@ -90,8 +92,9 @@
               Événements
             </q-item-section>
           </q-item>
+          <!-- </editor-fold> -->
 
-          <!-- News -->
+          <!-- <editor-fold desc="News" defaultstate="collapsed"> -->
           <q-expansion-item
             icon="mdi-newspaper-variant"
             label="Actualités"
@@ -131,22 +134,60 @@
               </q-item-section>
             </q-item>
           </q-expansion-item>
-
-          <!-- Settings -->
-          <q-item
-            v-ripple
-            :to="{ name: 'admin_settings' }"
-            clickable
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Settings" defaultstate="collapsed"> -->
+          <q-expansion-item
+            icon="mdi-settings"
+            label="Paramètres"
             active-class="text-admin-primary"
           >
-            <q-item-section avatar>
-              <q-icon name="mdi-settings" />
-            </q-item-section>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_settings_club' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-group" />
+              </q-item-section>
 
-            <q-item-section>
-              Paramètres
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                Le bureau
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_settings_register' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-plus" />
+              </q-item-section>
+
+              <q-item-section>
+                Inscription
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_settings_permission' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-check" />
+              </q-item-section>
+
+              <q-item-section>
+                Administrateurs
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
+          <!-- </editor-fold> -->
 
 
           <!-- Button back to home page -->
