@@ -1,6 +1,6 @@
 <template>
   <q-table
-    v-if="users.length"
+    v-if="showTable"
     :title="title"
     :data="users"
     :filter="filterInput"
@@ -80,6 +80,22 @@
         </q-badge>
       </q-td>
     </template>
+
+    <template v-slot:no-data>
+      <div class="full-width row flex-center q-gutter-sm">
+        <q-icon
+          size="2em"
+          name="mdi-emoticon-sad-outline"
+        />
+        <span>
+          Aucun compte validé pour le moment
+        </span>
+        <q-icon
+          size="2em"
+          name="mdi-alert"
+        />
+      </div>
+    </template>
   </q-table>
 </template>
 
@@ -147,6 +163,10 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    alwaysShow: {
+      type: Boolean,
+      required: true
     }
   },
   data: () => ({
@@ -159,6 +179,10 @@ export default {
   computed: {
     columns() {
       return columns;
+    },
+
+    showTable() {
+      return this.alwaysShow || this.users.length;
     }
   },
 

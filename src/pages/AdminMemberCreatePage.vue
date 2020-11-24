@@ -153,7 +153,7 @@ export default {
               color: 'negative'
             });
           } else {
-            uid = responseData.uid;
+            uid = responseData.data.uid;
           }
         }
 

@@ -28,13 +28,15 @@
     <admin-member-table
       :filter-input="searchQuery"
       :users="membersInactive"
+      :always-show="false"
       title="Comptes en attente de validation"
     />
     <admin-member-table
       :filter-input="searchQuery"
       :users="membersActive"
       :can-download="true"
-      title="Comptes validé et administrateur"
+      :always-show="true"
+      title="Comptes validé"
     />
   </q-page>
 </template>

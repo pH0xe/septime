@@ -13,7 +13,7 @@
     <q-separator />
 
     <div class="text-h6">
-      Désactiver tous les comptes (sauf les administrateurs)
+      Désactiver tous les comptes
     </div>
     <q-btn
       class="q-mt-md q-mb-lg"
