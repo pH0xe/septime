@@ -4,7 +4,7 @@
       <div class="col-12 col-md-6">
         <q-input
           v-model.trim="lastName"
-          label="Nom"
+          label="Nom *"
           error-message="Ce champ est requis"
           required
           autocomplete="family-name"
@@ -23,7 +23,7 @@
       <div class="col-12 col-md-6">
         <q-input
           v-model.trim="firstName"
-          label="Prénom"
+          label="Prénom *"
           error-message="Ce champ est requis"
           required
           autocomplete="given-name"
@@ -43,7 +43,7 @@
     <q-select
       v-model="gender"
       :options="genderOpt"
-      label="Sexe"
+      label="Sexe *"
       map-options
       emit-value
       required
@@ -55,7 +55,7 @@
 
     <q-input
       v-model.trim="email"
-      label="E-mail"
+      label="E-mail *"
       type="email"
       required
       autocomplete="email"
@@ -72,7 +72,7 @@
     <q-input
       v-model="birthDate"
       mask="##/##/####"
-      label="Date de naissance"
+      label="Date de naissance *"
       hint="JJ/MM/AAAA"
       required
       autocomplete="bday"

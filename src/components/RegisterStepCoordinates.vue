@@ -2,7 +2,7 @@
   <q-form @submit="onSubmit">
     <q-input
       v-model="address.street"
-      label="Adresse"
+      label="Adresse *"
       required
       autocomplete="address-line1"
       :error="$v.address.street.$error"
@@ -19,7 +19,7 @@
       <div class="col-12 col-md-6">
         <q-input
           v-model="address.city"
-          label="Ville"
+          label="Ville *"
           required
           autocomplete="address-level2"
           :error="$v.address.city.$error"
@@ -36,7 +36,7 @@
       <div class="col-12 col-md-6">
         <q-input
           v-model="address.zip"
-          label="Code Postal"
+          label="Code Postal *"
           mask="#####"
           required
           autocomplete="postal-code"
@@ -56,7 +56,7 @@
       <div class="col-12 col-md-6">
         <q-input
           v-model="phone"
-          label="Téléphone"
+          label="Téléphone *"
           mask="## ## ## ## ##"
           unmasked-value
           required
@@ -74,7 +74,7 @@
       <div class="col-12 col-md-6">
         <q-input
           v-model="phoneEmergency"
-          label="Téléphone d'urgence"
+          label="Téléphone d'urgence *"
           mask="## ## ## ## ##"
           unmasked-value
           required
@@ -93,7 +93,7 @@
         <!-- lien avec contact d'urgence -->
         <q-input
           v-model="relationEmergency"
-          label="Lien avec le contact d'urgence (Père, Mère...)"
+          label="Lien avec le contact d'urgence (Père, Mère...) *"
           required
           :error="$v.relationEmergency.$error"
           error-message="Veuillez entrer un lien"

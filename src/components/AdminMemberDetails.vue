@@ -424,7 +424,15 @@ export default {
   }),
 
   methods: {
-    ...mapActions(['setAdmin', 'activateAccount', 'removeAccount', 'fetchMembers', 'changePaidInfo', 'deactivateAccount']),
+    ...mapActions([
+      'setAdmin',
+      'activateAccount',
+      'removeAccount',
+      'fetchMembers',
+      'changePaidInfo',
+      'deactivateAccount',
+      'removeMember'
+    ]),
 
     // <editor-fold desc="Dialog Utils" defaultstate="collapsed">
     show() {
@@ -485,20 +493,14 @@ export default {
 
     // <editor-fold desc="deleteAccount" defaultstate="collapsed">
     deleteAccount() {
-      const data = {
-        uid: this.user.uid
-      };
+      const { uid, parentUid } = this.user;
       this.$q.loading.show({
         message: 'Suppression  du compte...'
       });
-      cloudFunctions.removeUser({ ...data })
+      this.removeMember({ uid, parentUid, member: this.user })
         .then(() => {
           this.$q.loading.hide();
-          this.fetchMembers();
           this.hide();
-        })
-        .catch((err) => {
-          console.log(err);
         });
     },
     // </editor-fold>

@@ -75,6 +75,16 @@ export default {
     changePaidState(state, { member, newPayments }) {
       const index = state.members.indexOf(member);
       state.members[index].payments = newPayments;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changePaidState" defaultstate="collapsed">
+    removeMemberState(state, { member }) {
+      let index = state.members.indexOf(member);
+      state.members.splice(index, 1);
+
+      index = state.membersInactive.indexOf(member);
+      state.membersInactive.splice(index, 1);
     }
     // </editor-fold>
   },
@@ -370,6 +380,28 @@ export default {
         .collection('subUsers')
         .doc(uid)
         .update({ emergency: newEmergency })
+        .catch((err) => {
+          console.log('Error while changing relation information : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="removeMember" defaultstate="collapsed">
+    // eslint-disable-next-line no-unused-vars
+    removeMember({ commit }, { uid, parentUid, member }) {
+      db.collection('users')
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .delete()
+        .then(() => {
+          commit('removeMemberState', { member });
+        })
         .catch((err) => {
           console.log('Error while changing relation information : ', err);
           Notify.create({

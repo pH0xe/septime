@@ -6,6 +6,9 @@
           Inscription
         </div>
         <q-separator />
+        <div class="text-subtitle2 q-mt-md">
+          Les champs marqué d'un * sont obligatoire
+        </div>
 
         <div class="q-pt-md">
           <q-stepper
@@ -49,6 +52,8 @@
               <register-step-practising
                 ref="upload"
                 :birth-date="data.birthDate"
+                :medical-template="medicalTemplateLink"
+                :cerfa-template="cerfaLink"
                 @go-back="previous"
                 @goto="goto"
                 @submit="onStepSubmit"
@@ -169,7 +174,7 @@
 
 <script>
 import { Notify, QSpinnerPie } from 'quasar';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import RegisterStepAccount from '../components/RegisterStepAccount';
 import RegisterStepCoordinates from '../components/RegisterStepCoordinates';
 import RegisterStepPractising from '../components/RegisterStepPractising';
@@ -193,6 +198,8 @@ export default {
   }),
 
   computed: {
+    ...mapGetters(['cerfaLink', 'medicalTemplateLink']),
+
     ...mapState({
       settingsRegister: (state) => state.settings.settingsRegister,
       currentUser: (state) => state.auth.currentUser
@@ -210,17 +217,25 @@ export default {
     }
   },
 
-  mounted() {
+  async mounted() {
     // if register is close come back to home
     this.fetchSettings().then(() => {
-      this.link = this.settingsRegister.linkToForm;
-      this.helloassoURL = this.settingsRegister.linkToHelloasso;
+      this.helloassoURL = this.settings?.settings[0]?.linkToHelloasso;
     });
+
+    if (this.cerfaLink === null) {
+      await this.fetchCerfa();
+    }
+
+    if (this.medicalTemplateLink === null) {
+      await this.fetchMedicalTemplate();
+    }
   },
 
   methods: {
-    ...mapActions(['fetchSettings']),
+    ...mapActions(['fetchSettings', 'fetchCerfa', 'fetchMedicalTemplate']),
 
+    // <editor-fold desc="stepper utils" defaultstate="collapsed">
     next() {
       this.$refs.stepper.next();
     },
@@ -232,7 +247,9 @@ export default {
     goto(step) {
       this.$refs.stepper.goTo(step);
     },
+    // </editor-fold>
 
+    // <editor-fold desc="onStepSubmit" defaultstate="collapsed">
     onStepSubmit(data) {
       // Append the step data to the page
       this.data = {
@@ -248,7 +265,9 @@ export default {
         this.next();
       }
     },
+    // </editor-fold>
 
+    // <editor-fold desc="onLastStepSubmit" defaultstate="collapsed">
     onLastStepSubmit() {
       // Prepare data
       const {
@@ -303,7 +322,6 @@ export default {
         spinnerColor: 'primary'
       });
 
-      // Signup on firebase
       this.$store.dispatch('createSubUser', { uid: this.currentUser.uid, data: userData })
         .then(async (subUid) => {
           this.$q.notify({
@@ -321,21 +339,23 @@ export default {
             certificateUploader.extra.path = `certificates/${this.currentUser.uid}`;
             certificateUploader.extra.filename = subUid;
 
-            await certificateUploader.upload().catch((err) => {
-              console.log(err);
-              console.error('Certificate not uploaded');
-            });
+            await certificateUploader.upload()
+              .then(() => {
+                this.$q.notify({
+                  message: 'Upload du certificat avec succès !',
+                  color: 'positive',
+                  icon: 'mdi-check'
+                });
+              })
+              .catch((err) => {
+                console.error(err);
+                console.error('Certificate not uploaded');
+              });
           }
           // this.$refs.profileUploader.extra.filename = uid;
           return subUid;
         })
         .then(async (subUid) => {
-          this.$q.notify({
-            message: 'Upload du certificat avec succès !',
-            color: 'positive',
-            icon: 'mdi-check'
-          });
-
           if (this.data.isProfilPic) {
             this.$q.loading.show({
               message: 'Upload de la photo de profil...'
@@ -345,20 +365,22 @@ export default {
             photoUploader.extra.path = `profile_pics/${this.currentUser.uid}`;
             photoUploader.extra.filename = subUid;
 
-            await photoUploader.upload().catch((err) => {
-              console.log(err);
-              console.error('Picture not uploaded');
-            });
+            await photoUploader.upload()
+              .then(() => {
+                this.$q.notify({
+                  message: 'Upload de la photo avec succès !',
+                  color: 'positive',
+                  icon: 'mdi-check'
+                });
+              })
+              .catch((err) => {
+                console.error(err);
+                console.error('Picture not uploaded');
+              });
           }
           return subUid;
         })
         .then(async (subUid) => {
-          this.$q.notify({
-            message: 'Upload de la photo avec succès !',
-            color: 'positive',
-            icon: 'mdi-check'
-          });
-
           if (this.data.isCerfa) {
             this.$q.loading.show({
               message: 'Upload du Cerfa...'
@@ -368,19 +390,22 @@ export default {
             cerfaUploader.extra.path = `cerfa/${this.currentUser.uid}`;
             cerfaUploader.extra.filename = subUid;
 
-            await cerfaUploader.upload().catch((err) => {
-              console.log(err);
-              console.error('Cerfa not uploaded');
-            });
+            await cerfaUploader.upload()
+              .then(() => {
+                this.$q.notify({
+                  message: 'Upload du cerfa avec succès !',
+                  color: 'positive',
+                  icon: 'mdi-check'
+                });
+              })
+              .catch((err) => {
+                console.error(err);
+                console.error('Cerfa not uploaded');
+              });
           }
           return subUid;
         })
         .then(() => {
-          this.$q.notify({
-            message: 'Upload du cerfa avec succès !',
-            color: 'positive',
-            icon: 'mdi-check'
-          });
           this.$q.loading.hide();
           this.$router.replace({ name: 'home' });
         })
@@ -453,10 +478,13 @@ export default {
           this.$q.loading.hide();
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="openWarning" defaultstate="collapsed">
     openWarning() {
       this.warningMessage = true;
     }
+    // </editor-fold>*
   },
 
   meta: {

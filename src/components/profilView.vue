@@ -1,6 +1,7 @@
 <template>
   <q-list
     bordered
+    separator
     class="rounded-borders"
   >
     <!-- <editor-fold desc="Informations personnelles" defaultstate="collapsed"> -->
@@ -243,12 +244,22 @@
       </q-card>
     </q-expansion-item>
     <!-- // </editor-fold> -->
+
+    <!-- <editor-fold desc="Suppression" defaultstate="collapsed"> -->
+    <q-item v-if="!user.isActive">
+      <q-btn
+        label="Supprimer l'adherent"
+        color="negative"
+        @click="confirmDelete"
+      />
+    </q-item>
+    <!-- // </editor-fold> -->
   </q-list>
 </template>
 
 <script>
-import { openURL } from 'quasar';
-import { mapGetters } from 'vuex';
+import { openURL, QSpinnerPie } from 'quasar';
+import { mapGetters, mapActions } from 'vuex';
 
 
 export default {
@@ -270,6 +281,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['removeMember', 'fetchCurrentUser']),
+
     // <editor-fold desc="editInformation" defaultstate="collapsed">
     editInformation() {
       this.$router.push({ name: 'profil_update', params: { id: this.user.uid } });
@@ -297,6 +310,36 @@ export default {
     // <editor-fold desc="openMedicalTemplate" defaultstate="collapsed">
     openMedicalTemplate() {
       openURL(this.medicalTemplateLink);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="deleteUser" defaultstate="collapsed">
+    deleteUser() {
+      const { uid, parentUid } = this.user;
+      this.$q.loading.show({
+        message: 'Suppression  du compte...',
+        spinnerColor: 'primary',
+        spinner: QSpinnerPie
+      });
+      this.removeMember({ uid, parentUid, member: this.user })
+        .then(() => {
+          this.$q.loading.hide();
+          this.fetchCurrentUser();
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="confirmDelete" defaultstate="collapsed">
+    confirmDelete() {
+      this.$q.dialog({
+        title: 'Confirmer',
+        message: `Voulez vous vraiment supprimer l'adhérent ${this.user.firstName}  ${this.user.lastName}`,
+        cancel: true,
+        persistent: true
+      })
+        .onOk(() => {
+          this.deleteUser();
+        });
     }
     // </editor-fold>
   }

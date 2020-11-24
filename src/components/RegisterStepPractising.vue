@@ -25,9 +25,19 @@
       <br><br>
       <span class="text-bold">Réinscriptions: </span>
       Le certificat médical est valable 3 ans, sauf pour les plus de
-      40 ans, à condition de s’auto-évaluer avec le questionnaire CERFA.
+      40 ans, à condition de s’auto-évaluer avec le questionnaire CERFA
+      <a
+        :href="medicalTemplate"
+        target="_blank"
+      >(Disponible ici)</a>
+      .
       Si vous répondez non à toutes les questions, il suffit de nous remettre
-      une attestation signée. Dans le cas contraire, et pour les plus de 40 ans,
+      une attestation signée
+      <a
+        :href="cerfaTemplate"
+        target="_blank"
+      >(Template disponible ici)</a>
+      . Dans le cas contraire, et pour les plus de 40 ans,
       il faut consulter un médecin et fournir un nouveau certificat médical.
       <br><br>
       Certificat médical spécifique à certaines catégories
@@ -102,7 +112,7 @@
     </div>
 
     <div class="text-body2 q-mt-md">
-      Veuillez sélectionner votre latéralité :
+      Veuillez sélectionner votre latéralité : *
     </div>
 
     <q-radio
@@ -117,7 +127,7 @@
     />
 
     <div class="text-body2 q-mt-md">
-      Veuillez sélectionner votre arme :
+      Veuillez sélectionner votre arme : *
     </div>
     <q-option-group
       v-model="weaponsChoice"
@@ -192,6 +202,16 @@ export default {
     birthDate: {
       type: Date,
       default: () => new Date()
+    },
+
+    medicalTemplate: {
+      type: String,
+      required: true
+    },
+
+    cerfaTemplate: {
+      type: String,
+      required: true
     }
   },
 

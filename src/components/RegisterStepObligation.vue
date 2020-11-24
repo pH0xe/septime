@@ -47,7 +47,7 @@
 
       <q-checkbox
         v-model="confirmRules"
-        label="J'ai lu les conditions obligatoires à toute inscription au CEM, et je les approuve sans condition"
+        label="J'ai lu les conditions obligatoires à toute inscription au CEM, et je les approuve sans condition *"
         color="primary"
         :error="$v.confirmRules.$error"
         error-message="Ce champ est requis"

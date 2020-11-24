@@ -107,6 +107,7 @@
             expand-separator
             icon="mdi-account"
             :label="getName(user)"
+            :header-class="getHeaderColor(user)"
           >
             <profil-view :user="user" />
           </q-expansion-item>
@@ -123,7 +124,6 @@ import { validationMixin } from 'vuelidate';
 import { required, email, minLength } from 'vuelidate/lib/validators';
 import { Notify, QSpinnerPie } from 'quasar';
 import ProfilView from '../components/profilView';
-import { cloudFunctions } from '../boot/firebase';
 
 export default {
   name: 'ProfilPage',
@@ -173,17 +173,19 @@ export default {
   },
 
   beforeMount() {
-    cloudFunctions.getTopics().then((topics) => {
+    /* cloudFunctions.getTopics().then((topics) => {
       this.topics = topics.data.topics;
     });
+    */
+    this.fetchCurrentUser();
   },
 
   methods: {
-    ...mapActions(['fetchCerfa', 'fetchMedicalTemplate', 'changeLoginEmail', 'fetchCurrentUser', 'changePassword']),
+    ...mapActions(['fetchCurrentUser', 'fetchCerfa', 'fetchMedicalTemplate', 'changeLoginEmail', 'fetchCurrentUser', 'changePassword']),
 
     // <editor-fold desc="getName" defaultstate="collapsed">
     getName(user) {
-      return `${user.firstName} ${user.lastName}`;
+      return user.isActive ? `${user.firstName} ${user.lastName}` : `${user.firstName} ${user.lastName} (Non validé par le club)`;
     },
     // </editor-fold>
 
@@ -240,6 +242,12 @@ export default {
           await this.fetchCurrentUser();
         }
       }
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="getHeaderColor" defaultstate="collapsed">
+    getHeaderColor(user) {
+      return user.isActive ? '' : 'bg-red-11';
     }
     // </editor-fold>
   },
