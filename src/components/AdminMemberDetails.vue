@@ -324,46 +324,8 @@
                   </div>
                 </q-item-section>
               </q-item> <!-- Loue un kit première touche -->
-              <q-separator />
             </q-expansion-item>
           </template> <!-- Info Cotisation -->
-          <q-separator />
-          <q-item>
-            <q-item-section>
-              <q-item-label>Administrateur :</q-item-label>
-              <div class="row justify-between">
-                <q-checkbox
-                  v-model="user.isAdmin"
-                  disable
-                  color="positive"
-                  label="Administrateur ?"
-                />
-                <q-btn
-                  v-if="!user.isAdmin"
-                  round
-                  tou
-                  icon="mdi-plus"
-                  color="admin-primary"
-                  @click="setAsAdmin"
-                >
-                  <q-tooltip>
-                    Mettre en administrateur
-                  </q-tooltip>
-                </q-btn>
-                <q-btn
-                  v-else
-                  round
-                  icon="mdi-minus"
-                  color="negative"
-                  @click="removeFromAdmin"
-                >
-                  <q-tooltip>
-                    Enlever des administrateurs
-                  </q-tooltip>
-                </q-btn>
-              </div>
-            </q-item-section>
-          </q-item> <!-- Administrateur -->
           <q-separator />
           <q-item>
             <q-item-section>
@@ -377,10 +339,17 @@
                 />
                 <q-btn
                   v-if="!user.isActive"
-                  label="Activer le compte (irréversible)"
+                  label="Activer le compte"
                   icon="mdi-plus"
                   color="admin-primary"
                   @click="activateMember"
+                />
+                <q-btn
+                  v-if="user.isActive"
+                  label="Désactiver le compte"
+                  icon="mdi-minus"
+                  color="admin-primary"
+                  @click="deactivateMember"
                 />
               </div>
             </q-item-section>
@@ -455,7 +424,7 @@ export default {
   }),
 
   methods: {
-    ...mapActions(['setAdmin', 'activateAccount', 'removeAccount', 'fetchMembers', 'changePaidInfo']),
+    ...mapActions(['setAdmin', 'activateAccount', 'removeAccount', 'fetchMembers', 'changePaidInfo', 'deactivateAccount']),
 
     // <editor-fold desc="Dialog Utils" defaultstate="collapsed">
     show() {
@@ -499,6 +468,12 @@ export default {
     // <editor-fold desc="activateMember" defaultstate="collapsed">
     activateMember() {
       this.activateAccount({ member: this.user });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="deactivateMember" defaultstate="collapsed">
+    deactivateMember() {
+      this.deactivateAccount({ member: this.user });
     },
     // </editor-fold>
 

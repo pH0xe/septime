@@ -15,12 +15,15 @@ export default {
   },
 
   mutations: {
+    // <editor-fold desc="setMembers" defaultstate="collapsed">
     setMembers(state, { members }) {
       state.members = members;
       state.membersActive = members.filter((user) => user.isActive);
       state.membersInactive = members.filter((user) => !user.isActive);
     },
+    // </editor-fold>
 
+    // <editor-fold desc="setAccounts" defaultstate="collapsed">
     setAccounts(state, { members, subUsers }) {
       members.forEach((member) => {
         let subUsersName = '';
@@ -37,40 +40,47 @@ export default {
       });
       state.accounts = members;
     },
+    // </editor-fold>
 
-    setMemberAdmin(state, { member, value }) {
+    // <editor-fold desc="setAccountAdmin" defaultstate="collapsed">
+    setAccountAdmin(state, { member, value }) {
       const index = state.accounts.indexOf(member);
-      state.members[index].isAdmin = value;
+      state.accounts[index].isAdmin = value;
     },
+    // </editor-fold>
 
-    activateMember(state, member) {
-      const index = state.members.indexOf(member);
+    // <editor-fold desc="activateMemberState" defaultstate="collapsed">
+    activateMemberState(state, member) {
+      let index = state.members.indexOf(member);
       state.members[index].isActive = true;
-    },
+      state.membersActive.push(state.members[index]);
 
+      index = state.membersInactive.indexOf(member);
+      state.membersInactive.splice(index, 1);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="deactivateMemberState" defaultstate="collapsed">
+    deactivateMemberState(state, member) {
+      let index = state.members.indexOf(member);
+      state.members[index].isActive = false;
+      state.membersInactive.push(state.members[index]);
+
+      index = state.membersActive.indexOf(member);
+      state.membersActive.splice(index, 1);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changePaidState" defaultstate="collapsed">
     changePaidState(state, { member, newPayments }) {
       const index = state.members.indexOf(member);
       state.members[index].payments = newPayments;
-    },
-
-    changeRelationState(state, { member, newRelation }) {
-      const index = state.members.indexOf(member);
-      state.members[index].relationEmergency = newRelation;
-    },
-
-    deactivateMember(state, { member }) {
-      let index = state.members.indexOf(member);
-      state.members[index].isActive = false;
-
-      index = state.membersActive.indexOf(member);
-      if (index > -1) {
-        state.membersActive.splice(index, 1);
-      }
-      state.membersInactive = [...state.membersInactive, member];
     }
+    // </editor-fold>
   },
 
   actions: {
+    // <editor-fold desc="createSubUser" defaultstate="collapsed">
     // eslint-disable-next-line no-unused-vars
     async createSubUser({ commit }, { uid, data }) {
       let newUid;
@@ -91,7 +101,9 @@ export default {
         });
       return newUid;
     },
+    // </editor-fold>
 
+    // <editor-fold desc="fetchMembers" defaultstate="collapsed">
     fetchMembers({ commit }) {
       db.collectionGroup('subUsers')
         .get()
@@ -149,7 +161,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="fetchAccounts" defaultstate="collapsed">
     fetchAccounts({ commit }) {
       db.collectionGroup('subUsers')
         .get()
@@ -184,13 +198,15 @@ export default {
             });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="setAdmin" defaultstate="collapsed">
     setAdmin({ commit }, { member, value }) {
       db.collection('users')
         .doc(member.uid)
         .update({ isAdmin: value })
         .then(() => {
-          commit('setMemberAdmin', { member, value });
+          commit('setAccountAdmin', { member, value });
         })
         .catch((err) => {
           console.log('Error while setting Admin : ', err);
@@ -201,7 +217,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="activateAccount" defaultstate="collapsed">
     activateAccount({ commit }, { member }) {
       db.collection('users')
         .doc(member.parentUid)
@@ -209,7 +227,7 @@ export default {
         .doc(member.uid)
         .update({ isActive: true })
         .then(() => {
-          commit('activateMember', member);
+          commit('activateMemberState', member);
         })
         .catch((err) => {
           console.log('Error while activating account : ', err);
@@ -220,7 +238,30 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="deactivateAccount" defaultstate="collapsed">
+    deactivateAccount({ commit }, { member }) {
+      db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
+        .doc(member.uid)
+        .update({ isActive: false })
+        .then(() => {
+          commit('deactivateMemberState', member);
+        })
+        .catch((err) => {
+          console.log('Error while deactivating account : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changeEmail" defaultstate="collapsed">
     // eslint-disable-next-line no-unused-vars
     changeEmail({ commit }, { newEmail, parentUid, uid }) {
       db.collection('users')
@@ -237,7 +278,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="changeAddress" defaultstate="collapsed">
     // eslint-disable-next-line no-unused-vars
     changeAddress({ commit }, { uid, parentUid, newAddress }) {
       db.collection('users')
@@ -254,7 +297,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="changePhone" defaultstate="collapsed">
     // eslint-disable-next-line no-unused-vars
     changePhone({ commit }, { uid, parentUid, newPhone }) {
       db.collection('users')
@@ -271,7 +316,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="changePaidInfo" defaultstate="collapsed">
     changePaidInfo({ commit }, { member, newPayments }) {
       db.collection('users')
         .doc(member.parentUid)
@@ -290,7 +337,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="deactivateMembers" defaultstate="collapsed">
     deactivateMembers({ commit }, { members }) {
       members.forEach((member) => {
         db.collection('users')
@@ -299,7 +348,7 @@ export default {
           .doc(member.uid)
           .update({ isActive: false })
           .then(() => {
-            commit('deactivateMember', { member });
+            commit('deactivateMemberState', { member });
           })
           .catch((err) => {
             console.log('Error while deactivate : ', err);
@@ -311,7 +360,9 @@ export default {
           });
       });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="changeEmergency" defaultstate="collapsed">
     // eslint-disable-next-line no-unused-vars
     changeEmergency({ commit }, { uid, parentUid, newEmergency }) {
       db.collection('users')
@@ -328,7 +379,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="changeLoginEmail" defaultstate="collapsed">
     // eslint-disable-next-line no-unused-vars
     changeLoginEmail({ commit }, { newEmail }) {
       const user = auth.currentUser;
@@ -407,7 +460,9 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="changePassword" defaultstate="collapsed">
     // eslint-disable-next-line no-unused-vars
     changePassword({ commit }, { newPassword }) {
       const user = auth.currentUser;
@@ -474,5 +529,6 @@ export default {
           }
         });
     }
+    // </editor-fold>
   }
 };
