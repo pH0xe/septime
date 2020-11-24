@@ -17,8 +17,8 @@ export default {
   mutations: {
     setMembers(state, { members }) {
       state.members = members;
-      state.membersActive = members.filter((user) => user.isActive || user.isAdmin);
-      state.membersInactive = members.filter((user) => !user.isActive && !user.isAdmin);
+      state.membersActive = members.filter((user) => user.isActive);
+      state.membersInactive = members.filter((user) => !user.isActive);
     },
 
     setAccounts(state, { members, subUsers }) {
@@ -106,7 +106,7 @@ export default {
         })
         .then((members) => members.map((member) => {
           member.birthDate = member.birthDate.toDate();
-          member.certificateDate = member.certificateDate.toDate();
+          member.certificateDate = member.certificateDate?.toDate();
           member.group = Group.from(member.birthDate);
           member.gender = Gender.from(member.gender);
           member.laterality = Laterality.from(member.laterality);
@@ -204,6 +204,8 @@ export default {
 
     activateAccount({ commit }, { member }) {
       db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
         .doc(member.uid)
         .update({ isActive: true })
         .then(() => {
@@ -272,6 +274,8 @@ export default {
 
     changePaidInfo({ commit }, { member, newPayments }) {
       db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
         .doc(member.uid)
         .update({ payments: newPayments })
         .then(() => {
@@ -289,22 +293,22 @@ export default {
 
     deactivateMembers({ commit }, { members }) {
       members.forEach((member) => {
-        if (member.isAdmin === false) {
-          db.collection('users')
-            .doc(member.uid)
-            .update({ isActive: false })
-            .then(() => {
-              commit('deactivateMember', { member });
-            })
-            .catch((err) => {
-              console.log('Error while deactivate : ', err);
-              Notify.create({
-                message: `Une erreur s'est produite: ${err}`,
-                color: 'negative',
-                position: 'top-left'
-              });
+        db.collection('users')
+          .doc(member.parentUid)
+          .collection('subUsers')
+          .doc(member.uid)
+          .update({ isActive: false })
+          .then(() => {
+            commit('deactivateMember', { member });
+          })
+          .catch((err) => {
+            console.log('Error while deactivate : ', err);
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'top-left'
             });
-        }
+          });
       });
     },
 

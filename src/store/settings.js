@@ -32,26 +32,20 @@ export default {
   mutations: {
     setSettings(state, { settings }) {
       state.settings = settings;
-      state.isOpen = state.settings.registerOpen;
+      state.isOpen = settings[0].registerOpen;
+    },
+
+    updateOfficeState(state, { settings, newOffice }) {
+      const currentSettings = state.settings.find((setting) => setting.id === settings.id);
+      currentSettings.office = newOffice;
     },
 
     updateIsOpen(state, { isOpen }) {
       state.isOpen = isOpen;
     },
 
-    // todo
-    updateClubState(state, {
-      president, treasurer, master, secretary
-    }) {
-      state.settingsClub.president = president;
-      state.settingsClub.treasurer = treasurer;
-      state.settingsClub.master = master;
-      state.settingsClub.secretary = secretary;
-    },
-
-    // todo
     updateHelloasso(state, { linkToForm }) {
-      state.settingsRegister.linkToHelloasso = linkToForm;
+      state.settings.helloAsso = linkToForm;
     },
 
     setCerfaLink(state, { link }) {
@@ -80,7 +74,7 @@ export default {
         .then((settings) => Promise.all(settings.map(async (item) => {
           // <editor-fold desc="President pict" defaultstate="collapsed">
           try {
-            item.president.picture = await storage.ref()
+            item.office.president.picture = await storage.ref()
               .child('important/president')
               .getDownloadURL();
           } catch (_e) {
@@ -89,7 +83,7 @@ export default {
           // </editor-fold>
           // <editor-fold desc="master pict" defaultstate="collapsed">
           try {
-            item.master.picture = await storage.ref()
+            item.office.master.picture = await storage.ref()
               .child('important/master')
               .getDownloadURL();
           } catch (_e) {
@@ -98,7 +92,7 @@ export default {
           // </editor-fold>
           // <editor-fold desc="treasurer pict" defaultstate="collapsed">
           try {
-            item.treasurer.picture = await storage.ref()
+            item.office.treasurer.picture = await storage.ref()
               .child('important/treasurer')
               .getDownloadURL();
           } catch (_e) {
@@ -107,7 +101,7 @@ export default {
           // </editor-fold>
           // <editor-fold desc="secretary pict" defaultstate="collapsed">
           try {
-            item.secretary.picture = await storage.ref()
+            item.office.secretary.picture = await storage.ref()
               .child('important/secretary')
               .getDownloadURL();
           } catch (_e) {
@@ -129,23 +123,13 @@ export default {
         });
     },
 
-    updateClub({ commit }, {
-      setting, presidentInfo, treasurerInfo, masterInfo, secretaryInfo
-    }) {
-      db.collection('settings').doc(setting.id)
+    updateOffice({ commit }, { settings, newOffice }) {
+      db.collection('settings').doc(settings.id)
         .update({
-          president: presidentInfo,
-          treasurer: treasurerInfo,
-          master: masterInfo,
-          secretary: secretaryInfo
+          office: newOffice
         })
         .then(() => {
-          commit('updateClubState', {
-            president: presidentInfo,
-            treasurer: treasurerInfo,
-            master: masterInfo,
-            secretary: secretaryInfo
-          });
+          commit('updateOfficeState', { settings, newOffice });
         })
         .catch((err) => {
           console.log('Error while updating club settings : ', err);
@@ -157,32 +141,14 @@ export default {
         });
     },
 
-    updateRegisterOpened({ commit }, {
-      setting, value
-    }) {
+    updateRegisterOpened({ commit }, { setting, value }) {
       db.collection('settings').doc(setting.id)
-        .update({ isOpen: value })
+        .update({ registerOpen: value })
         .then(() => {
           commit('updateIsOpen', { isOpen: value });
         })
         .catch((err) => {
           console.log('Error while updating registration open : ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'top-left'
-          });
-        });
-    },
-
-    updateIframeLink({ commit }, { setting, value }) {
-      db.collection('settings').doc(setting.id)
-        .update({ linkToForm: value })
-        .then(() => {
-          commit('updateIframe', { linkToForm: value });
-        })
-        .catch((err) => {
-          console.log('Error while updating iframe link : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',

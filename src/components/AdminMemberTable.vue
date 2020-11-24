@@ -6,8 +6,8 @@
     :filter="filterInput"
     :filter-method="filterUsers"
     :columns="columns"
-    :pagination.sync="pagination"
-    :rows-per-page-options="[0]"
+    :pagination="pagination"
+    :rows-per-page-options="[10, 20, 0]"
     class="full-width q-mb-lg"
     :dense="$q.platform.is.mobile"
     flat
@@ -151,7 +151,7 @@ export default {
   },
   data: () => ({
     pagination: {
-      rowsPerPage: 0,
+      rowsPerPage: 10,
       sortBy: 'lastName'
     }
   }),

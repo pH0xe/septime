@@ -7,7 +7,6 @@
   </q-page>
 </template>
 <script>
-import { mapActions } from 'vuex';
 import AdminSettingRegister from '../components/AdminSettingRegister';
 
 export default {
@@ -17,14 +16,6 @@ export default {
   data: () => ({
     tab: 'club'
   }),
-
-  beforeMount() {
-    this.fetchSettings();
-  },
-
-  methods: {
-    ...mapActions(['fetchSettings'])
-  },
 
   meta: {
     title: 'Admin - Paramètres'

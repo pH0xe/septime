@@ -130,7 +130,7 @@
         v-if="currentUser.isAdmin"
         v-close-popup
         clickable
-        :to="{ name: 'admin_members' }"
+        :to="{ name: 'admin_members_list' }"
       >
         <q-item-section avatar>
           <q-avatar

@@ -7,7 +7,6 @@
     :error-message="errorMessage"
     :error="error"
     :label="label"
-    class="full-width"
     :required="required"
     @input="onInput"
   >

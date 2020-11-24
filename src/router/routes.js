@@ -112,12 +112,17 @@ const routes = [
     children: [
       {
         path: '',
-        redirect: { name: 'admin_members' }
+        redirect: { name: 'admin_members_list' }
       },
       {
-        path: 'member',
-        name: 'admin_members',
+        path: 'members/list',
+        name: 'admin_members_list',
         component: () => import('../pages/AdminMemberPage.vue')
+      },
+      {
+        path: 'members/create',
+        name: 'admin_members_create',
+        component: () => import('../pages/AdminMemberCreatePage.vue')
       },
       {
         path: 'equipment',

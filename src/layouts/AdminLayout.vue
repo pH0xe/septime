@@ -30,20 +30,42 @@
       <q-scroll-area class="fit">
         <q-list padding>
           <!-- <editor-fold desc="Members" defaultstate="collapsed"> -->
-          <q-item
-            v-ripple
-            :to="{ name: 'admin_members' }"
-            clickable
+          <q-expansion-item
+            icon="mdi-account-group"
+            label="Membres"
             active-class="text-admin-primary"
           >
-            <q-item-section avatar>
-              <q-icon name="mdi-account-group" />
-            </q-item-section>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_members_list' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-details" />
+              </q-item-section>
 
-            <q-item-section>
-              Membres
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                Listes des membres
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_members_create' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-plus" />
+              </q-item-section>
+
+              <q-item-section>
+                Ajouter un membres
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
           <!-- </editor-fold> -->
           <!-- <editor-fold desc="Presence" defaultstate="collapsed"> -->
           <q-item

@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { QSpinnerPie } from 'quasar';
 import FirebaseUploader from './FirebaseUploader';
 
 export default {
@@ -90,7 +91,9 @@ export default {
     onSubmit() {
       if (this.isPict) {
         this.$q.loading.show({
-          message: 'Upload du certificat'
+          message: 'Upload de la photo',
+          spinner: QSpinnerPie,
+          spinnerColor: 'admin-primary'
         });
         this.$refs.uploader.extra.filename = this.regarding;
         this.$refs.uploader.upload()

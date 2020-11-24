@@ -4,7 +4,7 @@
       L'inscription est-elle ouverte ?
     </div>
     <q-toggle
-      v-model="isOpen"
+      :value="isRegisterOpen"
       label="ouvert"
       color="admin-primary"
       @input="onToggleChange"
@@ -22,38 +22,6 @@
       label="Désactiver"
       @click="deactivate"
     />
-
-    <!--
-    <div class="text-h6 q-mt-lg">
-      Lien de l'adhésion AssoConnect
-    </div>
-    <a
-      href="https://help.assoconnect.com/hc/fr/articles/115003805265-Int%C3%A9grer-les-formulaires-de-billetterie-dons-adh%C3%A9sions-en-iframe"
-      target="_blank"
-    >
-      Cliquez ici pour savoir comment obtenir le code iframe à copier
-    </a>
-    <div class="text-subtitle1">
-      Ne mettre que le contenu de "src"
-    </div>
-    <div>
-      Exemple : <span class="text-weight-bolder">https://cercle-d-escrime-de-moirans.assoconnect.com/billetterie/offre/134026-h-inscriptions-2020-2021?iframe=1</span>
-    </div>
-    <q-input
-      v-model="formURL"
-      :class="$q.platform.is.mobile? '' : 'w-50'"
-      type="url"
-      color="admin-primary"
-      label="URL de l'adhésion AssoConnect"
-    />
-    <q-btn
-      class="q-mt-md"
-      label="Valider le lien"
-      color="admin-primary"
-      outline
-      @click="changeIframe"
-    />
-   -->
 
     <q-separator class="" />
 
@@ -90,15 +58,12 @@ export default {
   name: 'AdminSettingRegister',
 
   data: () => ({
-    isOpen: false,
-    formURL: null,
     helloassoURL: null
   }),
 
   computed: {
     ...mapState({
-      settingsClub: (state) => state.settings.settingsClub,
-      settingsRegister: (state) => state.settings.settingsRegister,
+      settings: (state) => state.settings.settings[0],
       activeMember: (state) => state.members.membersActive
     }),
 
@@ -106,33 +71,27 @@ export default {
   },
 
   mounted() {
-    this.isOpen = this.$store.getters.isRegisterOpen;
-    this.formURL = this.settingsRegister.linkToForm;
-    this.helloassoURL = this.settingsRegister.linkToHelloasso;
+    this.fetchSettings().then(() => {
+      this.helloassoURL = this.settings.linkToHelloasso;
+    });
   },
 
   methods: {
-    ...mapActions(['updateRegisterOpened', 'updateIframeLink', 'deactivateMembers', 'updateHelloassoLink']),
+    ...mapActions([
+      'updateRegisterOpened',
+      'deactivateMembers',
+      'updateHelloassoLink',
+      'fetchSettings',
+      'fetchMembers'
+    ]),
 
     onToggleChange(value) {
-      this.updateRegisterOpened({ setting: this.settingsRegister, value });
-    },
-
-    changeIframe() {
-      this.updateIframeLink({ setting: this.settingsRegister, value: this.formURL })
-        .then(() => {
-          this.$q.notify({
-            color: 'positive',
-            position: 'bottom',
-            message: 'Mise à jour du lien effectuée',
-            icon: 'mdi-check'
-          });
-        });
+      this.updateRegisterOpened({ setting: this.settings, value });
     },
 
     changeHelloasso() {
       const newLink = this.helloassoURL;
-      this.updateHelloassoLink({ setting: this.settingsRegister, value: newLink })
+      this.updateHelloassoLink({ setting: this.settings, value: newLink })
         .then(() => {
           this.$q.notify({
             color: 'positive',

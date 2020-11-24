@@ -3,303 +3,371 @@
     <div class="text-h6">
       Les membres du bureau :
     </div>
-    <q-form
-      class="q-gutter-md"
-      @submit="onSubmit"
+    <!-- <editor-fold desc="President" defaultstate="collapsed"> -->
+    <q-card
+      flat
+      bordered
     >
-      <!-- President -->
-      <q-card
-        flat
-        bordered
-      >
-        <q-card-section class="text-h6">
-          Le président :
-        </q-card-section>
-        <q-card-section class="flex items-center">
-          <q-input
-            v-model="president.lastName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Nom"
-          />
-          <q-input
-            v-model="president.firstName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Prénoms"
-          />
-          <q-input
-            v-model="president.phone"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Numéros de téléphone"
-            mask="## ## ## ## ##"
-            unmasked-value
-            autocomplete="tel-national"
-          />
-          <q-btn
+      <q-card-section class="text-h6 q-py-sm">
+        Le président :
+      </q-card-section>
+      <q-card-section class="row items-center q-py-sm">
+        <q-input
+          v-model="office.president.lastName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Nom"
+        />
+        <q-input
+          v-model="office.president.firstName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Prénoms"
+        />
+        <q-input
+          v-model="office.president.phone"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Numéros de téléphone"
+          mask="## ## ## ## ##"
+          unmasked-value
+          autocomplete="tel-national"
+        />
+        <q-btn
+          round
+          @click="addImage('president')"
+        >
+          <q-avatar
+            :icon="!office.president.picture ? 'mdi-account': undefined"
+            color="grey-4"
             round
-            @click="addImage('president')"
           >
-            <q-avatar
-              :icon="!president.picture ? 'mdi-account': undefined"
-              color="grey-4"
-              round
-            >
-              <q-img
-                :src="president.picture"
-              />
-            </q-avatar>
-          </q-btn>
-        </q-card-section>
-      </q-card>
+            <q-img
+              :src="office.president.picture"
+            />
+          </q-avatar>
+        </q-btn>
+        <q-btn
+          class="q-ma-sm q-ml-lg"
+          icon="mdi-check"
+          color="positive"
+          round
+          @click="submitPresident"
+        >
+          <q-tooltip>Valider</q-tooltip>
+        </q-btn>
+      </q-card-section>
+    </q-card>
+    <!-- </editor-fold> -->
+    <!-- <editor-fold desc="Tresorier" defaultstate="collapsed"> -->
+    <q-card
+      flat
+      bordered
+    >
+      <q-card-section class="text-h6 q-py-sm">
+        Le trésorier :
+      </q-card-section>
+      <q-card-section class="row items-center q-py-sm">
+        <q-input
+          v-model="office.treasurer.lastName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Nom"
+        />
 
-      <!-- Treasurer -->
-      <q-card
-        flat
-        bordered
-      >
-        <q-card-section class="text-h6">
-          Le trésorier :
-        </q-card-section>
-        <q-card-section class="flex items-center">
-          <q-input
-            v-model="treasurer.lastName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Nom"
-          />
-
-          <q-input
-            v-model="treasurer.firstName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Prénoms"
-          />
-          <br>
-          <q-input
-            v-model="treasurer.phone"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Numéros de téléphone"
-            mask="## ## ## ## ##"
-            unmasked-value
-            autocomplete="tel-national"
-          />
-          <q-btn
+        <q-input
+          v-model="office.treasurer.firstName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Prénoms"
+        />
+        <br>
+        <q-input
+          v-model="office.treasurer.phone"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Numéros de téléphone"
+          mask="## ## ## ## ##"
+          unmasked-value
+          autocomplete="tel-national"
+        />
+        <q-btn
+          round
+          @click="addImage('treasurer')"
+        >
+          <q-avatar
+            :icon="!office.treasurer.picture ? 'mdi-account': undefined"
+            color="grey-4"
             round
-            @click="addImage('treasurer')"
           >
-            <q-avatar
-              :icon="!treasurer.picture ? 'mdi-account': undefined"
-              color="grey-4"
-              round
-            >
-              <q-img
-                :src="treasurer.picture"
-              />
-            </q-avatar>
-          </q-btn>
-        </q-card-section>
-      </q-card>
+            <q-img
+              :src="office.treasurer.picture"
+            />
+          </q-avatar>
+        </q-btn>
+        <q-btn
+          class="q-ma-sm q-ml-lg"
+          icon="mdi-check"
+          color="positive"
+          round
+          @click="submitTreasurer"
+        >
+          <q-tooltip>Valider</q-tooltip>
+        </q-btn>
+      </q-card-section>
+    </q-card>
+    <!-- </editor-fold> -->
+    <!-- <editor-fold desc="Secretaire" defaultstate="collapsed"> -->
+    <q-card
+      flat
+      bordered
+    >
+      <q-card-section class="text-h6 q-py-sm">
+        Le secrétaire :
+      </q-card-section>
+      <q-card-section class="row items-center q-py-sm">
+        <q-input
+          v-model="office.secretary.lastName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Nom"
+        />
 
-      <!-- Secretary -->
-      <q-card
-        flat
-        bordered
-      >
-        <q-card-section class="text-h6">
-          Le secrétaire :
-        </q-card-section>
-        <q-card-section class="flex items-center">
-          <q-input
-            v-model="secretary.lastName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Nom"
-          />
-
-          <q-input
-            v-model="secretary.firstName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Prénoms"
-          />
-          <br>
-          <q-input
-            v-model="secretary.phone"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Numéros de téléphone"
-            mask="## ## ## ## ##"
-            unmasked-value
-            autocomplete="tel-national"
-          />
-          <q-btn
+        <q-input
+          v-model="office.secretary.firstName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Prénoms"
+        />
+        <br>
+        <q-input
+          v-model="office.secretary.phone"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Numéros de téléphone"
+          mask="## ## ## ## ##"
+          unmasked-value
+          autocomplete="tel-national"
+        />
+        <q-btn
+          round
+          @click="addImage('secretary')"
+        >
+          <q-avatar
+            :icon="!office.secretary.picture ? 'mdi-account': undefined"
+            color="grey-4"
             round
-            @click="addImage('secretary')"
           >
-            <q-avatar
-              :icon="!secretary.picture ? 'mdi-account': undefined"
-              color="grey-4"
-              round
-            >
-              <q-img
-                :src="secretary.picture"
-              />
-            </q-avatar>
-          </q-btn>
-        </q-card-section>
-      </q-card>
+            <q-img
+              :src="office.secretary.picture"
+            />
+          </q-avatar>
+        </q-btn>
+        <q-btn
+          class="q-ma-sm q-ml-lg"
+          icon="mdi-check"
+          color="positive"
+          round
+          @click="submitSecretary"
+        >
+          <q-tooltip>Valider</q-tooltip>
+        </q-btn>
+      </q-card-section>
+    </q-card>
+    <!-- </editor-fold> -->
+    <!-- <editor-fold desc="Maitre d'armes" defaultstate="collapsed"> -->
+    <q-card
+      flat
+      bordered
+    >
+      <q-card-section class="text-h6 q-py-sm">
+        Le maître d’armes :
+      </q-card-section>
+      <q-card-section class="row items-center q-py-sm">
+        <q-input
+          v-model="office.master.lastName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Nom"
+        />
 
-      <!-- Master of arms -->
-      <q-card
-        flat
-        bordered
-      >
-        <q-card-section class="text-h6">
-          Le maître d’armes :
-        </q-card-section>
-        <q-card-section class="flex items-center">
-          <q-input
-            v-model="master.lastName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Nom"
-          />
-
-          <q-input
-            v-model="master.firstName"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Prénoms"
-          />
-          <br>
-          <q-input
-            v-model="master.phone"
-            class="q-ma-sm"
-            color="admin-primary"
-            filled
-            label="Numéros de téléphone"
-            mask="## ## ## ## ##"
-            unmasked-value
-            autocomplete="tel-national"
-          />
-          <q-btn
+        <q-input
+          v-model="office.master.firstName"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Prénoms"
+        />
+        <br>
+        <q-input
+          v-model="office.master.phone"
+          class="q-mr-md q-my-sm col-12 col-md-3"
+          color="admin-primary"
+          filled
+          label="Numéros de téléphone"
+          mask="## ## ## ## ##"
+          unmasked-value
+          autocomplete="tel-national"
+        />
+        <q-btn
+          round
+          @click="addImage('master')"
+        >
+          <q-avatar
+            :icon="!office.master.picture ? 'mdi-account': undefined"
+            color="grey-4"
             round
-            @click="addImage('master')"
           >
-            <q-avatar
-              :icon="!master.picture ? 'mdi-account': undefined"
-              color="grey-4"
-              round
-            >
-              <q-img
-                :src="master.picture"
-              />
-            </q-avatar>
-          </q-btn>
-        </q-card-section>
-      </q-card>
-      <q-card
-        flat
-        bordered
-        class="q-pa-sm"
+            <q-img
+              :src="office.master.picture"
+            />
+          </q-avatar>
+        </q-btn>
+        <q-btn
+          class="q-ma-sm q-ml-lg"
+          icon="mdi-check"
+          color="positive"
+          round
+          @click="submitMaster"
+        >
+          <q-tooltip>Valider</q-tooltip>
+        </q-btn>
+      </q-card-section>
+    </q-card>
+    <!-- </editor-fold> -->
+
+    <!-- <editor-fold desc="Other New" defaultstate="collapsed"> -->
+    <q-card
+      flat
+      bordered
+      class="q-pa-sm"
+    >
+      <q-card-section class="text-h6 q-py-sm">
+        Autres membres :
+      </q-card-section>
+      <q-card-section class="row items-center q-py-sm">
+        <q-input
+          v-model="newMember.roleName"
+          class="q-mr-md q-my-sm col-12 col-md-5"
+          color="admin-primary"
+          label="Rôle"
+          filled
+        />
+        <q-input
+          v-model="newMember.firstName"
+          class="q-mr-md q-my-sm col-12 col-md-5"
+          color="admin-primary"
+          label="Prénom"
+          filled
+        />
+        <q-input
+          v-model="newMember.lastName"
+          class="q-mr-md q-my-sm col-12 col-md-5"
+          color="admin-primary"
+          label="Nom"
+          filled
+        />
+        <q-input
+          v-model="newMember.phone"
+          class="q-mr-md q-my-sm col-12 col-md-5"
+          label="Numéro de téléphone"
+          filled
+          color="admin-primary"
+          mask="## ## ## ## ##"
+          unmasked-value
+        />
+        <q-btn
+          class="q-ma-sm"
+          icon="mdi-plus"
+          color="positive"
+          round
+          @click="addOfficeMember"
+        />
+      </q-card-section>
+    </q-card>
+    <!-- </editor-fold> -->
+    <!-- <editor-fold desc="Other list" defaultstate="collapsed"> -->
+    <q-card
+      flat
+      bordered
+      class="q-pa-sm"
+    >
+      <q-card-section class="text-h6 q-py-sm row">
+        Autres membres déjà soumit:
+        <q-space />
+        <q-btn
+          flat
+          round
+          icon="mdi-refresh"
+        />
+      </q-card-section>
+      <div
+        v-for="(office, index) in otherList"
+        :key="index"
+        class="row items-baseline q-my-sm"
       >
-        <div class="row items-center">
+        <q-card-section class="row items-center q-py-sm">
           <q-input
-            v-model="newMember.roleName"
+            v-model="office.roleName"
             class="q-mr-md q-my-sm col-12 col-md-5"
             color="admin-primary"
             label="Rôle"
             filled
+            readonly
           />
           <q-input
-            v-model="newMember.firstName"
+            v-model="office.firstName"
             class="q-mr-md q-my-sm col-12 col-md-5"
             color="admin-primary"
             label="Prénom"
             filled
+            readonly
           />
           <q-input
-            v-model="newMember.lastName"
+            v-model="office.lastName"
             class="q-mr-md q-my-sm col-12 col-md-5"
             color="admin-primary"
             label="Nom"
             filled
+            readonly
           />
           <q-input
-            v-model="newMember.phone"
+            v-model="office.phone"
             class="q-mr-md q-my-sm col-12 col-md-5"
             label="Numéro de téléphone"
             filled
             color="admin-primary"
             mask="## ## ## ## ##"
             unmasked-value
+            readonly
           />
           <q-btn
             class="q-ma-sm"
-            icon="mdi-plus"
-            color="positive"
+            icon="close"
+            color="negative"
+            flat
             round
-            @click="addOfficeMember"
+            @click="removeMember(index)"
           />
-        </div>
-      </q-card>
-      <div
-        v-for="office in settings.offices"
-        :key="office.id"
-        class="row items-baseline q-my-sm"
-      >
-        <q-input
-          v-model="office.name"
-          class="q-mr-md col-5"
-          color="admin-primary"
-          label="Rôle"
-          filled
-          readonly
-        />
-        <q-input
-          v-model="office.persons"
-          class="q-mr-lg col-5"
-          color="admin-primary"
-          label="Nombre de personnes"
-          type="number"
-          filled
-          readonly
-        />
-        <q-btn
-          class="q-ma-sm"
-          icon="close"
-          color="negative"
-          flat
-          round
-        />
+        </q-card-section>
+        <q-separator />
       </div>
-    </q-form>
-    <div>
-      <q-btn
-        label="Valider"
-        type="submit"
-        flat
-        color="admin-primary"
-      />
-    </div>
+    </q-card>
+    <!-- </editor-fold> -->
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { Notify } from 'quasar';
 import AdminSettingsAddPict from './AdminSettingsAddPict';
 
@@ -307,26 +375,14 @@ export default {
   name: 'AdminSettingClub',
 
   data: () => ({
-    president: {
-      lastName: '',
-      firstName: '',
-      phone: ''
+    office: {
+      president: {},
+      treasurer: {},
+      master: {},
+      secretary: {},
+      other: []
     },
-    treasurer: {
-      lastName: '',
-      firstName: '',
-      phone: ''
-    },
-    secretary: {
-      lastName: '',
-      firstName: '',
-      phone: ''
-    },
-    master: {
-      lastName: '',
-      firstName: '',
-      phone: ''
-    },
+    otherList: [],
     newMember: {
       lastName: '',
       firstName: '',
@@ -342,39 +398,169 @@ export default {
   },
 
   mounted() {
-    this.president = { ...this.settingsClub.president };
-    this.treasurer = { ...this.settingsClub.treasurer };
-    this.secretary = { ...this.settingsClub.secretary };
-    this.master = { ...this.settingsClub.master };
+    this.fetchSettings().then(() => {
+      const office = this.settings?.office;
+      if (office) {
+        const cpy = JSON.parse(JSON.stringify(this.settings?.office));
+        this.office = { ...this.office, ...cpy };
+        this.otherList = [...this.office.other];
+      }
+    });
   },
 
   methods: {
-    ...mapActions(['updateClub']),
+    ...mapActions(['updateOffice', 'fetchSettings']),
 
-    checkValue(out, source, who) {
-      out.lastName = source.lastName !== '' ? source.lastName : `Aucun nom n'a été donné pour le ${who}.`;
-      out.firstName = source.firstName !== '' ? source.firstName : `Aucun prénoms n'a été donné pour le ${who}.`;
-      out.phone = source.phone !== '' ? source.phone : `Aucun numéros n'a été donné pour le ${who}.`;
+    addImage(who) {
+      this.$q.dialog({
+        component: AdminSettingsAddPict,
+        parent: this,
+        regarding: who
+      });
     },
 
-    onSubmit() {
-      // console.log(this.president, this.secretary, this.master, this.treasurer);
-      const presidentInfo = {};
-      const treasurerInfo = {};
-      const masterInfo = {};
-      const secretaryInfo = {};
+    erasePictureField(newOffice) {
+      delete newOffice.president?.picture;
+      delete newOffice.treasurer?.picture;
+      delete newOffice.master?.picture;
+      delete newOffice.secretary?.picture;
+    },
 
-      this.checkValue(presidentInfo, this.president, 'président');
-      this.checkValue(treasurerInfo, this.treasurer, 'trésorier');
-      this.checkValue(masterInfo, this.master, 'Maître d’armes');
-      this.checkValue(secretaryInfo, this.secretary, 'secrétaire');
+    submitMaster() {
+      const { firstName, lastName } = this.office.master;
+      if (firstName && lastName) {
+        const newOffice = { ...this.settings.office };
+        newOffice.master = this.office.master;
+        this.erasePictureField(newOffice);
+        this.updateOffice({ settings: this.settings, newOffice })
+          .then(() => {
+            Notify.create({
+              message: 'Changement du maître d\'armes effectué avec succès',
+              color: 'positive',
+              position: 'top'
+            });
+          })
+          .catch((err) => {
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'top'
+            });
+          });
+      }
+    },
 
-      this.updateClub({
-        setting: this.settingsClub, presidentInfo, treasurerInfo, masterInfo, secretaryInfo
-      })
+    submitSecretary() {
+      const { firstName, lastName } = this.office.secretary;
+      if (firstName && lastName) {
+        const newOffice = { ...this.settings.office };
+        newOffice.secretary = this.office.secretary;
+        this.erasePictureField(newOffice);
+        this.updateOffice({ settings: this.settings, newOffice })
+          .then(() => {
+            Notify.create({
+              message: 'Changement du secrétaire effectué avec succès',
+              color: 'positive',
+              position: 'top'
+            });
+          })
+          .catch((err) => {
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'top'
+            });
+          });
+      }
+    },
+
+    submitTreasurer() {
+      const { firstName, lastName } = this.office.treasurer;
+      if (firstName && lastName) {
+        const newOffice = { ...this.settings.office };
+        newOffice.treasurer = this.office.treasurer;
+        this.erasePictureField(newOffice);
+        this.updateOffice({ settings: this.settings, newOffice })
+          .then(() => {
+            Notify.create({
+              message: 'Changement du trésorier effectué avec succès',
+              color: 'positive',
+              position: 'top'
+            });
+          })
+          .catch((err) => {
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'top'
+            });
+          });
+      }
+    },
+
+    submitPresident() {
+      const { firstName, lastName } = this.office.president;
+      if (firstName && lastName) {
+        const newOffice = { ...this.settings.office };
+        newOffice.president = this.office.president;
+        this.erasePictureField(newOffice);
+        this.updateOffice({ settings: this.settings, newOffice })
+          .then(() => {
+            Notify.create({
+              message: 'Changement du président effectué avec succès',
+              color: 'positive',
+              position: 'top'
+            });
+          })
+          .catch((err) => {
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'top'
+            });
+          });
+      }
+    },
+
+    addOfficeMember() {
+      const {
+        lastName, firstName, roleName
+      } = this.newMember;
+      if (lastName && firstName && roleName) {
+        const newOffice = { ...this.settings.office };
+        this.otherList = [...this.otherList, this.newMember];
+        newOffice.other = this.otherList;
+        this.erasePictureField(newOffice);
+        this.updateOffice({ settings: this.settings, newOffice })
+          .then(() => {
+            Notify.create({
+              message: 'Ajout d\'un membre avec succès',
+              color: 'positive',
+              position: 'top'
+            });
+            this.newMember = {
+              lastName: '', firstName: '', roleName: '', phone: null
+            };
+          })
+          .catch((err) => {
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'top'
+            });
+          });
+      }
+    },
+
+    removeMember(index) {
+      this.otherList.splice(index, 1);
+      const newOffice = { ...this.settings.office };
+      newOffice.other = [...this.otherList];
+      this.erasePictureField(newOffice);
+      this.updateOffice({ settings: this.settings, newOffice })
         .then(() => {
           Notify.create({
-            message: 'Changement effectué avec succès',
+            message: 'Suppression d\'un membre avec succès',
             color: 'positive',
             position: 'top'
           });
@@ -386,37 +572,14 @@ export default {
             position: 'top'
           });
         });
-    },
-
-    addImage(who) {
-      this.$q.dialog({
-        component: AdminSettingsAddPict,
-        parent: this,
-        regarding: who
-      });
-    },
-
-    addOfficeMember() {
-      const {
-        lastName, firstName, roleName, phone
-      } = this.newMember;
-      if (lastName && firstName && roleName) {
-        console.log('lastName : ', lastName);
-        console.log('firstName : ', firstName);
-        console.log('role name : ', roleName);
-        console.log('phone : ', phone);
-
-        // todo ajouter a firebase
-
-        this.newMember = {
-          lastName: '', firstName: '', roleName: '', phone: null
-        };
-      }
     }
   }
 };
 </script>
 
 <style scoped>
-
+.q-card {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
 </style>

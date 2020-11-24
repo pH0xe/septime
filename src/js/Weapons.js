@@ -29,5 +29,21 @@ const from = (weapons) => {
   return str;
 };
 
+const options = [
+  {
+    label: 'Fleuret',
+    value: Weapons.FOIL
+  },
+  {
+    label: 'Epée',
+    value: Weapons.EPEE
+  },
+  {
+    label: 'Sabre',
+    value: Weapons.SABRE
+  }
+];
+
 Weapons.from = from;
+Weapons.options = options;
 Object.freeze(Weapons);

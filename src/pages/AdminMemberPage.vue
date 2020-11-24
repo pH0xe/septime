@@ -6,13 +6,6 @@
     <div class="row items-center q-mb-md">
       <q-btn
         class="col-12 col-md-auto q-mb-sm q-mr-sm"
-        label="Ajouter"
-        icon-right="mdi-plus"
-        color="admin-primary"
-        @click="openDialogMemberNew"
-      />
-      <q-btn
-        class="col-12 col-md-auto q-mb-sm q-mr-sm"
         label="Extraire les inscrits"
         icon-right="mdi-download"
         color="admin-primary"
@@ -51,7 +44,6 @@ import { mapActions, mapState } from 'vuex';
 import { date } from 'quasar';
 import XLSX from 'xlsx';
 import AdminMemberTable from '../components/AdminMemberTable';
-import AdminMemberNew from '../components/AdminMemberNew';
 import { Laterality } from '../js/Laterality';
 
 export default {
@@ -72,13 +64,6 @@ export default {
 
   methods: {
     ...mapActions(['fetchMembers']),
-
-    openDialogMemberNew() {
-      this.$q.dialog({
-        component: AdminMemberNew,
-        parent: this
-      });
-    },
 
     downloadAll() {
       const allMembers = [...this.membersActive, ...this.membersInactive];
