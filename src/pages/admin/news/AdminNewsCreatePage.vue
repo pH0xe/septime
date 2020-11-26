@@ -26,7 +26,7 @@
         class="q-ma-lg"
         :options="newsType"
         map-options
-        label="Rechercher par type"
+        label="Type"
         color="admin-primary"
         emit-value
         :error="$v.newsTypeSelect.$error"

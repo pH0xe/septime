@@ -26,7 +26,7 @@
         class="q-ma-lg"
         :options="newsType"
         map-options
-        label="Rechercher par type"
+        label="Type"
         color="admin-primary"
         emit-value
         :error="$v.newsTypeSelect.$error"
@@ -222,8 +222,8 @@ export default {
     }
   },
 
-  beforeMount() {
-    this.fetchNews();
+  async beforeMount() {
+    await this.fetchNews();
     const currentNew = this.news.find((item) => item.uid === this.$route.params.id);
     if (currentNew.text) {
       this.newText = currentNew.text;

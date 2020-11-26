@@ -206,12 +206,12 @@ const routes = [
       {
         path: 'news/create',
         name: 'admin_news_create',
-        component: () => import('pages/AdminNewsCreatePage.vue')
+        component: () => import('../pages/admin/news/AdminNewsCreatePage.vue')
       },
       {
         path: 'news/modify/:id',
         name: 'admin_news_modify',
-        component: () => import('pages/AdminNewsModifyPage.vue')
+        component: () => import('../pages/admin/news/AdminNewsModifyPage.vue')
       }
     ]
   }
