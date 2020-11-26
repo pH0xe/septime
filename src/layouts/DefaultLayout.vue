@@ -180,9 +180,9 @@ import { mapGetters, mapState } from 'vuex';
 import { version as appVersion } from '../../package.json';
 
 import { auth } from '../boot/firebase';
-import NavbarLinks from '../components/NavbarLinks.vue';
-import NavbarAccount from '../components/NavbarAccount';
-import FooterImage from '../components/footerImage';
+import NavbarLinks from '../components/all/layout/NavbarLinks.vue';
+import NavbarAccount from '../components/all/layout/NavbarAccount';
+import FooterImage from '../components/all/layout/footerImage';
 import partners from '../js/partners';
 
 const footerLinks = [
