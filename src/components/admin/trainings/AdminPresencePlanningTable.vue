@@ -5,7 +5,6 @@
     :rows-per-page-options="[0]"
     :columns="columns"
     :data="trainings"
-    hide-bottom
     flat
     bordered
     class="q-my-md"
@@ -70,7 +69,7 @@ export default {
 
   data: () => ({
     pagination: {
-      rowsPerPage: 0,
+      rowsPerPage: 5,
       sortBy: 'startHour',
       descending: true
     }

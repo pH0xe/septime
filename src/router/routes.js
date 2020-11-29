@@ -130,11 +130,6 @@ const routes = [
         component: () => import('../pages/admin/equipment/AdminEquipmentPage.vue')
       },
       {
-        path: 'presence',
-        name: 'admin_presence',
-        component: () => import('../pages/admin/training/AdminPresencePage.vue')
-      },
-      {
         path: 'presence/create',
         name: 'admin_presence_create',
         component: () => import('../pages/admin/training/AdminPresenceCreatePage.vue')
@@ -148,6 +143,15 @@ const routes = [
         path: 'presence/list/:id',
         name: 'admin_presence_list',
         component: () => import('../pages/admin/training/AdminPresenceListPage.vue')
+      },
+      {
+        path: 'presence/:when',
+        name: 'admin_presence',
+        component: () => import('../pages/admin/training/AdminPresencePage.vue')
+      },
+      {
+        path: 'presence',
+        redirect: { name: 'admin_presence', params: { when: 'today' } }
       },
       {
         path: 'presence/planning',

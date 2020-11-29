@@ -68,20 +68,109 @@
           </q-expansion-item>
           <!-- </editor-fold> -->
           <!-- <editor-fold desc="Presence" defaultstate="collapsed"> -->
-          <q-item
-            v-ripple
-            :to="{ name: 'admin_presence' }"
-            clickable
+          <q-expansion-item
+            icon="mdi-fencing"
+            label="Entrainements"
             active-class="text-admin-primary"
           >
-            <q-item-section avatar>
-              <q-icon name="mdi-sword" />
-            </q-item-section>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_presence_planning' }"
+              :inset-level="1"
+              clickable
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-calendar-clock" />
+              </q-item-section>
 
-            <q-item-section>
-              Entraînements
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                Planning
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_presence_create' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-plus" />
+              </q-item-section>
+
+              <q-item-section>
+                Nouvel entrainement
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_presence_result' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-format-list-bulleted" />
+              </q-item-section>
+
+              <q-item-section>
+                Détails des absences
+              </q-item-section>
+            </q-item>
+            <q-expansion-item
+              icon="mdi-list-status"
+              label="Présence"
+              active-class="text-admin-primary"
+              :header-inset-level="1"
+            >
+              <q-item
+                v-ripple
+                :to="{ name: 'admin_presence', params: { when: 'today' } }"
+                clickable
+                :inset-level="2"
+                active-class="text-admin-primary"
+              >
+                <q-item-section avatar>
+                  <q-icon name="mdi-checkbox-marked-outline" />
+                </q-item-section>
+
+                <q-item-section>
+                  Aujourd'hui
+                </q-item-section>
+              </q-item>
+              <q-item
+                v-ripple
+                :to="{ name: 'admin_presence', params: { when: 'futur' } }"
+                clickable
+                :inset-level="2"
+                active-class="text-admin-primary"
+              >
+                <q-item-section avatar>
+                  <q-icon name="mdi-checkbox-marked-outline" />
+                </q-item-section>
+
+                <q-item-section>
+                  Futur
+                </q-item-section>
+              </q-item>
+              <q-item
+                v-ripple
+                :to="{ name: 'admin_presence', params: { when: 'past' } }"
+                clickable
+                :inset-level="2"
+                active-class="text-admin-primary"
+              >
+                <q-item-section avatar>
+                  <q-icon name="mdi-checkbox-marked-outline" />
+                </q-item-section>
+
+                <q-item-section>
+                  Passé
+                </q-item-section>
+              </q-item>
+            </q-expansion-item>
+          </q-expansion-item>
           <!-- </editor-fold> -->
           <!-- <editor-fold desc="Equipment" defaultstate="collapsed"> -->
           <q-item
@@ -159,7 +248,7 @@
           <!-- </editor-fold> -->
           <!-- <editor-fold desc="Settings" defaultstate="collapsed"> -->
           <q-expansion-item
-            icon="mdi-settings"
+            icon="mdi-cog"
             label="Paramètres"
             active-class="text-admin-primary"
           >

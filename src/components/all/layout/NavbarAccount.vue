@@ -134,7 +134,7 @@
       >
         <q-item-section avatar>
           <q-avatar
-            icon="mdi-settings"
+            icon="mdi-cog"
             color="warning"
             text-color="white"
           />
