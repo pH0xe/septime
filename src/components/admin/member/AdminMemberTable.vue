@@ -105,7 +105,6 @@ import { date } from 'quasar';
 import XLSX from 'xlsx';
 import AdminMemberDetails from './AdminMemberDetails';
 import { Group } from '../../../js/Group';
-import { Laterality } from '../../../js/Laterality';
 
 const columns = [
   {
@@ -249,32 +248,23 @@ export default {
       * - solde du sur adhesion 2019/2020
       * - Intitulé
       * */
+
       const items = [];
 
       this.users.forEach((user) => {
         const preparUser = {};
-        preparUser.Prénom = user.firstName;
+        preparUser['Prénom'] = user.firstName;
         preparUser.Nom = user.lastName;
         preparUser.Email = user.email;
-        preparUser.Adresse = user.address.street;
-        preparUser['Complément d\'adresse'] = null;
-        preparUser['Code postal'] = user.address.zip;
-        preparUser.Ville = user.address.city;
-        preparUser.Pays = 'France';
+        preparUser.Adresse = `${user.address.street}, ${user.address.city}, ${user.address.zip}, France`;
         preparUser['Date de naissance'] = date.formatDate(user.birthDate, 'DD/MM/YYYY');
-        preparUser.Téléphone = user.phone;
+        preparUser['Téléphone'] = user.phone;
         preparUser.Sexe = user.gender;
-        preparUser.Organisation = null;
-        preparUser.Catégorie = user.group;
-        preparUser['Tél en cas d\'urgence'] = user.phoneEmergency;
-        if (user.laterality === Laterality.RIGHT) {
-          preparUser.Latéralité = 'Droitier';
-        } else {
-          preparUser.Latéralité = 'Gaucher';
-        }
+        preparUser['Catégorie'] = user.group;
+        preparUser['Tél en cas d\'urgence'] = user.emergency.phone;
+        preparUser['Relation contact d\'urgence'] = user.emergency.relation;
+        preparUser['Latéralité'] = user.laterality;
         preparUser.Paiement = `${user.payments.amount}€`;
-        preparUser['solde du sur adhesion 2019/2020'] = null;
-        preparUser.Intitulé = null;
 
         items.push(preparUser);
       });
