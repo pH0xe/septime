@@ -70,6 +70,22 @@ const groupOptions = [
   { value: Group.M5, label: Group.M5 }
 ];
 
+const groupList = [
+  Group.VETERANS4,
+  Group.VETERANS3,
+  Group.VETERANS2,
+  Group.VETERANS1,
+  Group.SENIORS,
+  Group.M20,
+  Group.M17,
+  Group.M15,
+  Group.M13,
+  Group.M11,
+  Group.M9,
+  Group.M7,
+  Group.M5
+];
+
 const getBadgeColorFor = (group) => {
   switch (group) {
     case Group.M5:
@@ -103,4 +119,5 @@ const getBadgeColorFor = (group) => {
 Group.from = from;
 Group.groupOptions = groupOptions;
 Group.getBadgeColorFor = getBadgeColorFor;
+Group.groupList = groupList;
 Object.freeze(Group);

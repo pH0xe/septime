@@ -62,12 +62,18 @@ export default {
   computed: {
     groupOptions() {
       return Group.groupOptions;
+    },
+
+    memberSelected() {
+      return this.$refs.memberList.selectedMembers;
     }
   },
 
   methods: {
     onGroupBlur() {
       this.$v.group.$touch();
+
+      this.$refs.memberList.selectedMembers = this.memberSelected.filter((user) => this.group.includes(user.group));
     }
   },
 

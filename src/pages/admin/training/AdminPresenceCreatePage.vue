@@ -11,7 +11,10 @@
       <q-separator />
       <admin-training-create-period />
       <q-separator />
-      <admin-training-create-members :members="membersActive" />
+      <admin-training-create-members
+        ref="membersSection"
+        :members="membersActive"
+      />
     </q-card-section>
     <q-card-actions align="right">
       <q-btn
@@ -54,7 +57,11 @@ export default {
     ...mapState({
       members: (state) => state.members.members,
       membersActive: (state) => state.members.membersActive
-    })
+    }),
+
+    selectedMembers() {
+      return this.$refs.membersSection.memberSelected;
+    }
   },
 
   // TODO recuperer toute les erreurs et données et créé l'entrainement et les documents de presence requis
@@ -67,6 +74,7 @@ export default {
     ...mapGetters(['maxID']),
 
     onSubmit() {
+      console.log(this.selectedMembers);
       this.$v.$touch();
       if (!this.$v.$error) {
         const trainingsToAdd = [];

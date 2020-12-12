@@ -119,22 +119,28 @@ export default {
     },
 
     extendedFilterInput() {
-      return this.filterInput + this.searchString;
+      return `${this.filterInput},${this.searchString}`;
     }
   },
 
   methods: {
     filterGroups(rows, lookFor) {
-      lookFor = lookFor.toLowerCase();
-      const results = [];
+      let results = [];
       lookFor = lookFor.split(',');
+
+      const groups = lookFor.filter((word) => Group.groupList.includes(word));
+      const searchString = lookFor.filter((word) => !Group.groupList.includes(word))[0];
+
       this.members.forEach((member) => {
-        if (lookFor.includes(member.group.toLowerCase())) {
+        if (groups.includes(member.group)) {
           results.push(member);
         }
       });
 
-      this.selectedMembers = [];
+      if (searchString.length !== 0) {
+        results = results.filter((user) => user.firstName.toLowerCase().includes(searchString)
+          || user.lastName.toLowerCase().includes(searchString));
+      }
       return results;
     },
 
