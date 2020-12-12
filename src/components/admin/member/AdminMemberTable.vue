@@ -221,33 +221,7 @@ export default {
     },
 
     getBadgeColorFor(group) {
-      switch (group) {
-        case Group.M5:
-          return 'red';
-        case Group.M7:
-          return 'purple';
-        case Group.M9:
-          return 'indigo';
-        case Group.M11:
-          return 'light-blue';
-        case Group.M13:
-          return 'teal';
-        case Group.M15:
-          return 'orange';
-        case Group.M17:
-          return 'brown';
-        case Group.M20:
-          return 'blue-grey';
-        case Group.SENIORS:
-          return 'cyan';
-        case Group.VETERANS1:
-        case Group.VETERANS2:
-        case Group.VETERANS3:
-        case Group.VETERANS4:
-          return 'grey';
-        default:
-          return 'null';
-      }
+      return Group.getBadgeColorFor(group);
     },
 
     onClickRefreshTables() {

@@ -213,7 +213,7 @@ import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import { date, Notify } from 'quasar';
 import DateSelector from '../../../components/utils/DateSelector';
-import HourSelector from '../../../components/utils/HourSelector';
+import HourSelector from '../../../components/utils/TimeSelector';
 import { Group } from '../../../js/Group';
 import { Weapons } from '../../../js/Weapons';
 

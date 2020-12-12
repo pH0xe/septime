@@ -1,4 +1,4 @@
-import { Notify, date as quasarDate } from 'quasar';
+import { Notify, date as quasarDate, date } from 'quasar';
 import { db } from '../boot/firebase';
 
 
@@ -6,8 +6,9 @@ export default {
   namespaced: false,
   state: {
     trainings: [],
-    currentUserTrainings: [],
-    maxID: null
+    todaysTrainings: [],
+    futurTrainings: [],
+    pastTrainings: []
   },
 
   getters: {
@@ -18,25 +19,55 @@ export default {
 
   mutations: {
     setTrainings(state, { trainings }) {
-      state.trainings = trainings;
-      let max = 0;
+      const trainingsToStore = [];
       trainings.forEach((training) => {
-        if (max < training.internalId) max = training.internalId;
+        let currentDate = date.buildDate({
+          year: training.period.start.getFullYear(),
+          month: training.period.start.getMonth() + 1,
+          date: training.period.start.getDate() + training.day,
+          hours: 0,
+          minutes: 0,
+          seconds: 0
+        });
+        while (currentDate <= training.period.end) {
+          trainingsToStore.push({
+            date: currentDate,
+            ...training
+          });
+
+          currentDate = date.addToDate(currentDate, { days: 7 });
+        }
       });
-      state.maxID = max;
-    },
-    setCurrentUserTrainings(state, { trainings }) {
-      state.currentUserTrainings = trainings;
+      state.trainings = trainingsToStore;
     },
 
-    updateStudent(state, { training }) {
-      const updatedTraining = state.trainings.find((item) => training.uid === item.uid);
-      updatedTraining.students = training.students;
-    },
-
-    deleteTrainingState(state, { training }) {
-      const index = state.trainings.indexOf(training);
-      delete state.trainings[index];
+    setTodaysTrainings(state, { trainings }) {
+      const trainingsToStore = [];
+      trainings.forEach((training) => {
+        let currentDate = date.buildDate({
+          year: training.period.start.getFullYear(),
+          month: training.period.start.getMonth() + 1,
+          date: training.period.start.getDate() + training.day,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0
+        });
+        const compareTo = date.buildDate({
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0
+        });
+        while (date.getDateDiff(currentDate, compareTo, 'seconds') !== 0 && currentDate <= training.period.end) {
+          currentDate = date.addToDate(currentDate, { days: 7 });
+        }
+        trainingsToStore.push({
+          date: currentDate,
+          ...training
+        });
+      });
+      state.todaysTrainings = trainingsToStore;
     }
   },
 
@@ -50,12 +81,46 @@ export default {
           });
           return collector;
         }).then((trainings) => trainings.map((training) => {
-          training.startDate = training.startDate.toDate();
-          training.endDate = training.endDate.toDate();
+          training.period.start = training.period?.start.toDate();
+          training.period.end = training.period?.end.toDate();
           return training;
         }))
         .then((trainings) => {
           commit('setTrainings', { trainings });
+        })
+        .catch((err) => {
+          console.error('Error while fetching trainings list', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'bottom'
+          });
+        });
+    },
+
+    fetchTodaysTrainings({ commit }) {
+      const day = new Date().getDay();
+      let filterDate = new Date();
+      filterDate.setHours(0, 0, 0, 0);
+      filterDate = filterDate.getTime();
+      return db.collection('trainings')
+        .where('day', '==', day)
+        .where('period.end', '>=', new Date(filterDate))
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((item) => {
+            collector.push({ uid: item.id, ...item.data() });
+          });
+          return collector;
+        })
+        .then((trainings) => trainings.map((training) => {
+          training.period.start = training.period?.start.toDate();
+          training.period.end = training.period?.end.toDate();
+          return training;
+        }))
+        .then((trainings) => {
+          commit('setTodaysTrainings', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainings list', err);

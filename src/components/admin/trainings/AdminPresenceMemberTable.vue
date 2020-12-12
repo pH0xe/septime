@@ -1,18 +1,34 @@
 <template>
   <q-table
-    title="Selectionner les adhérents pour ce cours"
     :data="members"
     :columns="columns"
     row-key="uid"
     selection="multiple"
     :selected.sync="selectedMembers"
-    :pagination.sync="pagination"
-    hide-bottom
-    :filter="filterInput"
+    :pagination="pagination"
+    :filter="extendedFilterInput"
     :filter-method="filterGroups"
     flat
     bordered
   >
+    <template v-slot:top>
+      <h5 class="q-ma-none">
+        Adhérents de ce cours
+      </h5>
+      <q-space />
+      <q-input
+        v-model="searchString"
+        class="col-12 col-md-5"
+        label="Rechercher"
+        filled
+        color="admin-primary"
+      >
+        <template v-slot:append>
+          <q-icon name="mdi-magnify" />
+        </template>
+      </q-input>
+    </template>
+
     <template v-slot:body-cell-memberAvatar="props">
       <q-td :props="props">
         <q-avatar>
@@ -32,7 +48,7 @@
     <template v-slot:body-cell-group="props">
       <q-td :props="props">
         <q-badge
-          color="info"
+          :color="getBadgeColorFor(props.row.group)"
           :label="props.row.group"
         />
       </q-td>
@@ -41,6 +57,8 @@
 </template>
 
 <script>
+
+import { Group } from '../../../js/Group';
 
 const columns = [
   {
@@ -89,13 +107,19 @@ export default {
   data: () => ({
     selectedMembers: [],
     pagination: {
-      rowsPerPage: 0
-    }
+      rowsPerPage: 10,
+      sortBy: 'lastName'
+    },
+    searchString: ''
   }),
 
   computed: {
     columns() {
       return columns;
+    },
+
+    extendedFilterInput() {
+      return this.filterInput + this.searchString;
     }
   },
 
@@ -112,6 +136,10 @@ export default {
 
       this.selectedMembers = [];
       return results;
+    },
+
+    getBadgeColorFor(group) {
+      return Group.getBadgeColorFor(group);
     }
   }
 };

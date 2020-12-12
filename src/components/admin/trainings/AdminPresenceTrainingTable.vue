@@ -1,25 +1,26 @@
 <template>
   <q-table
-    :title="title"
-    :pagination.sync="pagination"
-    :rows-per-page-options="[0]"
+    :pagination="pagination"
     :columns="columns"
     :data="trainings"
-    hide-bottom
     flat
     bordered
     @row-click="onClickTraining"
   >
-    <template v-slot:body-cell-startDate="props">
+    <template v-slot:body-cell-startHour="props">
       <q-td
         :props="props"
         class="cursor-pointer"
       >
-        {{ date.formatDate(props.row.startDate, 'dddd DD MMMM, HH:mm - ', {
-          days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-          months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-                   'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']}) }}
-        {{ date.formatDate(props.row.endDate, 'HH:mm') }}
+        {{ ("0" + props.row.timetable.start.hour).slice(-2) }}:{{ ("0" + props.row.timetable.start.minute).slice(-2) }}
+      </q-td>
+    </template>
+    <template v-slot:body-cell-endHour="props">
+      <q-td
+        :props="props"
+        class="cursor-pointer"
+      >
+        {{ ("0" + props.row.timetable.end.hour).slice(-2) }}:{{ ("0" + props.row.timetable.end.minute).slice(-2) }}
       </q-td>
     </template>
   </q-table>
@@ -27,14 +28,23 @@
 
 <script>
 import { date } from 'quasar';
+import { DateUtils } from '../../../js/DateUtils';
+
 
 const columns = [
   {
-    name: 'startDate',
+    name: 'startHour',
     align: 'left',
-    label: 'Horaire',
+    label: 'Heure de début',
     sortable: false,
-    field: 'startDate'
+    field: ''
+  },
+  {
+    name: 'endHour',
+    align: 'left',
+    label: 'Heure de fin',
+    sortable: false,
+    field: ''
   }
 ];
 
@@ -43,11 +53,6 @@ export default {
   name: 'AdminPresenceTrainingTable',
 
   props: {
-    title: {
-      type: String,
-      required: true
-    },
-
     trainings: {
       type: Array,
       required: true
@@ -57,7 +62,7 @@ export default {
   data: () => ({
     pagination: {
       rowsPerPage: 0,
-      sortBy: 'startDate'
+      sortBy: 'date'
     }
   }),
 
@@ -68,6 +73,10 @@ export default {
 
     date() {
       return date;
+    },
+
+    DateUtils() {
+      return DateUtils;
     }
   },
 

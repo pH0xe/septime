@@ -9,6 +9,7 @@
     :label="label"
     :required="required"
     @input="onInput"
+    @blur="touchFct"
   >
     <template v-slot:append>
       <q-icon
@@ -22,6 +23,8 @@
         >
           <q-date
             :value="valueFormatted"
+            :options="options"
+            :locale="locale"
             color="admin-primary"
             mask="DD/MM/YYYY"
             @input="onInput"
@@ -33,6 +36,7 @@
 </template>
 <script>
 import { date } from 'quasar';
+import { DateUtils } from '../../js/DateUtils';
 
 
 export default {
@@ -60,12 +64,26 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    options: {
+      type: Function,
+      required: false,
+      default: () => true
+    },
+    touchFct: {
+      type: Function,
+      required: false,
+      default: () => true
     }
   },
 
   computed: {
     valueFormatted() {
       return date.formatDate(this.value, 'DD/MM/YYYY');
+    },
+
+    locale() {
+      return DateUtils.locale;
     }
   },
 

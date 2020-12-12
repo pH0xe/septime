@@ -54,5 +54,53 @@ const from = (birth) => {
   return Group.VETERANS4;
 };
 
+const groupOptions = [
+  { value: Group.VETERANS4, label: Group.VETERANS4 },
+  { value: Group.VETERANS3, label: Group.VETERANS3 },
+  { value: Group.VETERANS2, label: Group.VETERANS2 },
+  { value: Group.VETERANS1, label: Group.VETERANS1 },
+  { value: Group.SENIORS, label: Group.SENIORS },
+  { value: Group.M20, label: Group.M20 },
+  { value: Group.M17, label: Group.M17 },
+  { value: Group.M15, label: Group.M15 },
+  { value: Group.M13, label: Group.M13 },
+  { value: Group.M11, label: Group.M11 },
+  { value: Group.M9, label: Group.M9 },
+  { value: Group.M7, label: Group.M7 },
+  { value: Group.M5, label: Group.M5 }
+];
+
+const getBadgeColorFor = (group) => {
+  switch (group) {
+    case Group.M5:
+      return 'GRAY 9';
+    case Group.M7:
+      return 'purple';
+    case Group.M9:
+      return 'indigo';
+    case Group.M11:
+      return 'light-blue';
+    case Group.M13:
+      return 'cyan-6';
+    case Group.M15:
+      return 'orange';
+    case Group.M17:
+      return 'brown';
+    case Group.M20:
+      return 'blue-grey';
+    case Group.SENIORS:
+      return 'teal-7';
+    case Group.VETERANS1:
+    case Group.VETERANS2:
+    case Group.VETERANS3:
+    case Group.VETERANS4:
+      return 'grey';
+    default:
+      return 'null';
+  }
+};
+
 Group.from = from;
+Group.groupOptions = groupOptions;
+Group.getBadgeColorFor = getBadgeColorFor;
 Object.freeze(Group);

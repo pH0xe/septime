@@ -2,14 +2,14 @@
   <q-input
     :value="value"
     filled
-    color="admin-primary"
-    mask="##:##"
+    :color="color"
+    :rules="['time']"
     :error-message="errorMessage"
     :error="error"
     :label="label"
-    class="full-width"
     :required="required"
     @input="onInput"
+    @blur="touchFct"
   >
     <template v-slot:append>
       <q-icon
@@ -17,14 +17,14 @@
         class="cursor-pointer"
       >
         <q-popup-proxy
-          ref="qDateProxy"
+          ref="qHourProxy"
           transition-show="scale"
           transition-hide="scale"
         >
           <q-time
-            format24h
             :value="value"
-            color="admin-primary"
+            format24h
+            :color="color"
             @input="onInput"
           />
         </q-popup-proxy>
@@ -35,16 +35,17 @@
 <script>
 
 export default {
-  name: 'HourSelector',
+  name: 'TimeSelector',
   props: {
     errorMessage: {
       type: String,
-      required: true
+      required: false,
+      default: ''
     },
     value: {
       type: String,
       required: false,
-      default: null
+      default: ''
     },
     label: {
       type: String,
@@ -59,17 +60,23 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    color: {
+      type: String,
+      required: false,
+      default: 'primary'
+    },
+    touchFct: {
+      type: Function,
+      required: false,
+      default: () => true
     }
-  },
-
-  computed: {
-
   },
 
   methods: {
     onInput(event) {
       this.$emit('input', event);
-      this.$refs.qDateProxy.hide();
+      this.$refs.qHourProxy.hide();
     }
   }
 
