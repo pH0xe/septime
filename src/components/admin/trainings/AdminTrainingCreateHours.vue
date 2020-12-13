@@ -58,7 +58,6 @@ export default {
             hour: this.startHour.substr(0, 2),
             minute: this.startHour.substr(3, 2)
           };
-          console.log(start);
           const dStart = date.buildDate({ hours: start.hour, minutes: start.minute });
           const end = {
             hour: this.endHour.substr(0, 2),

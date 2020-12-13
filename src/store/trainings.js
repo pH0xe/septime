@@ -132,6 +132,7 @@ export default {
         });
     },
 
+    // TODO a refaire
     fetchCurrentUserTrainings({ commit }, { uid }) {
       return db.collection('trainings')
         .where('students', 'array-contains', { isPresent: 'here', uid })
@@ -163,6 +164,7 @@ export default {
         });
     },
 
+    // todo a refaire
     updateStudentPresence({ commit }, { training }) {
       return db.collection('trainings').doc(training.uid)
         .update({ students: training.students })
@@ -179,6 +181,7 @@ export default {
         });
     },
 
+    // todo a refaire
     updateStudents({ commit }, {
       trainings, newStudents, newGroup, newStartHour, newStartMinute, newEndHour, newEndMinute
     }) {
@@ -215,6 +218,7 @@ export default {
       });
     },
 
+    // todo a refaire
     createMultipleTraining(_, { trainings }) {
       const batch = db.batch();
 
@@ -240,6 +244,7 @@ export default {
         });
     },
 
+    // todo a verifier
     deleteTraining({ commit }, { training }) {
       db.collection('trainings').doc(training.uid)
         .delete()

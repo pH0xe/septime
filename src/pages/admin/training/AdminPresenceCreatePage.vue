@@ -5,11 +5,11 @@
     </h4>
     <q-card-section>
       <q-separator />
-      <admin-training-create-days />
+      <admin-training-create-days ref="daysSection" />
       <q-separator class="q-mt-lg" />
-      <admin-training-create-hours />
+      <admin-training-create-hours ref="hoursSection" />
       <q-separator />
-      <admin-training-create-period />
+      <admin-training-create-period ref="periodSection" />
       <q-separator />
       <admin-training-create-members
         ref="membersSection"
@@ -37,7 +37,7 @@
 import { required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import { date as quasarDate } from 'quasar';
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import AdminTrainingCreateDays from '../../../components/admin/trainings/AdminTrainingCreateDays';
 import AdminTrainingCreateHours from '../../../components/admin/trainings/AdminTrainingCreateHours';
 import AdminTrainingCreatePeriod from '../../../components/admin/trainings/AdminTrainingCreatePeriod';
@@ -59,8 +59,64 @@ export default {
       membersActive: (state) => state.members.membersActive
     }),
 
+    daysData() {
+      return {
+        day: this.$refs.daysSection.$data.trainingDay
+      };
+    },
+
+    hoursData() {
+      return {
+        timetable: {
+          end: {
+            hour: this.$refs.hoursSection.endHour.substr(0, 2),
+            minute: this.$refs.hoursSection.endHour.substr(3, 2)
+          },
+          start: {
+            hour: this.$refs.hoursSection.startHour.substr(0, 2),
+            minute: this.$refs.hoursSection.startHour.substr(3, 2)
+          }
+        }
+      };
+    },
+
+    periodData() {
+      return {
+        period: {
+          start: this.$refs.periodSection.$data.startDate,
+          end: this.$refs.periodSection.$data.endDate
+        }
+      };
+    },
+
+    membersData() {
+      const members = [];
+      const selected = [...this.selectedMembers];
+      selected.forEach((member) => members.push({ parentUid: member.parentUid, uid: member.uid }));
+      return {
+        group: this.$refs.membersSection.$data.group,
+        members
+      };
+    },
+
     selectedMembers() {
       return this.$refs.membersSection.memberSelected;
+    },
+
+    isErrors() {
+      const {
+        daysSection, hoursSection, periodSection, membersSection
+      } = this.$refs;
+      daysSection.$v.$touch();
+      hoursSection.$v.$touch();
+      periodSection.$v.$touch();
+      membersSection.$v.$touch();
+
+      return this.selectedMembers.length <= 0
+        || daysSection.$v.$error
+        || hoursSection.$v.$error
+        || periodSection.$v.$error
+        || membersSection.$v.$error;
     }
   },
 
@@ -71,48 +127,17 @@ export default {
 
   methods: {
     ...mapActions(['fetchMembers', 'createMultipleTraining']),
-    ...mapGetters(['maxID']),
 
     onSubmit() {
-      console.log(this.selectedMembers);
-      this.$v.$touch();
-      if (!this.$v.$error) {
-        const trainingsToAdd = [];
+      const data = {
+        ...this.daysData, ...this.hoursData, ...this.periodData, ...this.membersData
+      };
 
-        const startHour = quasarDate.extractDate(this.startHour, 'HH:mm').getHours();
-        const startMinute = quasarDate.extractDate(this.startHour, 'HH:mm').getMinutes();
+      if (!this.isErrors) {
+        console.log(data);
 
-        const endHour = quasarDate.extractDate(this.endHour, 'HH:mm').getHours();
-        const endMinute = quasarDate.extractDate(this.endHour, 'HH:mm').getMinutes();
-
-        let currentDate = quasarDate.extractDate(this.startDate, 'DD/MM/YYYY');
-        currentDate = quasarDate.addToDate(currentDate, { days: this.trainingDay });
-        const endDate = quasarDate.extractDate(this.endDate, 'DD/MM/YYYY');
-
-
-        const usersTraining = [];
-        this.$refs.memberList.selectedMembers.forEach((member) => {
-          usersTraining.push({ isPresent: 'here', uid: member.uid });
-        });
-
-        const internalId = this.maxID() + 1;
-
-        while (currentDate <= endDate) {
-          const currentTraining = {
-            internalId,
-            startDate: quasarDate.adjustDate(currentDate,
-              { hours: startHour, minutes: startMinute }),
-            endDate: quasarDate.adjustDate(currentDate,
-              { hours: endHour, minutes: endMinute }),
-            location: this.location,
-            group: this.trainingGroup,
-            students: usersTraining
-          };
-          trainingsToAdd.push(currentTraining);
-          currentDate = quasarDate.addToDate(currentDate, { days: 7 });
-        }
-        this.createMultipleTraining({ trainings: trainingsToAdd })
-          .then(() => { this.$router.replace({ name: 'admin_presence' }); });
+        /* this.createMultipleTraining({ trainings: trainingsToAdd })
+          .then(() => { this.$router.replace({ name: 'admin_presence' }); }); */
       }
     },
 
