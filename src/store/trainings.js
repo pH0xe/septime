@@ -18,6 +18,7 @@ export default {
   },
 
   mutations: {
+    // <editor-fold desc="setTrainings" defaultstate="collapsed">
     setTrainings(state, { trainings }) {
       const trainingsToStore = [];
       trainings.forEach((training) => {
@@ -40,7 +41,9 @@ export default {
       });
       state.trainings = trainingsToStore;
     },
+    // </editor-fold>
 
+    // <editor-fold desc="setTodaysTrainings" defaultstate="collapsed">
     setTodaysTrainings(state, { trainings }) {
       const trainingsToStore = [];
       trainings.forEach((training) => {
@@ -68,7 +71,14 @@ export default {
         });
       });
       state.todaysTrainings = trainingsToStore;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="createTrainingState" defaultstate="collapsed">
+    createTrainingState(state, { training }) {
+      state.trainings.push(training);
     }
+    // </editor-fold>
   },
 
   actions: {
@@ -218,31 +228,25 @@ export default {
       });
     },
 
-    // todo a refaire
-    createMultipleTraining(_, { trainings }) {
-      const batch = db.batch();
-
-      trainings.forEach((training) => {
-        batch.set(db.collection('trainings').doc(), training);
-      });
-
-      return batch.commit()
+    // <editor-fold desc="createTraining" defaultstate="collapsed">
+    createTraining({ commit }, { training }) {
+      return db.collection('trainings')
+        .add(training)
         .then(() => {
-          Notify.create({
-            message: 'Entrainement créé avec succès',
-            color: 'positive',
-            position: 'bottom'
-          });
+          commit('createTrainingState', { training });
         })
         .catch((err) => {
-          console.error('Error while creating training: ', err);
+          console.log('Error while creating training : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
             color: 'negative',
             position: 'bottom'
           });
         });
     },
+    // </editor-fold>
 
     // todo a verifier
     deleteTraining({ commit }, { training }) {

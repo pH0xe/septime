@@ -91,8 +91,7 @@ export default {
 
   actions: {
     // <editor-fold desc="createSubUser" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
-    async createSubUser({ commit }, { uid, data }) {
+    async createSubUser(_, { uid, data }) {
       let newUid;
       await db.collection('users')
         .doc(uid)

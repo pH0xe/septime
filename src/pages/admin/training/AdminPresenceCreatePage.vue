@@ -36,7 +36,7 @@
 <script>
 import { required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
-import { date as quasarDate } from 'quasar';
+import { date as quasarDate, Notify } from 'quasar';
 import { mapState, mapActions } from 'vuex';
 import AdminTrainingCreateDays from '../../../components/admin/trainings/AdminTrainingCreateDays';
 import AdminTrainingCreateHours from '../../../components/admin/trainings/AdminTrainingCreateHours';
@@ -126,20 +126,37 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchMembers', 'createMultipleTraining']),
+    ...mapActions(['fetchMembers', 'createTraining']),
 
+    // <editor-fold desc="onSubmit" defaultstate="collapsed">
     onSubmit() {
       const data = {
         ...this.daysData, ...this.hoursData, ...this.periodData, ...this.membersData
       };
 
       if (!this.isErrors) {
-        console.log(data);
-
-        /* this.createMultipleTraining({ trainings: trainingsToAdd })
-          .then(() => { this.$router.replace({ name: 'admin_presence' }); }); */
+        this.createTraining({ training: data })
+          .then(() => {
+            Notify.create({
+              message: 'Création de l\'entrainement avec succès',
+              caption: 'Contactez un administrateur pour plus d\'information',
+              icon: 'mdi-check',
+              color: 'positive',
+              position: 'bottom'
+            });
+            this.$router.replace({ name: 'admin_presence_planning' });
+          });
+      } else {
+        Notify.create({
+          message: 'Le formulaire contient une erreur',
+          caption: 'Vérifiez les champs puis réessayez',
+          icon: 'mdi-alert',
+          color: 'negative',
+          position: 'bottom'
+        });
       }
     },
+    // </editor-fold>
 
     optionSunday(date) {
       return quasarDate.extractDate(date, 'YYYY/MM/DD').getDay() === 0;
