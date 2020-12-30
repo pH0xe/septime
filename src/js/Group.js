@@ -116,8 +116,21 @@ const getBadgeColorFor = (group) => {
   }
 };
 
+const getSmallest = (groups) => {
+  if (groups.includes(Group.M5)) return 'M5+';
+  if (groups.includes(Group.M7)) return 'M7+';
+  if (groups.includes(Group.M9)) return 'M9+';
+  if (groups.includes(Group.M11)) return 'M11+';
+  if (groups.includes(Group.M13)) return 'M13+';
+  if (groups.includes(Group.M15)) return 'M15+';
+  if (groups.includes(Group.M17)) return 'M17+';
+  if (groups.includes(Group.M20)) return 'M20+';
+  return 'Adultes';
+};
+
 Group.from = from;
 Group.groupOptions = groupOptions;
 Group.getBadgeColorFor = getBadgeColorFor;
+Group.getSmallest = getSmallest;
 Group.groupList = groupList;
 Object.freeze(Group);

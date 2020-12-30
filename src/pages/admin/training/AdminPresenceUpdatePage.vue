@@ -1,20 +1,19 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Changement pour le cours du
-      <span class="text-weight-bold">{{ getDay }}</span>
-      de <span class="text-weight-bold">{{ getStartHours }}</span>
-      à <span class="text-weight-bold">{{ getEndHours }}</span>
-    </h5>
+  <q-page
+    v-if="training && members.length > 0"
+    class="q-ma-md"
+  >
+    <section-title
+      :text="pageTitle"
+    />
+
     <admin-presence-member-update-table
       ref="memberList"
       :members="members"
-      :filter-input="getFilter"
-      :selected="getSelectedMembers"
+      :training="training"
     />
 
     <q-separator class="q-my-md" />
-
     <q-option-group
       v-model="trainingGroup"
       :options="groupOption"
@@ -102,100 +101,80 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { date } from 'quasar';
-import AdminPresenceMemberUpdateTable from '../../../components/admin/trainings/AdminPresenceMemberUpdateTable';
+import { date, Notify } from 'quasar';
+import store from '../../../store';
+import { DateUtils } from '../../../js/DateUtils';
 import { Group } from '../../../js/Group';
-
-const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-
-const groupOption = [
-  { value: Group.VETERANS4, label: Group.VETERANS4 },
-  { value: Group.VETERANS3, label: Group.VETERANS3 },
-  { value: Group.VETERANS2, label: Group.VETERANS2 },
-  { value: Group.VETERANS1, label: Group.VETERANS1 },
-  { value: Group.SENIORS, label: Group.SENIORS },
-  { value: Group.M20, label: Group.M20 },
-  { value: Group.M17, label: Group.M17 },
-  { value: Group.M15, label: Group.M15 },
-  { value: Group.M13, label: Group.M13 },
-  { value: Group.M11, label: Group.M11 },
-  { value: Group.M9, label: Group.M9 },
-  { value: Group.M7, label: Group.M7 },
-  { value: Group.M5, label: Group.M5 }
-];
+import SectionTitle from '../../../components/utils/sectionTitle';
+import AdminPresenceMemberUpdateTable from '../../../components/admin/trainings/AdminPresenceMemberUpdateTable';
 
 export default {
   name: 'AdminPresenceUpdatePage',
-  components: { AdminPresenceMemberUpdateTable },
-
+  components: { AdminPresenceMemberUpdateTable, SectionTitle },
   data: () => ({
     trainingGroup: [],
-    hours: {
-      start: '',
-      end: ''
-    }
+    training: null
   }),
 
   computed: {
     ...mapState({
-      trainings: (state) => state.trainings.trainings,
       members: (state) => state.members.members
     }),
 
-    currentTraining() {
-      const { id } = this.$route.params;
-      return this.trainings.find((training) => training.internalId === id && training.startDate > date.endOfDate(new Date(), 'day'));
-    },
-
+    // <editor-fold desc="getDay String" defaultstate="collapsed">
     getDay() {
-      return days[this.currentTraining.startDate.getDay()];
+      return DateUtils.locale.days[this.training.day];
     },
+    // </editor-fold>
 
-    getStartHours() {
-      return date.formatDate(this.currentTraining.startDate, 'HH:mm');
-    },
-
-    getEndHours() {
-      return date.formatDate(this.currentTraining.endDate, 'HH:mm');
-    },
-
-    getFilter() {
-      return this.currentTraining.group.toString();
-    },
-
-    getSelectedMembers() {
-      const selected = [];
-      this.currentTraining.students.forEach((student) => {
-        const user = this.members.find((member) => member.uid === student.uid);
-        selected.push(user);
-      });
-      return selected;
-    },
-
-    getAllTraining() {
-      return this.trainings.filter((training) => training.internalId === this.$route.params.id
-        && (training.startDate > date.endOfDate(new Date(), 'day') || date.isSameDate(training.startDate, new Date(), 'day')));
-    },
-
+    // <editor-fold desc="groupOptions" defaultstate="collapsed">
     groupOption() {
-      return groupOption;
+      return Group.groupOptions;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="pageTitle" defaultstate="collapsed">
+    pageTitle() {
+      return `Changement pour le cours de ${this.getDay} de ${this.training.timetable.start.full} à ${this.training.timetable.end.full}`;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="hours" defaultstate="collapsed">
+    hours() {
+      return { start: this.training.timetable.start.full, end: this.training.timetable.end.full };
     }
+    // </editor-fold>
   },
 
-
-  mounted() {
-    this.trainingGroup = this.currentTraining.group;
-    this.hours.start = date.formatDate(this.currentTraining.startDate, 'HH:mm');
-    this.hours.end = date.formatDate(this.currentTraining.endDate, 'HH:mm');
+  beforeMount() {
+    this.fetchMembers();
+    const { id } = this.$route.params;
+    this.fetchTrainingsWeekPlanning()
+      .then(() => {
+        this.training = store.state.trainings.trainingsWeekPlanning.find((training) => training.uid === id);
+        if (!this.training) {
+          Notify.create({
+            message: 'L\'entrainement n\'a pas été trouvé.',
+            caption: 'Si l\'erreur persiste, contactez un administrateur',
+            icon: 'mdi-alert',
+            color: 'negative',
+            position: 'bottom'
+          });
+          this.$router.push({ name: 'admin_presence' });
+        }
+      });
   },
 
   methods: {
-    ...mapActions(['updateStudents']),
+    ...mapActions(['updateStudents', 'fetchTrainingsWeekPlanning', 'fetchMembers']),
 
+    // <editor-fold desc="onCancelClick" defaultstate="collapsed">
     onCancelClick() {
       this.$router.push({ name: 'admin_presence' });
     },
+    // </editor-fold>
 
+    // <editor-fold desc="updateTrainingsMembers" defaultstate="collapsed">
     updateTrainingsMembers() {
       const students = this.$refs.memberList.selectedMembers;
       const newStudents = [];
@@ -229,6 +208,7 @@ export default {
           this.$router.push({ name: 'admin_presence' });
         });
     }
+    // </editor-fold>
   },
 
   meta: {

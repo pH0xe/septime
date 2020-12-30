@@ -6,9 +6,7 @@ export default {
   namespaced: false,
   state: {
     trainings: [],
-    todaysTrainings: [],
-    futurTrainings: [],
-    pastTrainings: []
+    trainingsWeekPlanning: []
   },
 
   getters: {
@@ -43,34 +41,9 @@ export default {
     },
     // </editor-fold>
 
-    // <editor-fold desc="setTodaysTrainings" defaultstate="collapsed">
-    setTodaysTrainings(state, { trainings }) {
-      const trainingsToStore = [];
-      trainings.forEach((training) => {
-        let currentDate = date.buildDate({
-          year: training.period.start.getFullYear(),
-          month: training.period.start.getMonth() + 1,
-          date: training.period.start.getDate() + training.day,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          milliseconds: 0
-        });
-        const compareTo = date.buildDate({
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          milliseconds: 0
-        });
-        while (date.getDateDiff(currentDate, compareTo, 'seconds') !== 0 && currentDate <= training.period.end) {
-          currentDate = date.addToDate(currentDate, { days: 7 });
-        }
-        trainingsToStore.push({
-          date: currentDate,
-          ...training
-        });
-      });
-      state.todaysTrainings = trainingsToStore;
+    // <editor-fold desc="setTrainingsPlanning" defaultstate="collapsed">
+    setTrainingsWeekPlanning(state, { trainings }) {
+      state.trainingsWeekPlanning = trainings;
     },
     // </editor-fold>
 
@@ -82,8 +55,10 @@ export default {
   },
 
   actions: {
+    // <editor-fold desc="fetchTrainings" defaultstate="collapsed">
     fetchTrainings({ commit }) {
-      return db.collection('trainings').get()
+      return db.collection('trainings')
+        .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
@@ -102,20 +77,18 @@ export default {
           console.error('Error while fetching trainings list', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
             color: 'negative',
             position: 'bottom'
           });
         });
     },
+    // </editor-fold>
 
-    fetchTodaysTrainings({ commit }) {
-      const day = new Date().getDay();
-      let filterDate = new Date();
-      filterDate.setHours(0, 0, 0, 0);
-      filterDate = filterDate.getTime();
+    // <editor-fold desc="fetchTrainingsWeekPlanning" defaultstate="collapsed">
+    fetchTrainingsWeekPlanning({ commit }) {
       return db.collection('trainings')
-        .where('day', '==', day)
-        .where('period.end', '>=', new Date(filterDate))
         .get()
         .then((querySnapshot) => {
           const collector = [];
@@ -123,24 +96,26 @@ export default {
             collector.push({ uid: item.id, ...item.data() });
           });
           return collector;
-        })
-        .then((trainings) => trainings.map((training) => {
+        }).then((trainings) => trainings.map((training) => {
           training.period.start = training.period?.start.toDate();
           training.period.end = training.period?.end.toDate();
           return training;
         }))
         .then((trainings) => {
-          commit('setTodaysTrainings', { trainings });
+          commit('setTrainingsWeekPlanning', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainings list', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
             color: 'negative',
             position: 'bottom'
           });
         });
     },
+    // </editor-fold>
 
     // TODO a refaire
     fetchCurrentUserTrainings({ commit }, { uid }) {

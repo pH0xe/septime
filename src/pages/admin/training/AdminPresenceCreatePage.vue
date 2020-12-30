@@ -70,11 +70,13 @@ export default {
         timetable: {
           end: {
             hour: this.$refs.hoursSection.endHour.substr(0, 2),
-            minute: this.$refs.hoursSection.endHour.substr(3, 2)
+            minute: this.$refs.hoursSection.endHour.substr(3, 2),
+            full: this.$refs.hoursSection.endHour
           },
           start: {
             hour: this.$refs.hoursSection.startHour.substr(0, 2),
-            minute: this.$refs.hoursSection.startHour.substr(3, 2)
+            minute: this.$refs.hoursSection.startHour.substr(3, 2),
+            full: this.$refs.hoursSection.startHour
           }
         }
       };
@@ -120,7 +122,6 @@ export default {
     }
   },
 
-  // TODO recuperer toute les erreurs et données et créé l'entrainement et les documents de presence requis
   beforeMount() {
     this.fetchMembers();
   },

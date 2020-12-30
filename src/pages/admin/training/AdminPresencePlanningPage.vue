@@ -1,87 +1,50 @@
 <template>
   <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Planning des cours
-    </h5>
-    <admin-presence-planning-table
-      v-for="day in listTrainingDay"
-      :key="day.id"
-      :title="day.day"
-      :trainings="day.trainings"
+    <section-title
+      text="Planning des cours"
     />
-    <div
-      align="right"
-    >
-      <q-btn
-        class="q-my-md"
-        color="admin-primary"
-        outline
-        label="retour"
-        @click="onCancelClick"
-      />
-    </div>
+    <admin-presence-planning-calendar
+      :trainings="listTrainingDay"
+    />
   </q-page>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { date } from 'quasar';
-import AdminPresencePlanningTable from '../../../components/admin/trainings/AdminPresencePlanningTable';
-
-const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+import { mapState, mapActions } from 'vuex';
+import AdminPresencePlanningCalendar from '../../../components/admin/trainings/AdminPresencePlanningCalendar';
+import SectionTitle from '../../../components/utils/sectionTitle';
 
 export default {
   name: 'AdminPresencePlanningPage',
-  components: { AdminPresencePlanningTable },
+  components: { SectionTitle, AdminPresencePlanningCalendar },
   computed: {
     ...mapState({
-      trainings: (state) => state.trainings.trainings
+      trainings: (state) => state.trainings.trainingsWeekPlanning
     }),
 
+    // <editor-fold desc="listTrainingDay" defaultstate="collapsed">
     listTrainingDay() {
-      const trainingsId = [];
-      const listTraining = [];
-      const copyTrainings = Array.from(this.trainings);
-      copyTrainings.forEach((training) => {
-        if (!trainingsId.includes(training.internalId)) {
-          trainingsId.push(training.internalId);
-          listTraining.push({
-            internalId: training.internalId,
-            day: days[training.startDate.getDay()],
-            hours: {
-              start: date.formatDate(training.startDate, 'HH:mm'),
-              end: date.formatDate(training.endDate, 'HH:mm')
-            },
-            students: training.students
-          });
-        }
+      const days = [[], [], [], [], [], [], []];
+      this.trainings.forEach((training) => {
+        days[training.day].push(training);
       });
-
-
-      const perDay = [];
-      listTraining.forEach((training) => {
-        const goodDay = perDay.find((day) => day.day === training.day);
-        if (goodDay === undefined) {
-          perDay.push({
-            day: training.day,
-            trainings: [training],
-            id: perDay.length + 1,
-            position: days.indexOf(training.day)
-          });
-        } else {
-          goodDay.trainings = [...goodDay.trainings, training];
-        }
-      });
-
-      perDay.sort((a, b) => (a.position > b.position ? 1 : -1));
-      return perDay;
+      return days;
     }
+    // </editor-fold>
+  },
+
+  beforeMount() {
+    this.fetchTrainingsWeekPlanning();
   },
 
   methods: {
+    ...mapActions(['fetchTrainingsWeekPlanning']),
+
+    // <editor-fold desc="onCancelClick" defaultstate="collapsed">
     onCancelClick() {
       this.$router.push({ name: 'admin_presence' });
     }
+    // </editor-fold>
   },
 
   meta: {

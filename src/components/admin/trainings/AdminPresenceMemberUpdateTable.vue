@@ -56,43 +56,7 @@
 </template>
 
 <script>
-
-const columns = [
-  {
-    name: 'memberAvatar',
-    field: 'memberAvatar',
-    sortable: false,
-    align: 'left'
-  },
-  {
-    name: 'firstName',
-    field: 'firstName',
-    sortable: true,
-    align: 'left',
-    label: 'Prénom'
-  },
-  {
-    name: 'lastName',
-    field: 'lastName',
-    align: 'left',
-    sortable: true,
-    label: 'Nom'
-  },
-  {
-    name: 'group',
-    sortable: true,
-    align: 'left',
-    field: 'group',
-    label: 'Catégorie'
-  },
-  {
-    name: 'is-active',
-    sortable: false,
-    align: 'left',
-    field: 'isActive',
-    label: 'Compte Validé ?'
-  }
-];
+import { Group } from '../../../js/Group';
 
 export default {
   name: 'AdminPresenceMemberUpdateTable',
@@ -102,12 +66,8 @@ export default {
       type: Array,
       required: true
     },
-    filterInput: {
-      type: String,
-      required: true
-    },
-    selected: {
-      type: Array,
+    training: {
+      type: Object,
       required: true
     }
   },
@@ -120,13 +80,61 @@ export default {
   }),
 
   computed: {
+    // <editor-fold desc="columns" defaultstate="collapsed">
     columns() {
-      return columns;
+      return [
+        {
+          name: 'memberAvatar',
+          field: 'memberAvatar',
+          sortable: false,
+          align: 'left'
+        },
+        {
+          name: 'firstName',
+          field: 'firstName',
+          sortable: true,
+          align: 'left',
+          label: 'Prénom'
+        },
+        {
+          name: 'lastName',
+          field: 'lastName',
+          align: 'left',
+          sortable: true,
+          label: 'Nom'
+        },
+        {
+          name: 'group',
+          sortable: true,
+          align: 'left',
+          field: 'group',
+          label: 'Catégorie'
+        },
+        {
+          name: 'is-active',
+          sortable: false,
+          align: 'left',
+          field: 'isActive',
+          label: 'Compte Validé ?'
+        }
+      ];
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="filterInput" defaultstate="collapsed">
+    filterInput() {
+      return this.training.group.toString();
     }
+    // </editor-fold>
   },
 
   mounted() {
-    this.selectedMembers = this.selected;
+    console.log(this.training);
+    console.log(this.members);
+    this.training.members.forEach((student) => {
+      const member = this.members.find((m) => m.parentUid === student.parentUid && m.uid === student.uid);
+      this.selectedMembers.push(member);
+    });
   },
 
   methods: {
@@ -141,6 +149,10 @@ export default {
       });
 
       return results;
+    },
+
+    badgeColor(group) {
+      return Group.getBadgeColorFor(group);
     }
   }
 };

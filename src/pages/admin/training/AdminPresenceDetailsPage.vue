@@ -14,7 +14,7 @@ import { mapState, mapActions } from 'vuex';
 import AdminPresenceTrainingTable from '../../../components/admin/trainings/AdminPresenceTrainingTable';
 
 export default {
-  name: 'AdminPresencePage',
+  name: 'AdminPresenceDetailsPage',
   components: { AdminPresenceTrainingTable },
 
   data: () => ({

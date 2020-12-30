@@ -145,18 +145,19 @@ const routes = [
         component: () => import('../pages/admin/training/AdminPresenceListPage.vue')
       },
       {
-        path: 'presence/:when',
-        name: 'admin_presence',
-        component: () => import('../pages/admin/training/AdminPresencePage.vue')
-      },
-      {
-        path: 'presence',
-        redirect: { name: 'admin_presence', params: { when: 'today' } }
-      },
-      {
         path: 'presence/planning',
         name: 'admin_presence_planning',
         component: () => import('../pages/admin/training/AdminPresencePlanningPage')
+      },
+      {
+        path: 'presence/details/:when',
+        name: 'admin_presence_details',
+        component: () => import('../pages/admin/training/AdminPresenceDetailsPage.vue')
+      },
+      {
+        path: 'presence',
+        redirect: { name: 'admin_presence_planning' },
+        name: 'admin_presence'
       },
       {
         path: 'presence/update/:id',

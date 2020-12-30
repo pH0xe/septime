@@ -126,7 +126,7 @@
             >
               <q-item
                 v-ripple
-                :to="{ name: 'admin_presence', params: { when: 'today' } }"
+                :to="{ name: 'admin_presence_details', params: { when: 'today' } }"
                 clickable
                 :inset-level="2"
                 active-class="text-admin-primary"
@@ -141,7 +141,7 @@
               </q-item>
               <q-item
                 v-ripple
-                :to="{ name: 'admin_presence', params: { when: 'futur' } }"
+                :to="{ name: 'admin_presence_details', params: { when: 'futur' } }"
                 clickable
                 :inset-level="2"
                 active-class="text-admin-primary"
@@ -156,7 +156,7 @@
               </q-item>
               <q-item
                 v-ripple
-                :to="{ name: 'admin_presence', params: { when: 'past' } }"
+                :to="{ name: 'admin_presence_details', params: { when: 'past' } }"
                 clickable
                 :inset-level="2"
                 active-class="text-admin-primary"
