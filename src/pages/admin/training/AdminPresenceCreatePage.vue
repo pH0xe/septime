@@ -140,7 +140,7 @@ export default {
     // <editor-fold desc="onSubmit" defaultstate="collapsed">
     onSubmit() {
       const data = {
-        ...this.daysData, ...this.hoursData, ...this.periodData, ...this.membersData
+        ...this.daysData, ...this.hoursData, ...this.periodData, ...this.membersData, ...this.excludedDates
       };
 
       if (!this.isErrors) {
