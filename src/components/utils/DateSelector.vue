@@ -8,6 +8,7 @@
     :error="error"
     :label="label"
     :required="required"
+    :readonly="readonly"
     @input="onInput"
     @blur="touchFct"
   >
@@ -27,6 +28,7 @@
             :locale="locale"
             color="admin-primary"
             mask="DD/MM/YYYY"
+            :readonly="readonly"
             @input="onInput"
           />
         </q-popup-proxy>
@@ -74,6 +76,11 @@ export default {
       type: Function,
       required: false,
       default: () => true
+    },
+    readonly: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 

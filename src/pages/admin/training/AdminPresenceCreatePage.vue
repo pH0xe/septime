@@ -11,6 +11,8 @@
       <q-separator />
       <admin-training-create-period ref="periodSection" />
       <q-separator />
+      <admin-training-create-excluded-dates ref="excludedSection" />
+      <q-separator class="q-mt-lg" />
       <admin-training-create-members
         ref="membersSection"
         :members="membersActive"
@@ -42,10 +44,12 @@ import AdminTrainingCreateDays from '../../../components/admin/trainings/AdminTr
 import AdminTrainingCreateHours from '../../../components/admin/trainings/AdminTrainingCreateHours';
 import AdminTrainingCreatePeriod from '../../../components/admin/trainings/AdminTrainingCreatePeriod';
 import AdminTrainingCreateMembers from '../../../components/admin/trainings/AdminTrainingCreateMembers';
+import AdminTrainingCreateExcludedDates from '../../../components/admin/trainings/AdminTrainingCreateExcludedDates';
 
 export default {
   name: 'AdminPresenceCreatePage',
   components: {
+    AdminTrainingCreateExcludedDates,
     AdminTrainingCreateMembers,
     AdminTrainingCreatePeriod,
     AdminTrainingCreateHours,
@@ -61,7 +65,7 @@ export default {
 
     daysData() {
       return {
-        day: this.$refs.daysSection.$data.trainingDay
+        day: this.$refs.daysSection?.$data.trainingDay
       };
     },
 
@@ -103,6 +107,10 @@ export default {
 
     selectedMembers() {
       return this.$refs.membersSection.memberSelected;
+    },
+
+    excludedDates() {
+      return this.$refs.excludedSection.excludedDates;
     },
 
     isErrors() {
