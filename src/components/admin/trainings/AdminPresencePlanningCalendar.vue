@@ -2,7 +2,7 @@
   <div>
     <daykeep-calendar-multi-day
       :event-array="copyTrainings"
-      scrollHeight="600px"
+      scroll-height="600px"
       day-cell-height="2"
       day-cell-height-unit="rem"
       event-ref="planningEvent"
