@@ -4,7 +4,7 @@
       text="Planning des cours"
     />
     <admin-presence-planning-calendar
-      :trainings="listTrainingDay"
+      :trainings="trainings"
     />
   </q-page>
 </template>
@@ -19,26 +19,16 @@ export default {
   components: { SectionTitle, AdminPresencePlanningCalendar },
   computed: {
     ...mapState({
-      trainings: (state) => state.trainings.trainingsWeekPlanning
-    }),
-
-    // <editor-fold desc="listTrainingDay" defaultstate="collapsed">
-    listTrainingDay() {
-      const days = [[], [], [], [], [], [], []];
-      this.trainings.forEach((training) => {
-        days[training.day].push(training);
-      });
-      return days;
-    }
-    // </editor-fold>
+      trainings: (state) => state.trainings.trainingsPlanning
+    })
   },
 
   beforeMount() {
-    this.fetchTrainingsWeekPlanning();
+    this.fetchTrainingsPlanning();
   },
 
   methods: {
-    ...mapActions(['fetchTrainingsWeekPlanning']),
+    ...mapActions(['fetchTrainingsPlanning']),
 
     // <editor-fold desc="onCancelClick" defaultstate="collapsed">
     onCancelClick() {

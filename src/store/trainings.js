@@ -6,7 +6,7 @@ export default {
   namespaced: false,
   state: {
     trainings: [],
-    trainingsWeekPlanning: []
+    trainingsPlanning: []
   },
 
   getters: {
@@ -42,8 +42,50 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="setTrainingsPlanning" defaultstate="collapsed">
-    setTrainingsWeekPlanning(state, { trainings }) {
-      state.trainingsWeekPlanning = trainings;
+    setTrainingsPlanning(state, { trainings }) {
+      let id = 0;
+      const trainingsToStore = [];
+      trainings.forEach((training) => {
+        let currentDate = date.buildDate({
+          year: training.period.start.getFullYear(),
+          month: training.period.start.getMonth() + 1,
+          date: training.period.start.getDate() + training.day,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0
+        });
+        while (currentDate <= training.period.end) {
+          const start = {
+            dateTime: date.clone(currentDate),
+            timeZone: 'Europe/Paris'
+          };
+
+          const end = {
+            dateTime: date.clone(currentDate),
+            timeZone: 'Europe/Paris'
+          };
+          start.dateTime = date.adjustDate(start.dateTime, { hours: training.timetable.start.hour, minutes: training.timetable.start.minute });
+          end.dateTime = date.adjustDate(end.dateTime, { hours: training.timetable.end.hour, minutes: training.timetable.end.minute });
+
+          start.dateTime = start.dateTime.toISOString();
+          end.dateTime = end.dateTime.toISOString();
+
+          if (!training.excludedDates.includes(currentDate.toISOString())) {
+            trainingsToStore.push({
+              date: currentDate,
+              id,
+              start,
+              end,
+              ...training
+            });
+            id += 1;
+          }
+          currentDate = date.addToDate(currentDate, { days: 7 });
+        }
+      });
+      state.trainingsPlanning = trainingsToStore;
+      console.log(state.trainingsPlanning);
     },
     // </editor-fold>
 
@@ -65,9 +107,14 @@ export default {
             collector.push({ uid: item.id, ...item.data() });
           });
           return collector;
-        }).then((trainings) => trainings.map((training) => {
+        })
+        .then((trainings) => trainings.map((training) => {
           training.period.start = training.period?.start.toDate();
           training.period.end = training.period?.end.toDate();
+          training.excludedDates = training.excludedDates.map((d) => {
+            d = d.toDate();
+            return d;
+          });
           return training;
         }))
         .then((trainings) => {
@@ -87,7 +134,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="fetchTrainingsWeekPlanning" defaultstate="collapsed">
-    fetchTrainingsWeekPlanning({ commit }) {
+    fetchTrainingsPlanning({ commit }) {
       return db.collection('trainings')
         .get()
         .then((querySnapshot) => {
@@ -96,13 +143,23 @@ export default {
             collector.push({ uid: item.id, ...item.data() });
           });
           return collector;
-        }).then((trainings) => trainings.map((training) => {
+        })
+        .then((trainings) => trainings.map((training) => {
           training.period.start = training.period?.start.toDate();
           training.period.end = training.period?.end.toDate();
+          training.excludedDates = training.excludedDates.map((d) => {
+            d = d.toDate().toISOString();
+            return d;
+          });
+          return training;
+        }))
+        .then((trainings) => trainings.map((training) => {
+          training.summary = training.group.toString();
+          training.color = 'green-10';
           return training;
         }))
         .then((trainings) => {
-          commit('setTrainingsWeekPlanning', { trainings });
+          commit('setTrainingsPlanning', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainings list', err);
