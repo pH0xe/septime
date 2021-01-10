@@ -19,7 +19,7 @@ export default {
   components: { SectionTitle, AdminPresencePlanningCalendar },
   computed: {
     ...mapState({
-      trainings: (state) => state.trainings.trainingsPlanning
+      trainings: (state) => JSON.parse(JSON.stringify(state.trainings.trainingsPlanning)) // Deep copy of training (avoid mutating due to dayKeep calendar
     })
   },
 

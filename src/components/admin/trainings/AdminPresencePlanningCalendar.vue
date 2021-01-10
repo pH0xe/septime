@@ -1,17 +1,16 @@
 <template>
   <div>
     <daykeep-calendar-multi-day
-      :event-array="copyTrainings"
+      :event-array="trainings"
       scroll-height="600px"
       day-cell-height="2"
       day-cell-height-unit="rem"
       event-ref="planningEvent"
-      :prevent-event-detail="true"
-      calendar-timezone="fr-FR"
       :allow-editing="false"
       :day-display-start-hour="7"
       :force-start-of-week="true"
       :num-days="5"
+      :prevent-event-detail="true"
     />
   </div>
 </template>
@@ -33,13 +32,10 @@ export default {
   }),
 
   computed: {
-    copyTrainings() {
-      return [...this.trainings];
-    }
   },
 
   mounted() {
-    console.log(this.trainings);
+    this.$root.$on('click-event-planningEvent', this.onClickTraining);
   },
 
   methods: {

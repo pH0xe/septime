@@ -85,7 +85,6 @@ export default {
         }
       });
       state.trainingsPlanning = trainingsToStore;
-      console.log(state.trainingsPlanning);
     },
     // </editor-fold>
 
