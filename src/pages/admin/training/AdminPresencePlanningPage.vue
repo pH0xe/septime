@@ -28,13 +28,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchTrainingsPlanning']),
-
-    // <editor-fold desc="onCancelClick" defaultstate="collapsed">
-    onCancelClick() {
-      this.$router.push({ name: 'admin_presence' });
-    }
-    // </editor-fold>
+    ...mapActions(['fetchTrainingsPlanning'])
   },
 
   meta: {

@@ -130,7 +130,12 @@ export default {
           ...sportData.$data,
           ...uploaderData.$data,
           payments,
-          isActive: false
+          isActive: false,
+          presence: {
+            absent: [],
+            late: [],
+            here: []
+          }
         };
         delete userData.isCerfa;
         delete userData.isCertificate;

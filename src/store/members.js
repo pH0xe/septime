@@ -271,8 +271,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="changeEmail" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
-    changeEmail({ commit }, { newEmail, parentUid, uid }) {
+    changeEmail(_, { newEmail, parentUid, uid }) {
       db.collection('users')
         .doc(parentUid)
         .collection('subUsers')
@@ -290,8 +289,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="changeAddress" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
-    changeAddress({ commit }, { uid, parentUid, newAddress }) {
+    changeAddress(_, { uid, parentUid, newAddress }) {
       db.collection('users')
         .doc(parentUid)
         .collection('subUsers')
@@ -309,8 +307,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="changePhone" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
-    changePhone({ commit }, { uid, parentUid, newPhone }) {
+    changePhone(_, { uid, parentUid, newPhone }) {
       db.collection('users')
         .doc(parentUid)
         .collection('subUsers')
@@ -372,8 +369,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="changeEmergency" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
-    changeEmergency({ commit }, { uid, parentUid, newEmergency }) {
+    changeEmergency(_, { uid, parentUid, newEmergency }) {
       db.collection('users')
         .doc(parentUid)
         .collection('subUsers')
@@ -391,7 +387,6 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="removeMember" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
     removeMember({ commit }, { uid, parentUid, member }) {
       db.collection('users')
         .doc(parentUid)
@@ -413,8 +408,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="changeLoginEmail" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
-    changeLoginEmail({ commit }, { newEmail }) {
+    changeLoginEmail(_, { newEmail }) {
       const user = auth.currentUser;
       user.updateEmail(newEmail)
         .then(() => {
@@ -494,8 +488,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="changePassword" defaultstate="collapsed">
-    // eslint-disable-next-line no-unused-vars
-    changePassword({ commit }, { newPassword }) {
+    changePassword(_, { newPassword }) {
       const user = auth.currentUser;
       user.updatePassword(newPassword)
         .then(() => {

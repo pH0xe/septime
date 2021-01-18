@@ -13,83 +13,122 @@
       :training="training"
     />
 
-    <q-separator class="q-my-md" />
-    <q-option-group
-      v-model="trainingGroup"
-      :options="groupOption"
-      color="admin-primary"
-      type="checkbox"
-      inline
+    <section-title
+      text="Catégories"
     />
+    <div class="row q-mx-lg">
+      <q-select
+        v-model="training.group"
+        class="col-12 col-md-5"
+        multiple
+        :options="groupOptions"
+        label="Catégories"
+        hint="Multi-sélection possible"
+        color="admin-primary"
+        filled
+        emit-value
+        map-options
+        error-message="Champ requis"
+        :hide-hint="$v.training.group.$error"
+        :error="$v.training.group.$error"
+        @blur="$v.training.group.$touch"
+        @input="$v.training.group.$touch"
+      />
+    </div>
 
-    <q-separator class="q-my-md" />
-    <div class="row">
-      <q-input
+    <section-title
+      text="Horaires"
+    />
+    <div class="row q-mx-lg">
+      <time-selector
         v-model="hours.start"
-        filled
-        color="admin-primary"
-        label="Début"
         class="col-12 col-md-5 q-mr-md"
-        :rules="['time']"
-      >
-        <template v-slot:append>
-          <q-icon
-            name="access_time"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-time
-                v-model="hours.start"
-                format24h
-              />
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
-
-      <q-input
+        label="Heure de début"
+        error-message="Champ requis"
+        :error="$v.hours.start.$error"
+        :touch-fct="$v.hours.start.$touch"
+        color="admin-primary"
+        required
+      />
+      <time-selector
         v-model="hours.end"
-        filled
+        class="col-12 col-md-5"
+        label="Heure de fin"
+        error-message="Champ requis"
+        :error="$v.hours.end.$error"
+        :touch-fct="$v.hours.end.$touch"
         color="admin-primary"
-        label="Fin"
+        required
+      />
+    </div>
+
+    <section-title text="Date de vacance et d'absence" />
+    <div class="row q-mx-lg items-center">
+      <date-selector
+        v-model="newExcludedDate"
         class="col-12 col-md-5 q-mr-md"
-        :rules="['time']"
-      >
-        <template v-slot:append>
-          <q-icon
-            name="access_time"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-time
-                v-model="hours.end"
-                format24h
-              />
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
+        color="admin-primary"
+        error-message="erreur"
+        label="Date d'absence"
+        required
+        :options="isGoodDay"
+      />
+      <q-btn
+        label="Ajouter"
+        color="positive"
+        icon="mdi-plus"
+        class="col-12 col-md-auto q-mr-md"
+        rounded
+        :disable="newExcludedDate === null"
+        @click="onClickAdd"
+      />
+    </div>
+    <div
+      v-for="(item, index) in training.excludedDates"
+      :key="index"
+      class="row q-mx-lg items-center q-my-sm"
+    >
+      <date-selector
+        :value="item"
+        class="col-12 col-md-5 q-mr-md"
+        color="admin-primary"
+        error-message="erreur"
+        label="Date d'absence"
+        required
+        readonly
+        :options="isGoodDay"
+      />
+      <q-btn
+        label="Supprimer"
+        color="negative"
+        icon="mdi-minus"
+        class="col-12 col-md-auto q-mr-md"
+        rounded
+        @click="deleteItem(index)"
+      />
     </div>
 
     <q-separator class="q-my-md" />
 
     <div
-      align="right"
-      class="q-my-md"
+      class="row q-my-md justify-end items-center"
     >
       <q-btn
+        class="col-md-auto col-12"
         outline
         label="Retour"
         color="negative"
         @click="onCancelClick"
       />
       <q-btn
+        class="q-my-sm col-md-auto col-12"
+        flat
+        label="Supprimer le cours"
+        color="negative"
+        @click="onClickDelete"
+      />
+      <q-btn
+        class="col-md-auto col-12"
         flat
         label="Valider"
         color="admin-primary"
@@ -102,18 +141,32 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import { date, Notify } from 'quasar';
+import { validationMixin } from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
 import store from '../../../store';
 import { DateUtils } from '../../../js/DateUtils';
 import { Group } from '../../../js/Group';
 import SectionTitle from '../../../components/utils/sectionTitle';
 import AdminPresenceMemberUpdateTable from '../../../components/admin/trainings/AdminPresenceMemberUpdateTable';
+import { Utils } from '../../../js/Utils';
+import TimeSelector from '../../../components/utils/TimeSelector';
+import DateSelector from '../../../components/utils/DateSelector';
 
 export default {
   name: 'AdminPresenceUpdatePage',
-  components: { AdminPresenceMemberUpdateTable, SectionTitle },
+  components: {
+    DateSelector,
+    TimeSelector,
+    AdminPresenceMemberUpdateTable,
+    SectionTitle
+  },
+  mixins: [validationMixin],
+
   data: () => ({
     trainingGroup: [],
-    training: null
+    training: null,
+    newExcludedDate: null,
+    initialMembers: []
   }),
 
   computed: {
@@ -128,7 +181,7 @@ export default {
     // </editor-fold>
 
     // <editor-fold desc="groupOptions" defaultstate="collapsed">
-    groupOption() {
+    groupOptions() {
       return Group.groupOptions;
     },
     // </editor-fold>
@@ -149,9 +202,13 @@ export default {
   beforeMount() {
     this.fetchMembers();
     const { id } = this.$route.params;
-    this.fetchTrainingsWeekPlanning()
+    this.fetchTrainingsClean()
       .then(() => {
-        this.training = store.state.trainings.trainingsWeekPlanning.find((training) => training.uid === id);
+        this.training = Utils.deepCopy(store.state.trainings.trainingsClean.find((training) => training.uid === id));
+        this.training.period.start = new Date(this.training.period.start);
+        this.training.period.end = new Date(this.training.period.end);
+        this.training.excludedDates = this.training.excludedDates.map((d) => new Date(d));
+        this.initialMembers = this.training.members;
         if (!this.training) {
           Notify.create({
             message: 'L\'entrainement n\'a pas été trouvé.',
@@ -166,7 +223,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateStudents', 'fetchTrainingsWeekPlanning', 'fetchMembers']),
+    ...mapActions(['updateTraining', 'fetchTrainingsClean', 'fetchMembers', 'deleteTraining']),
 
     // <editor-fold desc="onCancelClick" defaultstate="collapsed">
     onCancelClick() {
@@ -177,38 +234,100 @@ export default {
     // <editor-fold desc="updateTrainingsMembers" defaultstate="collapsed">
     updateTrainingsMembers() {
       const students = this.$refs.memberList.selectedMembers;
-      const newStudents = [];
-      students.forEach((student) => {
-        newStudents.push({ isPresent: 'here', uid: student.uid });
+      this.training.timetable = {
+        end: {
+          full: this.hours.end,
+          hour: this.hours.end.split(':')[0],
+          minute: this.hours.end.split(':')[1]
+        },
+        start: {
+          full: this.hours.start,
+          hour: this.hours.start.split(':')[0],
+          minute: this.hours.start.split(':')[1]
+        }
+      };
+      this.training.members = students.map((st) => {
+        st = { parentUid: st.parentUid, uid: st.uid };
+        return st;
       });
 
-      const startHour = date.extractDate(this.hours.start, 'HH:mm').getHours();
-      const startMinute = date.extractDate(this.hours.start, 'HH:mm').getMinutes();
-
-      const endHour = date.extractDate(this.hours.end, 'HH:mm').getHours();
-      const endMinute = date.extractDate(this.hours.end, 'HH:mm').getMinutes();
-
-      this.updateStudents({
-        trainings: this.getAllTraining,
-        newStudents,
-        newGroup: this.trainingGroup,
-        newStartHour: startHour,
-        newStartMinute: startMinute,
-        newEndHour: endHour,
-        newEndMinute: endMinute
-      })
-        .then(() => {
-          this.$q.notify({
-            message: 'changements effectués avec succès',
-            icon: 'mdi-check',
-            color: 'positive'
-          });
-        })
+      this.updateTraining({ training: this.training })
         .then(() => {
           this.$router.push({ name: 'admin_presence' });
+          Notify.create({
+            message: 'Mise à jour de l\'entrainement avec succès',
+            icon: 'mdi-check',
+            color: 'positive',
+            position: 'bottom'
+          });
         });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="isGoodDay" defaultstate="collapsed">
+    isGoodDay(d) {
+      const dd = date.extractDate(d, 'YYYY/MM/DD');
+      return dd.getDay() === this.training.day;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="onClickAdd" defaultstate="collapsed">
+    onClickAdd() {
+      const exist = this.training.excludedDates.find((d) => d.getTime() === this.newExcludedDate.getTime());
+      if (this.newExcludedDate && !exist && this.newExcludedDate.getDay() === this.training.day) {
+        this.training.excludedDates.push(this.newExcludedDate);
+        this.newExcludedDate = date.addToDate(this.newExcludedDate, { days: 7 });
+      }
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="deleteItem" defaultstate="collapsed">
+    deleteItem(index) {
+      this.training.excludedDates.splice(index, 1);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="onClickDelete" defaultstate="collapsed">
+    onClickDelete() {
+      this.$q.dialog({
+        ok: {
+          label: 'Oui',
+          flat: true,
+          color: 'positive'
+        },
+        title: 'Confirmer',
+        message: 'Voulez-vous vraiment supprimer cet entrainement ?',
+        cancel: {
+          label: 'Non',
+          outline: true,
+          color: 'negative'
+        },
+        persistent: true
+      }).onOk(() => {
+        this.deleteTraining({ training: this.training })
+          .then(() => {
+            this.$router.push({ name: 'admin_presence' });
+            Notify.create({
+              message: 'Suppression de l\'entrainement avec succès',
+              icon: 'mdi-check',
+              color: 'positive',
+              position: 'bottom'
+            });
+          });
+      });
     }
     // </editor-fold>
+  },
+
+  validations: {
+    training: {
+      group: { required }
+    },
+
+    hours: {
+      start: { required },
+      end: { required }
+    }
   },
 
   meta: {

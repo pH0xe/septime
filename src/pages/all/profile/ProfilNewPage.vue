@@ -309,7 +309,12 @@ export default {
           phone: phoneEmergency,
           relation: relationEmergency
         },
-        weapons: weaponsChoice
+        weapons: weaponsChoice,
+        presence: {
+          absent: [],
+          late: [],
+          here: []
+        }
       };
 
       // Debug

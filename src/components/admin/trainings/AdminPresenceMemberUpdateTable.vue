@@ -1,18 +1,40 @@
 <template>
   <q-table
-    title="Selectionner les adhérents pour ce cours"
     :data="members"
     :columns="columns"
     row-key="uid"
     selection="multiple"
     :selected.sync="selectedMembers"
-    :pagination.sync="pagination"
-    hide-bottom
+    :pagination="pagination"
     :filter="filterInput"
     :filter-method="filterGroups"
     flat
     bordered
   >
+    <template v-slot:top>
+      <h5 class="q-ma-none">
+        Adhérents de ce cours
+      </h5>
+      <q-space />
+      <q-toggle
+        v-model="onlyActive"
+        class="q-mr-sm"
+        label="Afficher uniquement les membre activé"
+        color="positive"
+      />
+      <q-input
+        v-model="searchString"
+        class="col-12 col-md-5"
+        label="Rechercher"
+        filled
+        color="admin-primary"
+      >
+        <template v-slot:append>
+          <q-icon name="mdi-magnify" />
+        </template>
+      </q-input>
+    </template>
+
     <template v-slot:body-cell-memberAvatar="props">
       <q-td :props="props">
         <q-avatar>
@@ -32,7 +54,7 @@
     <template v-slot:body-cell-group="props">
       <q-td :props="props">
         <q-badge
-          color="info"
+          :color="badgeColor(props.row.group)"
           :label="props.row.group"
         />
       </q-td>
@@ -75,8 +97,11 @@ export default {
   data: () => ({
     selectedMembers: [],
     pagination: {
-      rowsPerPage: 0
-    }
+      rowsPerPage: 10,
+      sortBy: 'lastName'
+    },
+    searchString: '',
+    onlyActive: false
   }),
 
   computed: {
@@ -123,31 +148,44 @@ export default {
 
     // <editor-fold desc="filterInput" defaultstate="collapsed">
     filterInput() {
-      return this.training.group.toString();
+      return `${this.training.group.toString()},${this.searchString}`;
     }
     // </editor-fold>
   },
 
   mounted() {
-    console.log(this.training);
-    console.log(this.members);
     this.training.members.forEach((student) => {
       const member = this.members.find((m) => m.parentUid === student.parentUid && m.uid === student.uid);
-      this.selectedMembers.push(member);
+      if (member) this.selectedMembers.push(member);
     });
   },
 
   methods: {
     filterGroups(rows, lookFor) {
-      lookFor = lookFor.toLowerCase();
-      const results = [];
+      let filteredMembers;
+
+      if (this.onlyActive) {
+        filteredMembers = this.members.filter((member) => member.isActive === true);
+      } else {
+        filteredMembers = this.members;
+      }
+
+      let results = [];
       lookFor = lookFor.split(',');
-      this.members.forEach((member) => {
-        if (lookFor.includes(member.group.toLowerCase())) {
+
+      const groups = lookFor.filter((word) => Group.groupList.includes(word));
+      const searchString = lookFor.filter((word) => !Group.groupList.includes(word))[0];
+
+      filteredMembers.forEach((member) => {
+        if (groups.includes(member.group)) {
           results.push(member);
         }
       });
 
+      if (searchString.length !== 0) {
+        results = results.filter((user) => user.firstName.toLowerCase().includes(searchString.toLowerCase())
+          || user.lastName.toLowerCase().includes(searchString.toLowerCase()));
+      }
       return results;
     },
 
