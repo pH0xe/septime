@@ -22,12 +22,15 @@
         />
       </q-bar>
 
+      <!-- <editor-fold desc="Name" defaultstate="collapsed"> -->
       <q-card-section class="text-h5 text-center">
         {{ user.lastName }} {{ user.firstName }}
-      </q-card-section> <!-- Nom Prenom -->
+      </q-card-section>
+      <!-- </editor-fold> -->
       <q-separator />
       <q-card-section>
         <q-list>
+          <!-- <editor-fold desc="Group" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Catégorie :</q-item-label>
@@ -35,8 +38,10 @@
                 {{ user.group }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Catégorie-->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="BirthDate" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Date de naissance :</q-item-label>
@@ -44,8 +49,10 @@
                 {{ user.birthDate | dateDMY }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Date de naissance-->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Phone" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Numéro de téléphone :</q-item-label>
@@ -53,8 +60,10 @@
                 {{ user.phone }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Numero telephone -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Emergency phone" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Numéro de téléphone d'urgence :</q-item-label>
@@ -62,8 +71,10 @@
                 {{ user.emergency.phone }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Numero telephone urgence -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Emergency Relation" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Lien avec contact d'urgence :</q-item-label>
@@ -71,8 +82,10 @@
                 {{ user.emergency.relation || 'Non définit' }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Lien avec le contact d'urgence urgence -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Address" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Adresse :</q-item-label>
@@ -80,8 +93,10 @@
                 {{ user.address.street || 'Rue non définit' }}, {{ user.address.city || 'Vile non définit' }}, {{ user.address.zip || 'Code postal non définit' }},
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Adresse -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Email" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>E-mail :</q-item-label>
@@ -89,8 +104,10 @@
                 {{ user.email }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Email -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Gender" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Sexe :</q-item-label>
@@ -98,8 +115,10 @@
                 {{ user.gender }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Sexe -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Laterality" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Latéralité :</q-item-label>
@@ -107,8 +126,10 @@
                 {{ user.laterality }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Laterality -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Weapons" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Armes :</q-item-label>
@@ -118,8 +139,96 @@
                 {{ user.weapons }}
               </q-item-label>
             </q-item-section>
-          </q-item> <!-- Armes -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Presence" defaultstate="collapsed"> -->
+          <q-expansion-item
+            expand-separator
+            label="Détail des absences"
+            caption="Cliquer pour plus de détails"
+          >
+            <!-- <editor-fold desc="Absent" defaultstate="collapsed"> -->
+            <q-item>
+              <q-item-section>
+                <q-item-label>Absent le :</q-item-label>
+                <q-virtual-scroll
+                  style="max-height: 150px;"
+                  :items="user.presence.absent"
+                  separator
+                >
+                  <template v-slot="{ item, index }">
+                    <q-item
+                      :key="index"
+                      dense
+                    >
+                      <q-item-section>
+                        <q-item-label>
+                          • {{ item | dateFull }}
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-virtual-scroll>
+              </q-item-section>
+            </q-item>
+            <!-- </editor-fold> -->
+            <q-separator />
+            <!-- <editor-fold desc="Late" defaultstate="collapsed"> -->
+            <q-item>
+              <q-item-section>
+                <q-item-label>En retard le :</q-item-label>
+                <q-virtual-scroll
+                  style="max-height: 150px;"
+                  :items="user.presence.late"
+                  separator
+                >
+                  <template v-slot="{ item, index }">
+                    <q-item
+                      :key="index"
+                      dense
+                    >
+                      <q-item-section>
+                        <q-item-label>
+                          • {{ item | dateFull }}
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-virtual-scroll>
+              </q-item-section>
+            </q-item>
+            <!-- </editor-fold> -->
+            <q-separator />
+            <!-- <editor-fold desc="Here" defaultstate="collapsed"> -->
+            <q-item>
+              <q-item-section>
+                <q-item-label>Présent le :</q-item-label>
+                <q-virtual-scroll
+                  style="max-height: 150px;"
+                  :items="user.presence.here"
+                  separator
+                >
+                  <template v-slot="{ item, index }">
+                    <q-item
+                      :key="index"
+                      dense
+                    >
+                      <q-item-section>
+                        <q-item-label>
+                          • {{ item | dateFull }}
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-virtual-scroll>
+              </q-item-section>
+            </q-item>
+            <!-- </editor-fold> -->
+          </q-expansion-item>
+          <!-- </editor-fold> -->
+          <q-separator />
+          <!-- <editor-fold desc="Medical certificate" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Certificat médical :</q-item-label>
@@ -149,8 +258,10 @@
                 Date du certificat : {{ user.certificateDate | dateDMY }}
               </div>
             </q-item-section>
-          </q-item> <!-- Certificat medical-->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Cerfa" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Cerfa :</q-item-label>
@@ -177,8 +288,10 @@
                 />
               </div>
             </q-item-section>
-          </q-item> <!-- Cerfa -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Payments Done ?" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Cotisation :</q-item-label>
@@ -209,8 +322,10 @@
                 />
               </div>
             </q-item-section>
-          </q-item> <!-- Cotisation ? -->
+          </q-item>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Payments info" defaultstate="collapsed"> -->
           <template v-if="user.payments.paid">
             <q-expansion-item
               expand-separator
@@ -325,8 +440,10 @@
                 </q-item-section>
               </q-item> <!-- Loue un kit première touche -->
             </q-expansion-item>
-          </template> <!-- Info Cotisation -->
+          </template>
+          <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Activate" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
               <q-item-label>Activation :</q-item-label>
@@ -353,7 +470,8 @@
                 />
               </div>
             </q-item-section>
-          </q-item> <!-- Activation -->
+          </q-item>
+          <!-- </editor-fold> -->
         </q-list>
       </q-card-section>
       <q-separator />
@@ -427,7 +545,6 @@ export default {
     ...mapActions([
       'setAdmin',
       'activateAccount',
-      'removeAccount',
       'fetchMembers',
       'changePaidInfo',
       'deactivateAccount',

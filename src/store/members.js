@@ -132,6 +132,9 @@ export default {
           member.gender = Gender.from(member.gender);
           member.laterality = Laterality.from(member.laterality);
           member.weapons = Weapons.from(member.weapons);
+          member.presence.absent = member.presence.absent.map((d) => d.toDate());
+          member.presence.here = member.presence.here.map((d) => d.toDate());
+          member.presence.late = member.presence.late.map((d) => d.toDate());
           return member;
         }))
         .then((members) => Promise.all(members.map(async (member) => {
