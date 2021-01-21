@@ -301,8 +301,20 @@
           <!-- </editor-fold> -->
 
 
-          <!-- Button back to home page -->
           <div class="fixed-bottom">
+            <q-item
+              v-ripple
+              clickable
+              @click="toggleDarkTheme"
+            >
+              <q-item-section avatar>
+                <q-icon :name="getIcon" />
+              </q-item-section>
+              <q-item-section>
+                Mode sombre
+              </q-item-section>
+            </q-item>
+
             <q-separator />
             <q-item
               v-ripple
@@ -329,12 +341,20 @@
 </template>
 
 <script lang="js">
+import { Utils } from '../js/Utils';
+
 export default {
   name: 'AdminLayout',
   data: () => ({
     drawer: false,
     miniState: true
   }),
+
+  computed: {
+    getIcon() {
+      return this.$q.dark.isActive ? 'mdi-weather-night' : 'mdi-white-balance-sunny';
+    }
+  },
 
   methods: {
     toggleMini() {
@@ -343,6 +363,10 @@ export default {
 
     toggleDrawer() {
       this.drawer = !this.drawer;
+    },
+
+    toggleDarkTheme() {
+      Utils.toggleDarkTheme(this);
     }
   }
 };

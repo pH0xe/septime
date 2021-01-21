@@ -153,7 +153,7 @@
               icon-color="black"
               checked-icon="mdi-weather-night"
               unchecked-icon="mdi-white-balance-sunny"
-              @input="toggleDarkMode"
+              @input="toggleDarkTheme"
             />
           </div>
 
@@ -184,6 +184,7 @@ import NavbarLinks from '../components/all/layout/NavbarLinks.vue';
 import NavbarAccount from '../components/all/layout/NavbarAccount';
 import FooterImage from '../components/all/layout/footerImage';
 import partners from '../js/partners';
+import { Utils } from '../js/Utils';
 
 const footerLinks = [
   {
@@ -284,9 +285,8 @@ export default {
   },
 
   methods: {
-    toggleDarkMode() {
-      this.$q.dark.toggle();
-      localStorage.setItem('darkMode', `${this.$q.dark.isActive}`);
+    toggleDarkTheme() {
+      Utils.toggleDarkTheme(this);
     },
 
     onClickBannerMailDismiss() {

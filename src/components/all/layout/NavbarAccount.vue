@@ -169,6 +169,20 @@
         v-ripple
         v-close-popup
         clickable
+        @click="toggleDarkTheme"
+      >
+        <q-item-section avatar>
+          <q-icon :name="getIcon" />
+        </q-item-section>
+        <q-item-section>
+          Mode sombre
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        v-ripple
+        v-close-popup
+        clickable
         :to="{name: 'contact_club'}"
       >
         <q-item-section avatar>
@@ -191,6 +205,7 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import { Notify, QSpinnerPie } from 'quasar';
 import LoginDialog from '../login/LoginDialog';
 import RegisterDialog from '../login/RegisterDialog';
+import { Utils } from '../../../js/Utils';
 
 export default {
   name: 'NavbarAccount',
@@ -216,6 +231,10 @@ export default {
 
     registerOpen() {
       return this.isRegisterOpen;
+    },
+
+    getIcon() {
+      return this.$q.dark.isActive ? 'mdi-weather-night' : 'mdi-white-balance-sunny';
     }
   },
 
@@ -377,6 +396,10 @@ export default {
             icon: 'mdi-alert'
           });
         });
+    },
+
+    toggleDarkTheme() {
+      Utils.toggleDarkTheme(this);
     }
   }
 };
