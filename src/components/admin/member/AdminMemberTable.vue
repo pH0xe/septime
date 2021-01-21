@@ -101,7 +101,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { date } from 'quasar';
+import { date, Notify } from 'quasar';
 import XLSX from 'xlsx';
 import AdminMemberDetails from './AdminMemberDetails';
 import { Group } from '../../../js/Group';
@@ -224,7 +224,15 @@ export default {
     },
 
     onClickRefreshTables() {
-      this.fetchMembers();
+      this.fetchMembers()
+        .then(() => {
+          Notify.create({
+            message: 'Liste rafraîchit',
+            icon: 'mdi-check',
+            color: 'positive',
+            position: 'bottom'
+          });
+        });
     },
 
     onClickDownload() {

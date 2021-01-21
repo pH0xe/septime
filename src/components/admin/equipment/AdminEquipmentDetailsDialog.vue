@@ -251,9 +251,14 @@ export default {
     },
 
     getMemberName() {
-      const userId = this.equipment.renterId;
-      const result = this.members.find((member) => member.uid === userId);
-      return `${result.firstName} ${result.lastName}`;
+      const result = this.getRenter;
+      if (result) return `${result.firstName} ${result.lastName}`;
+      return 'Inconnu';
+    },
+
+    getRenter() {
+      const { parentUid, uid } = this.equipment.renterId;
+      return this.members.find((member) => member.uid === uid && member.parentUid === parentUid);
     }
   },
 
@@ -278,8 +283,8 @@ export default {
         component: AdminEquipmentAssignDialog,
         users: this.membersActive,
         parent: this
-      }).onOk((memberId) => {
-        this.rentEquipment({ uid: memberId, equipment: this.equipment });
+      }).onOk((member) => {
+        this.rentEquipment({ uid: { parentUid: member.parentUid, uid: member.uid }, equipment: this.equipment });
         this.hide();
       });
     },

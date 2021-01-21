@@ -24,7 +24,7 @@ export default {
 
   actions: {
     fetchEquipmentsType({ commit }) {
-      db.collection('equipmentsType').get()
+      return db.collection('equipmentsType').get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
@@ -35,6 +35,22 @@ export default {
         .then((types) => {
           commit('setEquipmentsTypes', { types });
         })
+        .catch((err) => {
+          console.error('Error while fetching Equipments Type List', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    fetchEquipmentName(_, { uid }) {
+      return db.collection('equipmentsType')
+        .doc(uid)
+        .get()
+        .then((item) => item.data())
+        .then((types) => types.name)
         .catch((err) => {
           console.error('Error while fetching Equipments Type List', err);
           Notify.create({

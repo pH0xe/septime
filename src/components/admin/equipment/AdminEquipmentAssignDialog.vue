@@ -178,7 +178,7 @@ export default {
     },
     onClickOk() {
       if (this.member) {
-        this.$emit('ok', this.member.uid);
+        this.$emit('ok', this.member);
         this.hide();
       }
     },

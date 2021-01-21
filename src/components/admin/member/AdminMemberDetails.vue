@@ -228,6 +228,25 @@
           </q-expansion-item>
           <!-- </editor-fold> -->
           <q-separator />
+          <!-- <editor-fold desc="Equipement" defaultstate="collapsed"> -->
+          <q-expansion-item
+            expand-separator
+            label="Equipements loué"
+            caption="Cliquer pour plus de détails"
+          >
+            <!-- <editor-fold desc="Absent" defaultstate="collapsed"> -->
+            <q-item
+              v-for="(item, index) in equipments"
+              :key="index"
+            >
+              <q-item-section>
+                <q-item-label>• {{ item.equipmentType }} : {{ item.internalId }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <!-- </editor-fold> -->
+          </q-expansion-item>
+          <!-- </editor-fold> -->
+          <q-separator />
           <!-- <editor-fold desc="Medical certificate" defaultstate="collapsed"> -->
           <q-item>
             <q-item-section>
@@ -538,8 +557,16 @@ export default {
 
   data: () => ({
     dialogDetails: false,
-    confirmDelete: false
+    confirmDelete: false,
+    equipments: null
   }),
+
+  beforeMount() {
+    this.fetchMemberEquipments({ parentUid: this.user.parentUid, uid: this.user.uid })
+      .then((items) => {
+        this.equipments = items;
+      });
+  },
 
   methods: {
     ...mapActions([
@@ -548,7 +575,8 @@ export default {
       'fetchMembers',
       'changePaidInfo',
       'deactivateAccount',
-      'removeMember'
+      'removeMember',
+      'fetchMemberEquipments'
     ]),
 
     // <editor-fold desc="Dialog Utils" defaultstate="collapsed">

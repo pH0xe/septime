@@ -70,6 +70,41 @@ export default {
         });
     },
 
+    // <editor-fold desc="fetchMemberEquipments" defaultstate="collapsed">
+    fetchMemberEquipments({ dispatch }, { parentUid, uid }) {
+      return db.collection('equipments')
+        .where('renterId.parentUid', '==', parentUid)
+        .where('renterId.uid', '==', uid)
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((doc) => {
+            collector.push({ uid: doc.id, ...doc.data() });
+          });
+          return collector;
+        })
+        .then((equipments) => equipments.map((equipment) => {
+          equipment.informationDate.buying = equipment.informationDate.buying.toDate();
+          equipment.informationDate.control = equipment.informationDate.control.toDate();
+          equipment.informationDate.production = equipment.informationDate.production.toDate();
+          dispatch('fetchEquipmentName', { uid: equipment.equipmentType })
+            .then((type) => {
+              equipment.equipmentType = type;
+            });
+          return equipment;
+        }))
+        .then((equipments) => equipments)
+        .catch((err) => {
+          console.log('Error while fetching equipments list : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
     postNewEquipment({ commit }, { equipment }) {
       return db.collection('equipments').add(equipment)
         .then((docReference) => {

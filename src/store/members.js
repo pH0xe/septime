@@ -114,7 +114,7 @@ export default {
 
     // <editor-fold desc="fetchMembers" defaultstate="collapsed">
     fetchMembers({ commit }) {
-      db.collectionGroup('subUsers')
+      return db.collectionGroup('subUsers')
         .get()
         .then((querySnapshot) => {
           const collector = [];
