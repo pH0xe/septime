@@ -1,10 +1,7 @@
 <template>
   <q-page class="q-ma-md">
-    <h4 class="text-h4 q-mb-xs q-mt-md q-ml-md">
-      Ajout d'un entrainement
-    </h4>
+    <page-title title="Ajout d'un entrainement" />
     <q-card-section>
-      <q-separator />
       <admin-training-create-days ref="daysSection" />
       <q-separator class="q-mt-lg" />
       <admin-training-create-hours ref="hoursSection" />
@@ -45,10 +42,12 @@ import AdminTrainingCreateHours from '../../../components/admin/trainings/AdminT
 import AdminTrainingCreatePeriod from '../../../components/admin/trainings/AdminTrainingCreatePeriod';
 import AdminTrainingCreateMembers from '../../../components/admin/trainings/AdminTrainingCreateMembers';
 import AdminTrainingCreateExcludedDates from '../../../components/admin/trainings/AdminTrainingCreateExcludedDates';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'AdminPresenceCreatePage',
   components: {
+    PageTitle,
     AdminTrainingCreateExcludedDates,
     AdminTrainingCreateMembers,
     AdminTrainingCreatePeriod,

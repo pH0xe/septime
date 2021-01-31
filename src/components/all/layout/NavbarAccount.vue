@@ -167,7 +167,6 @@
 
       <q-item
         v-ripple
-        v-close-popup
         clickable
         @click="toggleDarkTheme"
       >

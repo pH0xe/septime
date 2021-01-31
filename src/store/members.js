@@ -73,8 +73,8 @@ export default {
 
     // <editor-fold desc="changePaidState" defaultstate="collapsed">
     changePaidState(state, { member, newPayments }) {
-      const index = state.members.indexOf(member);
-      state.members[index].payments = newPayments;
+      const oldMember = state.members.find((m) => m.uid === member.uid && m.parentUid === member.parentUid);
+      oldMember.payments = newPayments;
     },
     // </editor-fold>
 

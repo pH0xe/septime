@@ -1,3 +1,5 @@
+import { date } from 'quasar';
+
 export const DateUtils = {
   format: {
     days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -15,4 +17,10 @@ export const DateUtils = {
   }
 };
 
+const formatFullDate = (d) => date.formatDate(d, 'dddd DD MMMM YYYY', {
+  days: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+  months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+});
+
+DateUtils.formatFullDate = formatFullDate;
 Object.freeze(DateUtils);

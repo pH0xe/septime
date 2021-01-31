@@ -115,7 +115,7 @@ export default {
         })
         .then((members) => members.map((member) => {
           member.birthDate = member.birthDate.toDate();
-          member.certificateDate = member.certificateDate.toDate();
+          member.certificateDate = member.certificateDate?.toDate();
           member.group = Group.from(member.birthDate);
           member.gender = Gender.from(member.gender);
           member.laterality = Laterality.from(member.laterality);

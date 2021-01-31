@@ -234,7 +234,6 @@
             label="Equipements loué"
             caption="Cliquer pour plus de détails"
           >
-            <!-- <editor-fold desc="Absent" defaultstate="collapsed"> -->
             <q-item
               v-for="(item, index) in equipments"
               :key="index"
@@ -243,7 +242,6 @@
                 <q-item-label>• {{ item.equipmentType }} : {{ item.internalId }}</q-item-label>
               </q-item-section>
             </q-item>
-            <!-- </editor-fold> -->
           </q-expansion-item>
           <!-- </editor-fold> -->
           <q-separator />

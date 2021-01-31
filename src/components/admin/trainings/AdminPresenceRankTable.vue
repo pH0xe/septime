@@ -7,50 +7,14 @@
     flat
     bordered
     :pagination.sync="pagination"
-    :sort-method="customSort"
+    :sort-method="rank"
+    @row-click="onClickMember"
   />
 </template>
 
 <script>
 
-const columns = [
-  {
-    name: 'firstName',
-    field: 'firstName',
-    sortable: false,
-    label: 'Prénom',
-    align: 'left'
-  },
-  {
-    name: 'lastName',
-    field: 'lastName',
-    sortable: false,
-    label: 'Nom',
-    align: 'left'
-  },
-  {
-    name: 'here',
-    field: 'here',
-    sortable: false,
-    label: 'Présent',
-    align: 'left'
-  },
-  {
-    name: 'late',
-    field: 'late',
-    sortable: false,
-    label: 'Retard',
-    align: 'left'
-  },
-  {
-    name: 'absent',
-    field: 'absent',
-    sortable: false,
-    label: 'Absent',
-    align: 'left'
-  }
-];
-
+import AdminPresenceMemberDetails from './AdminPresenceMemberDetails';
 
 export default {
   name: 'AdminPresenceRankTable',
@@ -76,24 +40,85 @@ export default {
   }),
 
   computed: {
+    // <editor-fold desc="columns" defaultstate="collapsed">
     columns() {
-      return columns;
+      return [
+        {
+          name: 'firstName',
+          field: 'firstName',
+          sortable: false,
+          label: 'Prénom',
+          align: 'left'
+        },
+        {
+          name: 'lastName',
+          field: 'lastName',
+          sortable: false,
+          label: 'Nom',
+          align: 'left'
+        },
+        {
+          name: 'here',
+          field: (row) => row.presence.here,
+          format: (val) => `${val.length}`,
+          sortable: false,
+          label: 'Présent',
+          align: 'left'
+        },
+        {
+          name: 'late',
+          field: (row) => row.presence.late,
+          format: (val) => `${val.length}`,
+          sortable: false,
+          label: 'Retard',
+          align: 'left'
+        },
+        {
+          name: 'absent',
+          field: (row) => row.presence.absent,
+          format: (val) => `${val.length}`,
+          sortable: false,
+          label: 'Absent',
+          align: 'left'
+        }
+      ];
     }
+    // </editor-fold>
   },
 
   methods: {
-    customSort(rows, sortBy, descending) {
-      const data = [...rows];
-      data.sort((a, b) => {
-        const x = descending ? b : a;
-        const y = descending ? a : b;
-        // numeric sort
-        return (parseFloat(x.here) - parseFloat(y.here))
-            || (parseFloat(y.late) - parseFloat(x.late))
-            || (parseFloat(y.absent) - parseFloat(x.absent));
+    // <editor-fold desc="rank" defaultstate="collapsed">
+    rank(rows) {
+      rows = rows.sort((a, b) => {
+        if (a.presence.here.length > b.presence.here.length) return -1;
+        if (b.presence.here.length > a.presence.here.length) return 1;
+
+        if (a.presence.here.length === b.presence.here.length) {
+          if (a.presence.late.length > b.presence.late.length) return 1;
+          if (b.presence.late.length > a.presence.late.length) return -1;
+
+          if (a.presence.late.length === b.presence.late.length) {
+            if (a.presence.absent.length > b.presence.absent.length) return 1;
+            if (b.presence.absent.length > a.presence.absent.length) return -1;
+            if (b.presence.absent.length === a.presence.absent.length) return 0;
+          }
+        }
+        return 0;
       });
-      return data;
+
+      return rows;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="onClickMember" defaultstate="collapsed">
+    onClickMember(event, row) {
+      this.$q.dialog({
+        component: AdminPresenceMemberDetails,
+        parent: this,
+        member: row
+      });
     }
+    // </editor-fold>
   }
 };
 </script>

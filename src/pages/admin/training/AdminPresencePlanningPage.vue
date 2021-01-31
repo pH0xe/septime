@@ -1,8 +1,6 @@
 <template>
   <q-page class="q-ma-md">
-    <section-title
-      text="Planning des cours"
-    />
+    <page-title title="Planning des cours" />
     <admin-presence-planning-calendar
       :trainings="trainings"
     />
@@ -12,11 +10,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AdminPresencePlanningCalendar from '../../../components/admin/trainings/AdminPresencePlanningCalendar';
-import SectionTitle from '../../../components/utils/sectionTitle';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'AdminPresencePlanningPage',
-  components: { SectionTitle, AdminPresencePlanningCalendar },
+  components: { PageTitle, AdminPresencePlanningCalendar },
   computed: {
     ...mapState({
       trainings: (state) => JSON.parse(JSON.stringify(state.trainings.trainingsPlanning)) // Deep copy of training (avoid mutating due to dayKeep calendar
