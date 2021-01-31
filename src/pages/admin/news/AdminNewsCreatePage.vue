@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Créer une actualité
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Créer une actualité" />
     <q-card flat>
       <q-card-section>
         <div class="full-width text-weight-bold q-mb-md">
@@ -173,6 +171,7 @@ import { mapState, mapActions } from 'vuex';
 import { Notify } from 'quasar';
 import FirebaseUploader from '../../../components/utils/FirebaseUploader';
 import { NewsType } from '../../../js/newsType';
+import PageTitle from '../../../components/utils/PageTitle';
 
 const newsType = [
   {
@@ -195,7 +194,7 @@ const newsType = [
 
 export default {
   name: 'AdminNewsCreatePage',
-  components: { FirebaseUploader },
+  components: { PageTitle, FirebaseUploader },
   mixins: [validationMixin],
 
   data: () => ({

@@ -2,10 +2,7 @@
   <q-page>
     <div class="row justify-center q-mx-sm">
       <div class="page-padded col-12 col-md-8">
-        <div class="text-h5 q-mb-md">
-          Inscription
-        </div>
-        <q-separator />
+        <page-title title="Inscription" />
         <div class="text-subtitle2 q-mt-md">
           Les champs marqué d'un * sont obligatoire
         </div>
@@ -179,11 +176,16 @@ import RegisterStepAccount from '../../../components/all/profil/RegisterStepAcco
 import RegisterStepCoordinates from '../../../components/all/profil/RegisterStepCoordinates';
 import RegisterStepPractising from '../../../components/all/profil/RegisterStepPractising';
 import RegisterStepObligation from '../../../components/all/profil/RegisterStepObligation';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'ProfilNewPage',
   components: {
-    RegisterStepObligation, RegisterStepPractising, RegisterStepCoordinates, RegisterStepAccount
+    PageTitle,
+    RegisterStepObligation,
+    RegisterStepPractising,
+    RegisterStepCoordinates,
+    RegisterStepAccount
   },
   data: () => ({
     step: 0,

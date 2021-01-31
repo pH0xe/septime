@@ -1,13 +1,10 @@
 <template>
-  <q-page class="q-ma-md">
+  <q-page class="page-padded">
+    <page-title title="Ajout d'un adhérent" />
     <form
       @submit.prevent="onClickOk"
     >
-      <h4 class="text-h4 q-mb-xs q-mt-md q-ml-md">
-        Ajout d'un adhérent
-      </h4>
       <q-card-section>
-        <q-separator />
         <admin-member-create-login-data ref="loginData" />
         <q-separator />
         <admin-member-create-personal-data ref="personalData" />
@@ -42,10 +39,12 @@ import AdminMemberCreateEmergencyData from '../../../components/admin/member/Adm
 import AdminMemberCreateSportData from '../../../components/admin/member/AdminMemberCreateSportData';
 import AdminMemberCreateUploaderData from '../../../components/admin/member/AdminMemberCreateUploaderData';
 import AdminMemberCreateLoginData from '../../../components/admin/member/AdminMemberCreateLoginData';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'AdminMemberCreatePage',
   components: {
+    PageTitle,
     AdminMemberCreateLoginData,
     AdminMemberCreateUploaderData,
     AdminMemberCreateSportData,

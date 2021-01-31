@@ -2,10 +2,7 @@
   <q-page>
     <div class="row justify-center q-mx-sm">
       <div class="page-padded col-12 col-md-8">
-        <div class="text-h5 q-mb-md">
-          Inscription
-        </div>
-        <q-separator />
+        <page-title title="Inscription" />
 
         <div class="q-pt-md">
           <q-form @submit.prevent="onClickOk">
@@ -61,9 +58,11 @@ import { Notify, QSpinnerPie } from 'quasar';
 import { email, required } from 'vuelidate/lib/validators'; // Needed to access the store in beforeRouteEnter when the component hasn't been created yet
 import { validationMixin } from 'vuelidate';
 import store from '../../store';
+import PageTitle from '../../components/utils/PageTitle';
 
 export default {
   name: 'RegisterPage',
+  components: { PageTitle },
   mixins: [validationMixin],
 
   data: () => ({

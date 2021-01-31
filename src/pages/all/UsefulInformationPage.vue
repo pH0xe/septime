@@ -2,9 +2,7 @@
   <q-page>
     <div class="row justify-center q-mx-sm">
       <div class="page-padded col-12 col-md-8">
-        <div class="text-h5 q-mb-md">
-          Infos pratiques
-        </div>
+        <page-title title="Infos pratiques" />
         <q-separator class="separator-margin" />
         <div class="row q-col-gutter-md">
           <div
@@ -29,10 +27,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import NewsCard from '../../components/all/news/NewsCard';
+import PageTitle from '../../components/utils/PageTitle';
 
 export default {
   name: 'UsefulInformationPage',
-  components: { NewsCard },
+  components: { PageTitle, NewsCard },
 
   data: () => ({
     newsTab: 10,

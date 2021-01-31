@@ -371,3 +371,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  .page-padded {
+    margin: 2%;
+  }
+</style>

@@ -1,18 +1,17 @@
 <template>
-  <q-page class="q-ma-md q-my-lg">
-    <h5 class="text-h4 q-my-md">
-      Permission et administrateur
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Permission et administrateur" />
     <admin-setting-permissions />
   </q-page>
 </template>
 <script>
 import { mapActions } from 'vuex';
 import AdminSettingPermissions from '../../../components/admin/settings/AdminSettingPermissions';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'AdminSettingPermissionPage',
-  components: { AdminSettingPermissions },
+  components: { PageTitle, AdminSettingPermissions },
 
   data: () => ({
     tab: 'club'

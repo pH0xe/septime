@@ -34,10 +34,7 @@
               transition-next="jump-up"
             >
               <q-tab-panel name="news">
-                <div class="text-h5 q-mb-md">
-                  Actualités du club
-                </div>
-                <q-separator class="separator-margin" />
+                <page-title title="Actualités du club" />
 
                 <div class="row q-col-gutter-md">
                   <div
@@ -57,10 +54,8 @@
               </q-tab-panel>
 
               <q-tab-panel name="ffe">
-                <div class="text-h5 q-mb-md">
-                  Actualités FFE
-                </div>
-                <q-separator class="separator-margin" />
+                <page-title title="Actualités FFE" />
+
                 <div class="row q-col-gutter-md">
                   <div
                     v-for="news in sortedNewsFFE"
@@ -88,10 +83,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import NewsCard from '../../../components/all/news/NewsCard';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'NewsPage',
-  components: { NewsCard },
+  components: { PageTitle, NewsCard },
 
   data: () => ({
     newsTab: 10,

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h4 class="text-h4 q-mb-xs q-mt-md q-ml-md">
+    <h4 class="text-h4 q-mb-xs q-mt-md">
       {{ title }}
     </h4>
-    <q-separator />
+    <q-separator class="q-mb-md" />
   </div>
 </template>
 

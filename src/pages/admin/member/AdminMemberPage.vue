@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Liste des membres
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Liste des membres" />
     <div class="row items-center q-mb-md">
       <q-btn
         class="col-12 col-md-auto q-mb-sm q-mr-sm"
@@ -46,10 +44,11 @@ import { mapActions, mapState } from 'vuex';
 import { date } from 'quasar';
 import XLSX from 'xlsx';
 import AdminMemberTable from '../../../components/admin/member/AdminMemberTable';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'AdminMemberPage',
-  components: { AdminMemberTable },
+  components: { PageTitle, AdminMemberTable },
   data: () => ({
     searchQuery: ''
   }),

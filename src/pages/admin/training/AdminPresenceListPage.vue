@@ -1,8 +1,7 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-mt-md q-mb-none">
-      Liste d'appel:
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Liste d'appel:" />
+
     <div class="text-caption q-my-none">
       {{ date.formatDate(training.startDate, 'dddd DD MMMM, HH:mm - ', {
         days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -49,11 +48,12 @@
 import { date } from 'quasar';
 import { mapState, mapActions } from 'vuex';
 import AdminPresenceCallListTable from '../../../components/admin/trainings/AdminPresenceCallListTable';
+import PageTitle from '../../../components/utils/PageTitle';
 
 
 export default {
   name: 'AdminPresenceListPage',
-  components: { AdminPresenceCallListTable },
+  components: { PageTitle, AdminPresenceCallListTable },
   data: () => ({
     training: null
   }),

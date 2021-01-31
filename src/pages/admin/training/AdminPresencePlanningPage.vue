@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-ma-md">
+  <q-page class="page-padded">
     <page-title title="Planning des cours" />
     <admin-presence-planning-calendar
       :trainings="trainings"

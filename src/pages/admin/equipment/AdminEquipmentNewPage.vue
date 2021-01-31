@@ -1,10 +1,7 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Ajout d'un nouveau équipement
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Ajout d'un nouveau équipement" />
     <q-card flat>
-      <q-separator />
       <div class="row">
         <q-card-section class="col-12 col-md-4">
           <div class="text-weight-bold">
@@ -169,11 +166,12 @@ import { date } from 'quasar';
 import { mapState, mapActions } from 'vuex';
 import DateSelector from '../../../components/utils/DateSelector';
 import { EquipmentState } from '../../../js/EquipmentState';
+import PageTitle from '../../../components/utils/PageTitle';
 
 
 export default {
   name: 'AdminEquipmentNewPage',
-  components: { DateSelector },
+  components: { PageTitle, DateSelector },
   mixins: [validationMixin],
   data: () => ({
     equipmentChoice: '',

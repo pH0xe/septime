@@ -1,10 +1,7 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Création d'un nouveau type d'équipement
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Création d'un nouveau type d'équipement" />
     <q-card flat>
-      <q-separator />
       <div class="row">
         <q-card-section class="col-12 col-md-6">
           <div class="text-weight-bold">
@@ -106,12 +103,14 @@ const optionIsRentable = [
 import { required } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import { mapActions } from 'vuex';
+import PageTitle from '../../../components/utils/PageTitle';
 
 
 const mustBeBoolean = (value) => value === null || value.value === true || value.value === false;
 
 export default {
   name: 'AdminEquipmentNewTypePage',
+  components: { PageTitle },
   mixins: [validationMixin],
 
   data: () => ({

@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Modification de la news
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Modification de la news" />
     <q-card flat>
       <q-card-section>
         <div class="full-width text-weight-bold q-mb-md">
@@ -180,6 +178,7 @@ import { mapState, mapActions } from 'vuex';
 import { Notify } from 'quasar';
 import { NewsType } from '../../../js/newsType';
 import FirebaseUploader from '../../../components/utils/FirebaseUploader';
+import PageTitle from '../../../components/utils/PageTitle';
 
 const newsType = [
   {
@@ -202,7 +201,7 @@ const newsType = [
 
 export default {
   name: 'AdminNewsModifyPage',
-  components: { FirebaseUploader },
+  components: { PageTitle, FirebaseUploader },
   mixins: [validationMixin],
 
   data: () => ({

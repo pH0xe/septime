@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-ma-md">
+  <q-page class="page-padded">
     <page-title title="Classement des présences aux entraînements" />
     <div
       v-for="(list, index) in rankingCalculaton"

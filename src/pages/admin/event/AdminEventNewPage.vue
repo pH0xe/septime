@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Nouvel événement
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Nouvel événement" />
     <q-form
       autofocus
       @submit.prevent="onSubmit"
@@ -216,6 +214,7 @@ import DateSelector from '../../../components/utils/DateSelector';
 import HourSelector from '../../../components/utils/TimeSelector';
 import { Group } from '../../../js/Group';
 import { Weapons } from '../../../js/Weapons';
+import PageTitle from '../../../components/utils/PageTitle';
 
 const groupOption = [
   { value: Group.VETERANS4, label: Group.VETERANS4 },
@@ -240,7 +239,7 @@ const weaponsOption = [
 
 export default {
   name: 'AdminEventNewPage',
-  components: { HourSelector, DateSelector },
+  components: { PageTitle, HourSelector, DateSelector },
   mixins: [validationMixin],
 
   data: () => ({

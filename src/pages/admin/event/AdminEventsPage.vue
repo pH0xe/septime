@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Événements
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Événements" />
     <div class="row items-center q-pb-lg">
       <q-btn
         label="Ajouter"
@@ -34,10 +32,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AdminEventTable from '../../../components/admin/event/AdminEventTable';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'EventPage',
-  components: { AdminEventTable },
+  components: { PageTitle, AdminEventTable },
 
   data: () => ({
     searchQuery: ''

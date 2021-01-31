@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Liste des actualités
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Liste des actualités" />
 
     <q-select
       v-model="newsTypeSelect"
@@ -34,6 +32,7 @@
 import { mapState, mapActions } from 'vuex';
 import AdminNewsTable from '../../../components/admin/news/AdminNewsTable';
 import { NewsType } from '../../../js/newsType';
+import PageTitle from '../../../components/utils/PageTitle';
 
 const newsType = [
   {
@@ -56,7 +55,7 @@ const newsType = [
 
 export default {
   name: 'NewsPage',
-  components: { AdminNewsTable },
+  components: { PageTitle, AdminNewsTable },
 
   data: () => ({
     newsTypeSelect: ''

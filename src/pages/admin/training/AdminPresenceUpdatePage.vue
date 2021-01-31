@@ -1,11 +1,9 @@
 <template>
   <q-page
     v-if="training && members.length > 0"
-    class="q-ma-md"
+    class="page-padded"
   >
-    <section-title
-      :text="pageTitle"
-    />
+    <page-title :title="pageTitle" />
 
     <admin-presence-member-update-table
       ref="memberList"
@@ -151,10 +149,12 @@ import AdminPresenceMemberUpdateTable from '../../../components/admin/trainings/
 import { Utils } from '../../../js/Utils';
 import TimeSelector from '../../../components/utils/TimeSelector';
 import DateSelector from '../../../components/utils/DateSelector';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'AdminPresenceUpdatePage',
   components: {
+    PageTitle,
     DateSelector,
     TimeSelector,
     AdminPresenceMemberUpdateTable,

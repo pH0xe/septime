@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-ma-md">
-    <h5 class="text-h5 q-my-md">
-      Liste du matériel
-    </h5>
+  <q-page class="page-padded">
+    <page-title title="Liste du matériel" />
     <div class="row items-center q-pb-lg">
       <q-btn
         label="Ajouter"
@@ -52,10 +50,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AdminEquipmentTable from '../../../components/admin/equipment/AdminEquipmentTable';
+import PageTitle from '../../../components/utils/PageTitle';
 
 export default {
   name: 'AdminEquipmentPage',
-  components: { AdminEquipmentTable },
+  components: { PageTitle, AdminEquipmentTable },
 
   data: () => ({
     equipmentType: ''

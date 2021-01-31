@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-ma-md">
+  <q-page class="page-padded">
     <page-title title="Ajout d'un entrainement" />
     <q-card-section>
       <admin-training-create-days ref="daysSection" />
