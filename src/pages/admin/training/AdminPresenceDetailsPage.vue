@@ -18,8 +18,6 @@ export default {
   components: { PageTitle, AdminPresenceTrainingTable },
 
   data: () => ({
-    title: '',
-    period: '',
     trainings: []
   }),
 
@@ -31,29 +29,21 @@ export default {
     }),
 
     getTitle() {
-      return `Entraînements ${this.title}`;
-    }
-  },
-
-  beforeMount() {
-    this.period = this.$route.params.when;
-    if (this.period === 'today') {
-      this.title = 'd\'aujourd\'hui';
-      this.fetchTodaysTrainings().then(() => {
-        this.trainings = this.todaysTrainings;
-        console.log(this.trainings);
-      });
-    } else if (this.period === 'futur') {
-      this.title = 'futur';
-      this.trainings = this.futurTrainings;
-    } else if (this.period === 'past') {
-      this.title = 'passé';
-      this.trainings = this.pastTrainings;
+      const period = this.$route.params.when;
+      let title = '';
+      if (period === 'today') {
+        title = 'd\'aujourd\'hui';
+      } else if (period === 'futur') {
+        title = 'futur';
+      } else if (period === 'past') {
+        title = 'passé';
+      }
+      return `Entraînements ${title}`;
     }
   },
 
   methods: {
-    ...mapActions(['fetchTrainings', 'fetchTodaysTrainings'])
+    ...mapActions(['fetchTrainings'])
   },
 
   meta: {

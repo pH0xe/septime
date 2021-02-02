@@ -85,6 +85,7 @@
         v-ripple
         clickable
         :to="{name: 'profil'}"
+        exact
       >
         <q-item-section avatar>
           <q-avatar
@@ -108,6 +109,7 @@
         v-ripple
         clickable
         :to="{name: 'addAdherent'}"
+        exact
       >
         <q-item-section avatar>
           <q-avatar
