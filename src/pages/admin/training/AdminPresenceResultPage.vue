@@ -33,7 +33,6 @@ import AdminPresenceRankTable from '../../../components/admin/trainings/AdminPre
 import { Group } from '../../../js/Group';
 import PageTitle from '../../../components/utils/PageTitle';
 
-
 export default {
   name: 'AdminPresenceResultPage',
   components: { PageTitle, AdminPresenceRankTable },

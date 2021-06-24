@@ -105,7 +105,6 @@ import { validationMixin } from 'vuelidate';
 import { mapActions } from 'vuex';
 import PageTitle from '../../../components/utils/PageTitle';
 
-
 const mustBeBoolean = (value) => value === null || value.value === true || value.value === false;
 
 export default {

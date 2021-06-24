@@ -138,7 +138,6 @@
         />
       </q-card-section>
 
-
       <!-- buttons example -->
       <q-card-actions align="right">
         <q-btn
@@ -167,7 +166,6 @@ import { mapState, mapActions } from 'vuex';
 import DateSelector from '../../../components/utils/DateSelector';
 import { EquipmentState } from '../../../js/EquipmentState';
 import PageTitle from '../../../components/utils/PageTitle';
-
 
 export default {
   name: 'AdminEquipmentNewPage',

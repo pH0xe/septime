@@ -50,7 +50,6 @@ export default {
         .filter((t) => t.students
           .find((s) => s.uid === this.currentUser.uid));
 
-
       // concat events and trainings and return them
       return copyEvent.concat(copyTrainings);
     }

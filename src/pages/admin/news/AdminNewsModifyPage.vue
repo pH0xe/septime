@@ -244,7 +244,6 @@ export default {
   methods: {
     ...mapActions(['fetchNews', 'updateNews', 'updateNewsImage']),
 
-
     modifyNews() {
       this.$v.$touch();
       if (!this.$v.$error) {

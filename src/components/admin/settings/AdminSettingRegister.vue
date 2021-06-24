@@ -53,7 +53,6 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-
 export default {
   name: 'AdminSettingRegister',
 

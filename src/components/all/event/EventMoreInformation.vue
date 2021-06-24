@@ -175,7 +175,6 @@
         <q-separator />
       </template> <!-- Entrainement -->
 
-
       <q-card-actions align="right">
         <template v-if="$store.getters.isLoggedIn && !isTraining">
           <q-btn

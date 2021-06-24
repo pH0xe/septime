@@ -101,7 +101,6 @@ import { date } from 'quasar';
 import AdminEquipmentDetailsDialog from './AdminEquipmentDetailsDialog';
 import { EquipmentState } from '../../../js/EquipmentState';
 
-
 const columns = [
   {
     name: 'internalId',

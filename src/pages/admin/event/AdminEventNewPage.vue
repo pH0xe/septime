@@ -307,7 +307,6 @@ export default {
         this.startDate.setHours(startHour, startMinute);
         this.endDate.setHours(endHour, endMinute);
 
-
         const eventData = {
           description: this.description,
           endDate: this.endDate,

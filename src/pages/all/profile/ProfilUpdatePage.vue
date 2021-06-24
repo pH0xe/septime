@@ -306,7 +306,6 @@ export default {
   components: { FirebaseUploader },
   mixins: [validationMixin],
 
-
   data: () => ({
     user: null,
     email: '',

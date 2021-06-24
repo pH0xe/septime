@@ -1,6 +1,5 @@
 import { date } from 'quasar';
 
-
 export const Group = {
   VETERANS4: 'Vétérans 4',
   VETERANS3: 'Vétérans 3',

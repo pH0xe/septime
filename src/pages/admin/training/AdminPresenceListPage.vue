@@ -20,7 +20,6 @@ import { mapState, mapActions } from 'vuex';
 import PageTitle from '../../../components/utils/PageTitle';
 import AdminPresenceCallListTable from '../../../components/admin/trainings/AdminPresenceCallListTable';
 
-
 export default {
   name: 'AdminPresenceListPage',
   components: { AdminPresenceCallListTable, PageTitle },

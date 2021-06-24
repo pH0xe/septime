@@ -32,7 +32,6 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import { Notify } from 'quasar';
-import { adminCreateMember } from '../../../boot/firebase';
 import AdminMemberCreatePersonalData from '../../../components/admin/member/AdminMemberCreatePersonalData';
 import AdminMemberCreateContactData from '../../../components/admin/member/AdminMemberCreateContactData';
 import AdminMemberCreateEmergencyData from '../../../components/admin/member/AdminMemberCreateEmergencyData';
@@ -80,7 +79,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchAccounts', 'createSubUser']),
+    ...mapActions(['fetchAccounts', 'adminCreateAccount', 'createSubUser']),
 
     emailExist(email) {
       const account = this.accounts.find((ac) => ac.email === email);
@@ -147,17 +146,10 @@ export default {
         const data = { email: loginData.$data.loginEmail };
         let uid = this.emailExist(data.email);
         let responseData;
-        if (!uid) {
-          responseData = await adminCreateMember({ ...data });
-          if (responseData.error) {
-            console.error(responseData);
-            this.$q.notify({
-              message: `Unexpected error: ${responseData.code}`,
-              icon: 'mdi-alert',
-              color: 'negative'
-            });
-          } else {
-            uid = responseData.data.uid;
+        if (!uid) { // l'email n'existe pas encore, il faut créer un compte
+          responseData = await this.adminCreateAccount({ email: data.email });
+          if (!responseData.error) {
+            uid = responseData.uid;
           }
         }
 
@@ -222,7 +214,6 @@ export default {
     title: 'Admin - Membres'
   }
 };
-
 
 </script>
 

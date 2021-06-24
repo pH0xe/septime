@@ -130,7 +130,6 @@ export default {
   components: { ProfilView },
   mixins: [validationMixin],
 
-
   data: () => ({
     topics: [],
     emailCopy: '',

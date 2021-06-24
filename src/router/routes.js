@@ -13,7 +13,6 @@ import TCUPage from '../pages/all/contact/ContactTCUPage';
 import ContactWebmasterPage from '../pages/all/contact/ContactWebmasterPage';
 import ContactAccessPage from '../pages/all/contact/ContactAccessPage';
 
-
 const routes = [
   {
     path: '/',

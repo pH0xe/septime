@@ -84,7 +84,6 @@
 import { mapActions } from 'vuex';
 import { NewsType } from '../../../js/newsType';
 
-
 const columns = [
   {
     name: 'title',

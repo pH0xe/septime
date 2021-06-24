@@ -129,7 +129,6 @@ export default {
   methods: {
     ...mapActions(['fetchEvents']),
 
-
     toggleDialogEventDetails(event, row) {
       this.$q.dialog({
         component: AdminEventDetails,
@@ -172,7 +171,6 @@ export default {
       this.fetchEvents();
     }
   }
-
 
 };
 </script>

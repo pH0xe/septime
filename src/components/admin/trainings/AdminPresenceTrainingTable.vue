@@ -39,7 +39,6 @@ const columns = [
   }
 ];
 
-
 export default {
   name: 'AdminPresenceTrainingTable',
 

@@ -261,7 +261,6 @@
 import { openURL, QSpinnerPie } from 'quasar';
 import { mapGetters, mapActions } from 'vuex';
 
-
 export default {
   name: 'ProfilView',
 

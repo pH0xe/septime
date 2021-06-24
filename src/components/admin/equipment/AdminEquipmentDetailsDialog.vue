@@ -262,7 +262,6 @@ export default {
     }
   },
 
-
   methods: {
     ...mapActions(['rentEquipment', 'stopRentEquipment', 'updateControlEquipment', 'updateStateEquipment', 'deleteThisEquipment', 'fetchEquipments']),
 

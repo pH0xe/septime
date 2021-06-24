@@ -300,7 +300,6 @@
           </q-expansion-item>
           <!-- </editor-fold> -->
 
-
           <div class="fixed-bottom">
             <q-item
               v-ripple

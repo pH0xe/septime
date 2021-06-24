@@ -1,7 +1,6 @@
 import { Notify, date } from 'quasar';
 import { db } from '../boot/firebase';
 
-
 export default {
   namespaced: false,
   state: {

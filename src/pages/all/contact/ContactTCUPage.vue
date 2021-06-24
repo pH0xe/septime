@@ -93,7 +93,6 @@ export default {
     ...mapGetters(['tcuLink'])
   },
 
-
   mounted() {
     if (this.tcuLink === null) {
       this.fetchTCU();

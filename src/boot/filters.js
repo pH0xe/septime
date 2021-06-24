@@ -1,6 +1,5 @@
 import { date } from 'quasar';
 
-
 export default ({ Vue }) => {
   Vue.filter('uppercase', (value) => {
     if (!value) return '';

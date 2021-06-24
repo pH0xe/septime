@@ -176,7 +176,7 @@
 </template>
 
 <script lang="js">
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import { version as appVersion } from '../../package.json';
 
 import { auth } from '../boot/firebase';
@@ -285,6 +285,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['adminCreateAccount']),
+
     toggleDarkTheme() {
       Utils.toggleDarkTheme(this);
     },

@@ -40,7 +40,6 @@
 import { date } from 'quasar';
 import { DateUtils } from '../../js/DateUtils';
 
-
 export default {
   name: 'DateSelector',
   props: {
