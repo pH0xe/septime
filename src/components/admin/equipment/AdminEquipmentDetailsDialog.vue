@@ -2,7 +2,7 @@
   <q-dialog
     ref="dialog"
     :maximized="$q.platform.is.mobile"
-    @hide="hide"
+    @hide="onDialogHide"
   >
     <q-card>
       <q-bar
@@ -271,6 +271,10 @@ export default {
 
     hide() {
       this.$refs.dialog.hide();
+    },
+
+    onDialogHide() {
+      this.$emit('hide');
     },
 
     onClickOk() {

@@ -1,5 +1,6 @@
 <template>
   <q-table
+    :key="tableKey"
     :data="equipments"
     :filter="filterInput"
     :filter-method="filterEquipment"
@@ -174,7 +175,8 @@ export default {
     pagination: {
       rowsPerPage: 0
     },
-    index: 0
+    index: 0,
+    tableKey: 0
 
   }),
 
@@ -196,7 +198,10 @@ export default {
         equipmentType: this.getTypeByUid(row.equipmentType),
         members: this.members,
         membersActive: this.membersActive
-      });
+      })
+        .onDismiss(() => {
+          this.tableKey += 1;
+        });
     },
 
     monthsBeforeNextControl(useDate, uid) {

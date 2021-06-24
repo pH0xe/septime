@@ -232,7 +232,6 @@ export default {
     },
     // </editor-fold>
 
-    // todo a refaire
     updateStudentPresence(_, { members }) {
       members.forEach((member) => db.collection('users')
         .doc(member.parentUid)
