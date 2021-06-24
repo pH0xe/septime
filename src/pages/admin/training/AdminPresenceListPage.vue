@@ -1,89 +1,60 @@
 <template>
   <q-page class="page-padded">
-    <page-title title="Liste d'appel:" />
-
-    <div class="text-caption q-my-none">
-      {{ date.formatDate(training.startDate, 'dddd DD MMMM, HH:mm - ', {
-        days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-        months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-                 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']}) }}
-      {{ date.formatDate(training.endDate, 'HH:mm') }}
+    <page-title title="Liste d'appel :" />
+    <div class="text-h6">
+      {{ training.date | dateFull }} de
+      {{ training.timetable.start.full.replaceAll(':', 'h') }} à
+      {{ training.timetable.end.full.replaceAll(':', 'h') }}
     </div>
-    <div><span class="text-weight-bold">Lieux : </span> {{ training.location }}</div>
-    <div><span class="text-weight-bold">Catégories : </span> {{ training.group.toString() }}</div>
+    <q-separator />
     <admin-presence-call-list-table
-      class="q-mt-md"
-      :members="trainingMember"
+      :members="trainingMembers"
       :training="training"
     />
-    <q-card
-      flat
-      class="q-mt-md"
-    >
-      <q-card-actions align="left">
-        <q-btn
-          color="negative"
-          label="Supprimer"
-          @click="deleteThisTrainings"
-        />
-        <q-space />
-        <q-btn
-          color="negative"
-          outline
-          label="Retour"
-          @click="onCancelClick"
-        />
-        <q-btn
-          color="admin-primary"
-          flat
-          label="Valider"
-          @click="onOkClick"
-        />
-      </q-card-actions>
-    </q-card>
   </q-page>
 </template>
 
 <script>
-import { date } from 'quasar';
+import { date, extend } from 'quasar';
 import { mapState, mapActions } from 'vuex';
-import AdminPresenceCallListTable from '../../../components/admin/trainings/AdminPresenceCallListTable';
 import PageTitle from '../../../components/utils/PageTitle';
+import AdminPresenceCallListTable from '../../../components/admin/trainings/AdminPresenceCallListTable';
 
 
 export default {
   name: 'AdminPresenceListPage',
-  components: { PageTitle, AdminPresenceCallListTable },
+  components: { AdminPresenceCallListTable, PageTitle },
   data: () => ({
     training: null
   }),
 
   computed: {
     ...mapState({
-      members: (state) => state.members.members,
-      trainings: (state) => state.trainings.trainings
+      members: (state) => state.members.members
     }),
+
     date() {
       return date;
     },
 
-    trainingMember() {
+    trainingMembers() {
       const result = [];
-      this.training.students.forEach((student) => {
-        const findUser = this.members.find((user) => user.uid === student.uid);
-        if (findUser) result.push(findUser);
+      this.training.members.forEach((student) => {
+        const findUser = this.members.find((user) => user.parentUid === student.parentUid && user.uid === student.uid);
+        if (findUser) result.push(extend(true, {}, findUser));
       });
       return result;
     }
   },
 
   beforeMount() {
-    const searchUid = this.$route.params.id;
-    this.training = this.trainings.find((training) => training.uid === searchUid);
+    this.training = this.$route.params.train;
+    if (!this.training.date) this.$router.push({ name: 'admin_presence' });
+    this.fetchMembers();
   },
 
   methods: {
-    ...mapActions(['fetchMembers', 'fetchTrainings', 'updateStudentPresence', 'deleteTraining']),
+    ...mapActions(['fetchMembers', 'updateStudentPresence', 'deleteTraining']),
 
     onOkClick() {
       this.updateStudentPresence({ training: this.training });

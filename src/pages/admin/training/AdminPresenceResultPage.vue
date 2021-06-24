@@ -28,9 +28,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import { extend } from 'quasar';
 import AdminPresenceRankTable from '../../../components/admin/trainings/AdminPresenceRankTable';
 import { Group } from '../../../js/Group';
-import { Utils } from '../../../js/Utils';
 import PageTitle from '../../../components/utils/PageTitle';
 
 
@@ -45,7 +45,7 @@ export default {
     rankingCalculaton() {
       const tablesRes = new Map();
       Group.groupList.forEach((val) => tablesRes.set(val, []));
-      const result = Utils.deepCopy(this.members);
+      const result = extend(true, [], this.members);
 
       result.forEach((member) => {
         tablesRes.get(member.group).push(member);

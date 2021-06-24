@@ -140,8 +140,9 @@ const routes = [
         component: () => import('../pages/admin/training/AdminPresenceResultPage.vue')
       },
       {
-        path: 'presence/list/:id',
+        path: 'presence/list/:train',
         name: 'admin_presence_list',
+        props: true,
         component: () => import('../pages/admin/training/AdminPresenceListPage.vue')
       },
       {

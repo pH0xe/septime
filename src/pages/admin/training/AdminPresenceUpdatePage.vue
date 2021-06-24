@@ -138,7 +138,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { date, Notify } from 'quasar';
+import { date, extend, Notify } from 'quasar';
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import store from '../../../store';
@@ -146,7 +146,6 @@ import { DateUtils } from '../../../js/DateUtils';
 import { Group } from '../../../js/Group';
 import SectionTitle from '../../../components/utils/sectionTitle';
 import AdminPresenceMemberUpdateTable from '../../../components/admin/trainings/AdminPresenceMemberUpdateTable';
-import { Utils } from '../../../js/Utils';
 import TimeSelector from '../../../components/utils/TimeSelector';
 import DateSelector from '../../../components/utils/DateSelector';
 import PageTitle from '../../../components/utils/PageTitle';
@@ -204,7 +203,7 @@ export default {
     const { id } = this.$route.params;
     this.fetchTrainingsClean()
       .then(() => {
-        this.training = Utils.deepCopy(store.state.trainings.trainingsClean.find((training) => training.uid === id));
+        this.training = extend(true, [], store.state.trainings.trainingsClean.find((training) => training.uid === id));
         this.training.period.start = new Date(this.training.period.start);
         this.training.period.end = new Date(this.training.period.end);
         this.training.excludedDates = this.training.excludedDates.map((d) => new Date(d));
