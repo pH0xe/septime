@@ -8,9 +8,25 @@
     </div>
     <q-separator />
     <admin-presence-call-list-table
+      ref="callList"
       :members="trainingMembers"
       :training="training"
     />
+    <div class="q-mt-lg row justify-end items-baseline">
+      <q-btn
+        label="Annuler"
+        color="negative"
+        class="col-12 col-md-auto"
+        outline
+        @click="onCancelClick"
+      />
+      <q-btn
+        label="Valider"
+        color="positive"
+        class="col-12 col-md-auto q-ml-md q-mt-md"
+        @click="onOkClick"
+      />
+    </div>
   </q-page>
 </template>
 
@@ -56,7 +72,8 @@ export default {
     ...mapActions(['fetchMembers', 'updateStudentPresence', 'deleteTraining']),
 
     onOkClick() {
-      this.updateStudentPresence({ training: this.training });
+      const { members } = this.$refs.callList;
+      this.updateStudentPresence({ members });
       this.$router.push({ name: 'admin_presence' });
     },
 

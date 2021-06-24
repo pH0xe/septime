@@ -20,7 +20,8 @@ export default {
       console.error(error);
     });
     const result = JSON.parse(localStorage.getItem('darkMode'));
-    this.$q.dark.set(result || 'auto');
+    if (result == null) this.$q.dark.set('auto');
+    else this.$q.dark.set(result);
   },
 
   meta: {

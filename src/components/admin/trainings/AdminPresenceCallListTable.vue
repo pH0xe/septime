@@ -1,5 +1,6 @@
 <template>
   <q-table
+    :key="tableKey"
     :data="members"
     :columns="columns"
     :pagination.sync="pagination"
@@ -101,7 +102,8 @@ export default {
     pagination: {
       rowsPerPage: 0
     },
-    color: 'bg-info'
+    color: 'bg-info',
+    tableKey: 0
   }),
 
   computed: {
@@ -135,7 +137,7 @@ export default {
         this.removeDate(State.HERE, member);
         member.presence.absent.push(this.training.date);
       }
-      // todo update color
+      this.tableKey += 1;
     },
 
     isAbsent(member) {

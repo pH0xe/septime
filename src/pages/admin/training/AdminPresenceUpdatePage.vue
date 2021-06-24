@@ -203,7 +203,7 @@ export default {
     const { id } = this.$route.params;
     this.fetchTrainingsClean()
       .then(() => {
-        this.training = extend(true, [], store.state.trainings.trainingsClean.find((training) => training.uid === id));
+        this.training = extend(true, {}, store.state.trainings.trainingsClean.find((training) => training.uid === id));
         this.training.period.start = new Date(this.training.period.start);
         this.training.period.end = new Date(this.training.period.end);
         this.training.excludedDates = this.training.excludedDates.map((d) => new Date(d));

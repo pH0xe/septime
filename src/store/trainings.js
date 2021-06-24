@@ -233,20 +233,21 @@ export default {
     // </editor-fold>
 
     // todo a refaire
-    updateStudentPresence({ commit }, { training }) {
-      return db.collection('trainings').doc(training.uid)
-        .update({ students: training.students })
-        .then(() => {
-          commit('updateStudent', { training });
-        })
+    updateStudentPresence(_, { members }) {
+      members.forEach((member) => db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
+        .doc(member.uid)
+        .update({ presence: member.presence })
         .catch((err) => {
-          console.error('Error while updating presence: ', err);
+          console.log('Error while changing presence : ', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
             color: 'negative',
-            position: 'bottom'
+            position: 'top-left'
           });
-        });
+        }));
+      return true;
     },
 
     // <editor-fold desc="createTraining" defaultstate="collapsed">
