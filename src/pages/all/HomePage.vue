@@ -119,8 +119,8 @@
 
         <div class="row q-col-gutter-md">
           <div
-            v-for="training in upcomingTrainings"
-            :key="training.uid"
+            v-for="(training, index) in upcomingTrainings"
+            :key="index"
             class="col-12 col-md-4"
           >
             <lesson-card :training="training" />
@@ -144,8 +144,8 @@
 
       <div class="row q-col-gutter-md">
         <div
-          v-for="event in upcomingEvents"
-          :key="event.uid"
+          v-for="(index, event) in upcomingEvents"
+          :key="index"
           class="col-12 col-md-4"
         >
           <event-card
@@ -160,7 +160,7 @@
 <script lang="js">
 import { mapState, mapGetters, mapActions } from 'vuex';
 
-import { date } from 'quasar';
+import { date, extend } from 'quasar';
 import * as firebase from 'firebase';
 import NewsCard from '../../components/all/news/NewsCard';
 import LessonCard from '../../components/all/trainings/LessonCard';
@@ -178,13 +178,14 @@ export default {
     ...mapState({
       currentUser: (state) => state.auth.currentUser,
       news: (state) => state.news.news,
-      currentUserTrainings: (state) => state.trainings.currentUserTrainings,
+      currentUserTrainings: (state) => state.trainings.trainings,
       events: (state) => state.events.nextEvents,
       newsFFE: (state) => state.news.ffeInfo
     }),
 
     ...mapGetters(['isLoggedIn']),
 
+    // <editor-fold desc="orderedNews" defaultstate="collapsed">
     orderedNews() {
       const newsCopy = Array.from(this.news);
       newsCopy.sort((news1, news2) => {
@@ -196,7 +197,9 @@ export default {
 
       return newsCopy.slice(0, 3);
     },
+    // </editor-fold>
 
+    // <editor-fold desc="orderedNewsFFE" defaultstate="collapsed">
     orderedNewsFFE() {
       const newsCopy = Array.from(this.newsFFE);
       newsCopy.sort((news1, news2) => {
@@ -208,30 +211,36 @@ export default {
 
       return newsCopy.slice(0, 3);
     },
+    // </editor-fold>
 
+    // <editor-fold desc="upcomingTrainings" defaultstate="collapsed">
     upcomingTrainings() {
       if (!this.isLoggedIn) {
         return [];
       }
 
-      let filtered = Array.from(this.currentUserTrainings);
-      filtered = filtered.filter((t) => t.endDate > new Date());
-
-      filtered = filtered
-        .filter((training) => training.group.includes(this.currentUser.group));
+      let filtered = extend(true, [], this.currentUserTrainings);
+      filtered = filtered.filter((t) => date.getDateDiff(t.date, new Date(), 'days') > 0
+      || (date.getDateDiff(t.date, new Date(), 'days') === 0 && t.timetable.end.hour >= new Date().getHours()));
 
       filtered.sort((t1, t2) => {
-        if (t1.startDate < t2.startDate) {
+        const d1 = new Date(t1.date);
+        const d2 = new Date(t2.date);
+        d1.setHours(t1.timetable.start.hour, t1.timetable.start.minute);
+        d2.setHours(t2.timetable.start.hour, t2.timetable.start.minute);
+        if (d1 < d2) {
           return -1;
         }
         return 1;
       });
 
-      filtered = filtered.filter((t) => t.students.find((s) => s.uid === this.currentUser.uid));
+      filtered = filtered.filter((t) => t.members.find((s) => s.parentUid === this.currentUser.uid));
 
-      return filtered.slice(0, 3);
+      return filtered.splice(0, 3);
     },
+    // </editor-fold>
 
+    // <editor-fold desc="upcomingEvents" defaultstate="collapsed">
     upcomingEvents() {
       let copy = Array.from(this.events);
 
@@ -246,18 +255,25 @@ export default {
 
       return copy.slice(0, 3);
     },
+    // </editor-fold>
 
+    // <editor-fold desc="ratioMainImage" defaultstate="collapsed">
     ratioMainImage() {
       return this.$q.platform.is.mobile ? 4 / 3 : 1000 / 200;
     }
+    // </editor-fold>
   },
 
+  // <editor-fold desc="beforeMount" defaultstate="collapsed">
   beforeMount() {
     this.fetchNews();
     this.fetchNextEvents();
   },
+  // </editor-fold>
 
+  // <editor-fold desc="mounted" defaultstate="collapsed">
   mounted() {
+    // <editor-fold desc="beforeinstallprompt" defaultstate="collapsed">
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       this.deferredPrompt = e;
@@ -267,12 +283,16 @@ export default {
       if (item) diff = date.getDateDiff(Date(), item.date, 'days');
       if (!item || diff >= 10) this.showInstallPromotion();
     });
+    // </editor-fold>
+
     this.displayTrainings();
   },
+  // </editor-fold>
 
   methods: {
-    ...mapActions(['fetchNews', 'fetchTrainings', 'fetchNextEvents', 'fetchCurrentUserTrainings']),
+    ...mapActions(['fetchNews', 'fetchNextEvents', 'fetchTrainings']),
 
+    // <editor-fold desc="showInstallPromotion" defaultstate="collapsed">
     showInstallPromotion() {
       this.$q.notify({
         message: 'Voulez-vous ajouter l\'application Cercle d\'escrime de Moirans sur votre bureau ?',
@@ -293,26 +313,15 @@ export default {
         ]
       });
     },
+    // </editor-fold>
 
-    showRefreshNotification() {
-      this.$q.notify({
-        message: 'Une nouvelle version du site est disponible.',
-        caption: 'Voulez-vous rafraichir ?',
-        color: 'dark',
-        icon: 'mdi-refresh',
-        timeout: 0,
-        actions: [
-          { label: 'Oui', color: 'amber', handler: () => { /* ... */ } },
-          { label: 'Non', color: 'white', handler: () => { /* ... */ } }
-        ]
-      });
-    },
-
+    // <editor-fold desc="displayTrainings" defaultstate="collapsed">
     async displayTrainings() {
       await firebase.getCurrentUser().then((user) => {
-        if (user) { this.fetchCurrentUserTrainings({ uid: user.uid }); }
+        if (user) { this.fetchTrainings(); }
       });
     }
+    // </editor-fold>
   },
 
   meta: {

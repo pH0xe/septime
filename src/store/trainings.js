@@ -232,6 +232,7 @@ export default {
     },
     // </editor-fold>
 
+    // <editor-fold desc="updateStudentPresence" defaultstate="collapsed">
     updateStudentPresence(_, { members }) {
       members.forEach((member) => db.collection('users')
         .doc(member.parentUid)
@@ -248,6 +249,7 @@ export default {
         }));
       return true;
     },
+    // </editor-fold>
 
     // <editor-fold desc="createTraining" defaultstate="collapsed">
     createTraining({ commit }, { training }) {
