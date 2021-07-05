@@ -13,18 +13,29 @@
       <q-card-section>
         <q-select
           v-model="selectedRole"
-          :options="processedRoles"
+          :options="roles"
+          :option-label="(item) => `${item.name} (${item.require} requis)`"
           label="Rôle"
         >
           <template v-slot:prepend>
             <q-icon name="mdi-sword-cross" />
           </template>
         </q-select>
+        <q-select
+          v-model="selectedMember"
+          :options="processedMembers"
+          label="Adhérent"
+          :option-label="(item) => `${item.firstName} ${item.lastName}`"
+        >
+          <template v-slot:prepend>
+            <q-icon name="mdi-account" />
+          </template>
+        </q-select>
       </q-card-section>
 
       <q-card-actions align="right">
         <q-btn
-          v-if="selectedRole !== undefined"
+          v-if="selectedRole !== undefined && selectedMember !== undefined"
           unelevated
           icon="mdi-check"
           label="Ok"
@@ -44,6 +55,8 @@
 </template>
 
 <script lang="js">
+import { mapState } from 'vuex';
+
 export default {
   name: 'EventParticipateDialog',
   props: {
@@ -54,19 +67,31 @@ export default {
     roles: {
       type: Array,
       required: true
+    },
+    registerMember: {
+      type: Array,
+      required: false,
+      default: null
     }
   },
   data: () => ({
-    selectedRole: undefined
+    selectedRole: undefined,
+    selectedMember: undefined
   }),
 
   computed: {
-    processedRoles() {
-      return this.roles.map((role) => ({
-        label: `${role.name} (${role.require} requis)`,
-        value: role.name
-      }));
+    ...mapState({
+      currentUser: (state) => state.auth.currentUser
+    }),
+
+    processedMembers() {
+      return this.currentUser.subUsers.filter((m) => !this.registerMember?.some((r) => r.uid === m.uid && r.parentUid === this.currentUser.uid));
     }
+  },
+
+  mounted() {
+    [this.selectedMember] = this.processedMembers;
+    [this.selectedRole] = this.roles;
   },
 
   methods: {
@@ -80,7 +105,7 @@ export default {
       this.$emit('hide');
     },
     onClickOk() {
-      this.$emit('ok', { role: this.selectedRole });
+      this.$emit('ok', { role: this.selectedRole, member: this.selectedMember });
       this.hide();
     }
   }

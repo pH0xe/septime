@@ -242,9 +242,10 @@ export default {
     },
 
     canParticipate() {
-      return !this.event.registerMember?.some(
-        (registration) => registration.uid === this.$store.state.auth.currentUser.uid
-      );
+      if (!this.event.registerMember) return true;
+      const registerCount = this.event.registerMember.filter((r) => r.parentUid === this.currentUser.uid).length;
+      const subUsersCount = this.currentUser?.subUsers?.length || 0;
+      return registerCount < subUsersCount;
     }
   },
 
@@ -282,21 +283,24 @@ export default {
         component: EventParticipateDialog,
         parent: this,
         title: this.event.title,
-        roles: this.event.neededRole
-      }).onOk(({ role: { value } }) => {
+        roles: this.event.neededRole,
+        registerMember: this.event.registerMember
+      }).onOk(({ role, member }) => {
         this.isSubscribing = true;
         let newRegisterMember;
         if (this.event.registerMember) {
           newRegisterMember = [...this.event.registerMember, {
-            name: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
-            role: value,
-            uid: this.currentUser.uid
+            name: `${member.firstName} ${member.lastName}`,
+            role: role.name,
+            uid: member.uid,
+            parentUid: this.currentUser.uid
           }];
         } else {
           newRegisterMember = [{
-            name: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
-            role: value,
-            uid: this.currentUser.uid
+            name: `${member.firstName} ${member.lastName}`,
+            role: role.name,
+            uid: member.uid,
+            parentUid: this.currentUser.uid
           }];
         }
         this.$store.dispatch('subscribeToEvent', { id: this.event.id, newRegisterMember })
@@ -307,9 +311,6 @@ export default {
               icon: 'mdi-check',
               position: 'bottom'
             });
-
-            this.hide();
-            return this.$store.dispatch('fetchEvents');
           })
           .catch((err) => {
             this.$q.notify({

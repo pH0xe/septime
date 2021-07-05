@@ -144,7 +144,7 @@
 
       <div class="row q-col-gutter-md">
         <div
-          v-for="(index, event) in upcomingEvents"
+          v-for="(event, index) in upcomingEvents"
           :key="index"
           class="col-12 col-md-4"
         >

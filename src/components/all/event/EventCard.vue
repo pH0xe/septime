@@ -23,9 +23,12 @@
 
     <q-card-section>
       <div class="row items-center q-gutter-sm">
-        <q-icon name="mdi-clock-outline" />
         <div>
+          <q-icon name="mdi-clock-start" />
           Du {{ dateFormatted }} à {{ event.startDate | dateHM }}
+        </div>
+        <div>
+          <q-icon name="mdi-clock-end" />
           au {{ endDateFormatted }} à {{ event.endDate | dateHM }}
         </div>
       </div>
@@ -106,9 +109,10 @@ export default {
       return `${this.timeRange[0]}-${this.timeRange[1]}h`;
     },
     canParticipate() {
-      return !this.event.registerMember?.some(
-        (registration) => registration.uid === this.$store.state.auth.currentUser.uid
-      );
+      if (!this.event.registerMember) return true;
+      const registerCount = this.event.registerMember.filter((r) => r.parentUid === this.currentUser.uid).length;
+      const subUsersCount = this.currentUser?.subUsers?.length || 0;
+      return registerCount < subUsersCount;
     }
   },
   methods: {
@@ -117,21 +121,24 @@ export default {
         component: EventParticipateDialog,
         parent: this,
         title: this.event.title,
-        roles: this.event.neededRole
-      }).onOk(({ role: { value } }) => {
+        roles: this.event.neededRole,
+        registerMember: this.event.registerMember
+      }).onOk(({ role, member }) => {
         this.isSubscribing = true;
         let newRegisterMember;
         if (this.event.registerMember) {
           newRegisterMember = [...this.event.registerMember, {
-            name: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
-            role: value,
-            uid: this.currentUser.uid
+            name: `${member.firstName} ${member.lastName}`,
+            role: role.name,
+            uid: member.uid,
+            parentUid: this.currentUser.uid
           }];
         } else {
           newRegisterMember = [{
-            name: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
-            role: value,
-            uid: this.currentUser.uid
+            name: `${member.firstName} ${member.lastName}`,
+            role: role.name,
+            uid: member.uid,
+            parentUid: this.currentUser.uid
           }];
         }
         this.$store.dispatch('subscribeToEvent', { id: this.event.id, newRegisterMember })
@@ -142,8 +149,6 @@ export default {
               icon: 'mdi-check',
               position: 'bottom'
             });
-
-            return this.$store.dispatch('fetchEvents');
           })
           .catch((err) => {
             this.$q.notify({

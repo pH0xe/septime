@@ -23,6 +23,11 @@ export default {
     deleteEventState(state, { event }) {
       const index = state.events.indexOf(event);
       state.events.splice(index, 1);
+    },
+
+    updateEventMembers(state, { id, newRegisterMember }) {
+      const item = state.nextEvents.find((e) => e.id === id);
+      item.registerMember = newRegisterMember;
     }
   },
 
@@ -55,8 +60,10 @@ export default {
     },
 
     fetchNextEvents({ commit }) {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
       return db.collection('events')
-        .orderBy('startDate').startAt(new Date(new Date().getTime()))
+        .orderBy('startDate').startAt(new Date(d.getTime()))
         .limit(3)
         .get()
         .then((querySnapshot) => {
@@ -84,9 +91,12 @@ export default {
         });
     },
 
-    subscribeToEvent(_, { id, newRegisterMember }) {
+    subscribeToEvent({ commit }, { id, newRegisterMember }) {
       return db.collection('events').doc(id)
-        .update({ registerMember: newRegisterMember });
+        .update({ registerMember: newRegisterMember })
+        .then(() => {
+          commit('updateEventMembers', { id, newRegisterMember });
+        });
     },
 
     postNewEvent({ commit }, { event }) {
