@@ -25,6 +25,7 @@ export default {
   components: { DaykeepCalendar },
 
   computed: {
+    // todo r qui va ici
     ...mapState({
       currentUser: (state) => state.auth.currentUser,
       eventsCalendar: (state) => JSON.parse(JSON.stringify(state.calendar.eventsCalendar)),
