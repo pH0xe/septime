@@ -22,5 +22,8 @@ const formatFullDate = (d) => date.formatDate(d, 'dddd DD MMMM YYYY', {
   months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
 });
 
+const formatShort = (d) => date.formatDate(d, 'DD/MM/YYYY');
+
 DateUtils.formatFullDate = formatFullDate;
+DateUtils.formatShort = formatShort;
 Object.freeze(DateUtils);

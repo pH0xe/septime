@@ -8,7 +8,9 @@ export default {
     isOpen: false,
     cerfa: null, // lien vers le questionnaire cerfa
     medicalTemplate: null, // lien vers le template d'attestation de cerfa
-    tcu: null // lien vers les cgu
+    tcu: null, // lien vers les cgu
+    helloAsso: null, // lien vers la page de paiement Hello asso
+    assoconnect: null // lien vers le formaulaire d'hadésion Assoconnect
   },
 
   getters: {
@@ -26,6 +28,14 @@ export default {
 
     tcuLink(state) {
       return state.tcu;
+    },
+
+    helloAsso(state) {
+      return state.helloAsso;
+    },
+
+    assoconnect(state) {
+      return state.assoconnect;
     }
   },
 
@@ -33,6 +43,8 @@ export default {
     setSettings(state, { settings }) {
       state.settings = settings;
       state.isOpen = settings[0].registerOpen;
+      state.assoconnect = settings[0].assoconnect;
+      state.helloAsso = settings[0].helloAsso;
     },
 
     updateOfficeState(state, { settings, newOffice }) {
@@ -45,7 +57,11 @@ export default {
     },
 
     updateHelloasso(state, { linkToForm }) {
-      state.settings.helloAsso = linkToForm;
+      state.helloAsso = linkToForm;
+    },
+
+    updateAssoconnect(state, { linkToForm }) {
+      state.assoconnect = linkToForm;
     },
 
     setCerfaLink(state, { link }) {
@@ -159,9 +175,25 @@ export default {
 
     updateHelloassoLink({ commit }, { setting, value }) {
       db.collection('settings').doc(setting.id)
-        .update({ linkToHelloasso: value })
+        .update({ helloAsso: value })
         .then(() => {
           commit('updateHelloasso', { linkToForm: value });
+        })
+        .catch((err) => {
+          console.log('Error while updating iframe link : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+
+    updateAssoconnectLink({ commit }, { setting, value }) {
+      db.collection('settings').doc(setting.id)
+        .update({ assoconnect: value })
+        .then(() => {
+          commit('updateAssoconnect', { linkToForm: value });
         })
         .catch((err) => {
           console.log('Error while updating iframe link : ', err);
