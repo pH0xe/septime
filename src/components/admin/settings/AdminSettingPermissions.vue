@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div class="text-h6">
-      Accorder les permissions administrateurs
-    </div>
+    <section-title text="Accorder les permissions administrateurs" />
     <admin-permissions-table
       :accounts="accounts"
       title="Choisir les administrateurs du site"
@@ -13,10 +11,11 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import AdminPermissionsTable from './AdminPermissionsTable';
+import SectionTitle from '../../utils/sectionTitle';
 
 export default {
   name: 'AdminSettingPermissions',
-  components: { AdminPermissionsTable },
+  components: { SectionTitle, AdminPermissionsTable },
 
   computed: {
     ...mapState({
