@@ -3,122 +3,58 @@
     <page-title title="Modification de la news" />
     <q-card flat>
       <q-card-section>
-        <div class="full-width text-weight-bold q-mb-md">
-          Titre :
-        </div>
-        <div class="col q-ml-lg">
+        <section-title text="Titre" />
+        <q-card-section class="q-pt-none">
           <q-input
             v-model="newTitle"
-            label="Nom de l'actualitée"
+            filled
+            label="Nom de l'actualité"
             error-message="Champ requis"
             color="admin-primary"
             :error="$v.newTitle.$error"
             @input="$v.newTitle.$touch"
             @blur="$v.newTitle.$touch"
           />
-        </div>
+        </q-card-section>
       </q-card-section>
 
-      <q-select
-        v-model="newsTypeSelect"
-        class="q-ma-lg"
-        :options="newsType"
-        map-options
-        label="Type"
-        color="admin-primary"
-        emit-value
-        :error="$v.newsTypeSelect.$error"
-        error-message="Champ requis"
-        @input="$v.newsTypeSelect.$touch"
-        @blur="$v.newsTypeSelect.$touch"
-      >
-        <template v-slot:append>
-          <q-icon
-            v-if="newsTypeSelect !== ''"
-            class="cursor-pointer"
-            name="mdi-close"
-            @click="newsTypeSelect = ''"
-          />
-        </template>
-      </q-select>
+      <q-card-section class="q-pt-none">
+        <section-title text="Type de l'actualité" />
+        <q-card-section class="q-pt-none">
+          <q-select
+            v-model="newsTypeSelect"
+            filled
+            :options="newsType"
+            map-options
+            label="Type"
+            color="admin-primary"
+            emit-value
+            :error="$v.newsTypeSelect.$error"
+            error-message="Champ requis"
+            @input="$v.newsTypeSelect.$touch"
+            @blur="$v.newsTypeSelect.$touch"
+          >
+            <template v-slot:append>
+              <q-icon
+                v-if="newsTypeSelect !== ''"
+                class="cursor-pointer"
+                name="mdi-close"
+                @click="newsTypeSelect = ''"
+              />
+            </template>
+          </q-select>
+        </q-card-section>
+      </q-card-section>
 
-      <q-card-section>
-        <div class="full-width text-weight-bold q-mb-md">
-          Contenu :
-        </div>
-        <div class="fa-border-all">
+      <q-card-section class="q-pt-none">
+        <section-title text="Contenu" />
+        <q-card-section class="q-pt-none fa-border-all">
           <q-editor
             v-model="newText"
             error-message="Champ requis"
             toolbar-toggle-color="admin-primary"
             :error="$v.newText.$error"
-            :toolbar="[
-              [
-                {
-                  label: 'Aligner',
-                  icon: this.$q.iconSet.editor.align,
-                  fixedLabel: true,
-                  list: 'only-icons',
-                  options: ['left', 'center', 'right', 'justify']
-                }
-              ],
-              ['bold', 'italic', 'strike', 'underline'],
-              ['token', 'hr', 'link', 'custom_btn'],
-              [
-                {
-                  label: 'Titre',
-                  icon: this.$q.iconSet.editor.formatting,
-                  list: 'no-icons',
-                  options: [
-                    'p',
-                    'h1',
-                    'h2',
-                    'h3',
-                    'h4',
-                    'h5',
-                    'h6',
-                    'code'
-                  ]
-                },
-                {
-                  label: 'Taille',
-                  icon: this.$q.iconSet.editor.fontSize,
-                  fixedLabel: true,
-                  fixedIcon: true,
-                  list: 'no-icons',
-                  options: [
-                    'size-1',
-                    'size-2',
-                    'size-3',
-                    'size-4',
-                    'size-5',
-                    'size-6',
-                    'size-7'
-                  ]
-                },
-                {
-                  label: 'Polices',
-                  icon: this.$q.iconSet.editor.font,
-                  fixedIcon: true,
-                  list: 'no-icons',
-                  options: [
-                    'default_font',
-                    'arial',
-                    'arial_black',
-                    'comic_sans',
-                    'courier_new',
-                    'impact',
-                    'lucida_grande',
-                    'times_new_roman',
-                    'verdana'
-                  ]
-                },
-                'removeFormat'
-              ],
-              ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
-              ['undo', 'redo']
-            ]"
+            :toolbar="wysiwyg"
             :fonts="{
               arial: 'Arial',
               arial_black: 'Arial Black',
@@ -132,25 +68,27 @@
             @input="$v.newText.$touch"
             @blur="$v.newText.$touch"
           />
-        </div>
+        </q-card-section>
       </q-card-section>
 
-      <q-card-section>
-        <div class="full-width text-weight-bold q-mb-md">
-          Modifier l'image :
-        </div>
-        <firebase-uploader
-          ref="newsUploader"
-          color="admin-primary"
-          path="news/public_temp"
-          :max-total-size="1048576"
-          :auto-upload="false"
-          hide-upload-btn
-          flat
-          bordered
-          @added="picUploader"
-          @removed="picUploader"
-        />
+      <q-card-section class="q-pt-none">
+        <section-title text="Ajouter une image" />
+        <q-card-section class="q-pt-none row items-start">
+          <firebase-uploader
+            ref="newsUploader"
+            class="col-12 col-md-5 q-mr-lg"
+            color="admin-primary"
+            path="news/public_temp"
+            accept="image/*"
+            :max-total-size="1048576"
+            :auto-upload="false"
+            hide-upload-btn
+            flat
+            bordered
+            @added="picUploader"
+            @removed="picUploader"
+          />
+        </q-card-section>
       </q-card-section>
 
       <q-card-actions align="right">
@@ -179,6 +117,7 @@ import { Notify } from 'quasar';
 import { NewsType } from '../../../js/newsType';
 import FirebaseUploader from '../../../components/utils/FirebaseUploader';
 import PageTitle from '../../../components/utils/PageTitle';
+import SectionTitle from '../../../components/utils/sectionTitle';
 
 const newsType = [
   {
@@ -192,16 +131,12 @@ const newsType = [
   {
     label: 'Actualité',
     value: NewsType.NEWS
-  },
-  {
-    label: 'Boutique',
-    value: NewsType.STORE
   }
 ];
 
 export default {
   name: 'AdminNewsModifyPage',
-  components: { PageTitle, FirebaseUploader },
+  components: { SectionTitle, PageTitle, FirebaseUploader },
   mixins: [validationMixin],
 
   data: () => ({
@@ -218,6 +153,76 @@ export default {
 
     newsType() {
       return newsType;
+    },
+
+    wysiwyg() {
+      return [
+        [
+          {
+            label: 'Aligner',
+            icon: this.$q.iconSet.editor.align,
+            fixedLabel: true,
+            list: 'only-icons',
+            options: ['left', 'center', 'right', 'justify']
+          }
+        ],
+        ['bold', 'italic', 'strike', 'underline'],
+        ['token', 'hr', 'link', 'custom_btn'],
+        [
+          {
+            label: 'Titre',
+            icon: this.$q.iconSet.editor.formatting,
+            list: 'no-icons',
+            options: [
+              'p',
+              'h1',
+              'h2',
+              'h3',
+              'h4',
+              'h5',
+              'h6',
+              'code'
+            ]
+          },
+          {
+            label: 'Taille',
+            icon: this.$q.iconSet.editor.fontSize,
+            fixedLabel: true,
+            fixedIcon: true,
+            list: 'no-icons',
+            options: [
+              'size-1',
+              'size-2',
+              'size-3',
+              'size-4',
+              'size-5',
+              'size-6',
+              'size-7'
+            ]
+          },
+          {
+            label: 'Polices',
+            icon: this.$q.iconSet.editor.font,
+            fixedIcon: true,
+            list: 'no-icons',
+            options: [
+              'default_font',
+              'arial',
+              'arial_black',
+              'comic_sans',
+              'courier_new',
+              'impact',
+              'lucida_grande',
+              'times_new_roman',
+              'verdana'
+            ]
+          },
+          'removeFormat'
+        ],
+        ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+        ['undo', 'redo']
+      ];
     }
   },
 

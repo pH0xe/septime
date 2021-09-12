@@ -6,6 +6,7 @@
     @click="openDialog"
   >
     <q-img
+      placeholder-src="~assets/appLogo.svg"
       :src="imgSrc"
       :ratio="2/1"
     >
@@ -40,7 +41,7 @@ export default {
     imgSrc: {
       type: String,
       required: false,
-      default: 'https://source.unsplash.com/random/400x200'
+      default: undefined
     },
     date: {
       type: Date,

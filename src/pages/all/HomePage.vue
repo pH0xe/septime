@@ -154,10 +154,6 @@
         </div>
       </div>
     </div>
-    <q-btn
-      label="test Excel"
-      @click="exportF"
-    />
   </div>
 </template>
 
@@ -169,8 +165,6 @@ import * as firebase from 'firebase';
 import NewsCard from '../../components/all/news/NewsCard';
 import LessonCard from '../../components/all/trainings/LessonCard';
 import EventCard from '../../components/all/event/EventCard';
-import { UsersExport } from '../../js/usersExport';
-import UsersTest from '../../js/usersTest';
 
 export default {
   name: 'HomePage',
@@ -326,12 +320,8 @@ export default {
       await firebase.getCurrentUser().then((user) => {
         if (user) { this.fetchTrainings(); }
       });
-    },
-    // </editor-fold>
-
-    exportF() {
-      UsersExport.exportData(UsersTest);
     }
+    // </editor-fold>
   },
 
   meta: {

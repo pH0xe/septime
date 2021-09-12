@@ -9,8 +9,10 @@
           />
 
           <q-img
-            :src="currentNews.imgURL ? currentNews.imgURL : 'https://source.unsplash.com/random/400x200'"
+            placeholder-src="~assets/appLogo.svg"
+            :src="currentNews.imgURL"
             class="rounded-borders"
+            :class="currentNews.imgURL ? '' : 'defaultImg'"
           />
           <q-separator class="q-my-md" />
 
@@ -72,5 +74,9 @@ export default {
 <style scoped>
   .separator-margin {
     margin-bottom: 1rem;
+  }
+  .defaultImg {
+    width: 50%;
+    margin-left: 25%;
   }
 </style>

@@ -15,9 +15,9 @@
 </template>
 
 <script lang="js">
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { DaykeepCalendar } from '@daykeep/calendar-quasar';
-import * as firebase from 'firebase';
+import { extend } from 'quasar';
 import EventMoreInformation from '../../components/all/event/EventMoreInformation';
 
 export default {
@@ -25,34 +25,13 @@ export default {
   components: { DaykeepCalendar },
 
   computed: {
-    // todo r qui va ici
     ...mapState({
-      currentUser: (state) => state.auth.currentUser,
-      eventsCalendar: (state) => JSON.parse(JSON.stringify(state.calendar.eventsCalendar)),
-      trainingsCalendar: (state) => JSON.parse(JSON.stringify(state.calendar.trainingsCalendar))
+      eventsCalendar: (state) => state.calendar.eventsCalendar
     }),
-
-    ...mapGetters(['isLoggedIn']),
 
     copyEvents() {
       // prepare event to calendar format
-      const copyEvent = Array.from(this.eventsCalendar);
-
-      // prepare trainings to calendar format if user is logged in
-      let copyTrainings = [];
-      if (!this.isLoggedIn) {
-        return copyEvent;
-      }
-
-      copyTrainings = Array.from(this.trainingsCalendar);
-
-      // filter trainings to display only trainings where currentUser is register
-      copyTrainings = copyTrainings
-        .filter((t) => t.students
-          .find((s) => s.uid === this.currentUser.uid));
-
-      // concat events and trainings and return them
-      return copyEvent.concat(copyTrainings);
+      return extend(true, [], this.eventsCalendar);
     }
   },
 
@@ -71,15 +50,10 @@ export default {
 
   async beforeMount() {
     this.fetchEventsCalendar();
-    await firebase.getCurrentUser().then((user) => {
-      if (user) {
-        this.fetchTrainingCalendar({ uid: user.uid });
-      }
-    });
   },
 
   methods: {
-    ...mapActions(['fetchEventsCalendar', 'fetchTrainingCalendar']),
+    ...mapActions(['fetchEventsCalendar']),
 
     onCalendarClick(event) {
       if (event.origin.neededRole) {

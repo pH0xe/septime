@@ -36,7 +36,6 @@
     </a>
     <q-input
       v-model="helloassoURL"
-      :class="$q.platform.is.mobile? '' : 'w-50'"
       type="url"
       color="admin-primary"
       label="URL de l'adhésion HelloAsso"
@@ -48,19 +47,47 @@
       outline
       @click="changeHelloasso"
     />
+
+    <section-title
+      text="Lien de la campagne assoconnect"
+    />
+    <a
+      href="https://help.assoconnect.com/hc/fr/articles/115003805265#h_01F3QQGWEJ1BEH0BEVJQ6JX0E6"
+      target="_blank"
+    >
+      Comment obtenir ce lien ? <br>
+      (exemple : https://cercle-d-escrime-de-moirans.assoconnect.com/collect/description/134026-h-inscriptions-2020-2021 )
+    </a>
+    <q-input
+      v-model="assoconnectURL"
+      type="url"
+      color="admin-primary"
+      label="URL de l'adhésion Assoconnect"
+    />
+    <q-btn
+      class="q-mt-md"
+      label="Valider le lien"
+      color="admin-primary"
+      outline
+      @click="changeAssoconnect"
+    />
   </div>
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
+import SectionTitle from '../../utils/sectionTitle';
 
 export default {
   name: 'AdminSettingRegister',
+  components: { SectionTitle },
 
   data: () => ({
-    helloassoURL: null
+    helloassoURL: null,
+    assoconnectURL: null
   }),
 
   computed: {
+    ...mapGetters(['helloAsso', 'assoconnect']),
     ...mapState({
       settings: (state) => state.settings.settings[0],
       activeMember: (state) => state.members.membersActive
@@ -71,7 +98,8 @@ export default {
 
   mounted() {
     this.fetchSettings().then(() => {
-      this.helloassoURL = this.settings.linkToHelloasso;
+      this.helloassoURL = this.helloAsso;
+      this.assoconnectURL = this.assoconnect;
     });
   },
 
@@ -81,7 +109,8 @@ export default {
       'deactivateMembers',
       'updateHelloassoLink',
       'fetchSettings',
-      'fetchMembers'
+      'fetchMembers',
+      'updateAssoconnectLink'
     ]),
 
     onToggleChange(value) {
@@ -91,6 +120,19 @@ export default {
     changeHelloasso() {
       const newLink = this.helloassoURL;
       this.updateHelloassoLink({ setting: this.settings, value: newLink })
+        .then(() => {
+          this.$q.notify({
+            color: 'positive',
+            position: 'bottom',
+            message: 'Mise à jour du lien effectuée',
+            icon: 'mdi-check'
+          });
+        });
+    },
+
+    changeAssoconnect() {
+      const newLink = this.assoconnectURL;
+      this.updateAssoconnectLink({ setting: this.settings, value: newLink })
         .then(() => {
           this.$q.notify({
             color: 'positive',

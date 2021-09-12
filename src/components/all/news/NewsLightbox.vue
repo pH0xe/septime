@@ -23,8 +23,9 @@
       </q-card-section>
 
       <q-img
+        placeholder-src="~assets/appLogo.svg"
         :src="imgSrc"
-        :ratio="5/2"
+        :class="imgSrc ? '' : 'defaultImg'"
       />
 
       <q-card-section class="row items-center text-subtitle2 text-italic text-grey-6">
@@ -97,5 +98,10 @@ export default {
 <style lang="scss" scoped>
   .w-40 {
     width: 40%;
+  }
+
+  .defaultImg {
+    width: 50%;
+    margin-left: 25%;
   }
 </style>

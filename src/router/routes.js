@@ -1,6 +1,5 @@
 import DefaultLayout from '../layouts/DefaultLayout.vue';
 import HomePage from '../pages/all/HomePage.vue';
-import RegisterPage from '../pages/all/RegisterPage.vue';
 import NewsPage from '../pages/all/news/NewsPage';
 import CalendarPage from '../pages/all/CalendarPage';
 import NewsArticlePage from '../pages/all/news/NewsArticlePage';
@@ -12,6 +11,7 @@ import ContactClubPage from '../pages/all/contact/ContactClubPage';
 import TCUPage from '../pages/all/contact/ContactTCUPage';
 import ContactWebmasterPage from '../pages/all/contact/ContactWebmasterPage';
 import ContactAccessPage from '../pages/all/contact/ContactAccessPage';
+import RegisterPage from '../pages/all/RegisterOnAssoconnect.vue';
 
 const routes = [
   {

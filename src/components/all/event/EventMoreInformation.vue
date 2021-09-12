@@ -35,7 +35,7 @@
           Se finit le {{ event.endDate | dateDM }} à {{ event.endDate | dateHM }}
         </q-card-section>
         <q-separator />
-        <q-card-section>
+        <q-card-section v-if="event.neededRole.length > 0">
           <span class="text-weight-bold">Personnes requises:</span>
           <q-virtual-scroll
             :items="event.neededRole"
@@ -59,7 +59,7 @@
           </q-virtual-scroll>
         </q-card-section>
         <q-separator />
-        <q-card-section v-if="$store.getters.isLoggedIn">
+        <q-card-section v-if="$store.getters.isLoggedIn && event.neededRole.length > 0">
           <span class="text-weight-bold">Personnes inscrites :</span>
           <q-virtual-scroll
             :items="event.registerMember"

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col">
       <h5 class="text-h5 q-ma-md">
-        {{ text }}
+        {{ text }} <br>
       </h5>
       <q-separator class="separator-margin" />
     </div>
