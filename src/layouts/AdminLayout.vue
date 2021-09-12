@@ -303,7 +303,7 @@
           <!-- </editor-fold> -->
         </div>
 
-        <q-space style="height: 50px;"/>
+        <q-space style="height: 50px;" />
         <div>
           <q-separator />
           <q-item
