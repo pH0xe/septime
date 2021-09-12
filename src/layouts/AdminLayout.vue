@@ -27,8 +27,10 @@
       @mouseover="toggleMini"
       @mouseout="toggleMini"
     >
-      <q-scroll-area class="fit">
-        <q-list padding>
+      <q-list
+        padding
+      >
+        <div>
           <!-- <editor-fold desc="Members" defaultstate="collapsed"> -->
           <q-expansion-item
             icon="mdi-account-group"
@@ -299,38 +301,40 @@
             </q-item>
           </q-expansion-item>
           <!-- </editor-fold> -->
+        </div>
 
-          <div class="fixed-bottom">
-            <q-item
-              v-ripple
-              clickable
-              @click="toggleDarkTheme"
-            >
-              <q-item-section avatar>
-                <q-icon :name="getIcon" />
-              </q-item-section>
-              <q-item-section>
-                Mode sombre
-              </q-item-section>
-            </q-item>
+        <q-space style="height: 50px;"/>
+        <div>
+          <q-separator />
+          <q-item
+            v-ripple
+            clickable
+            @click="toggleDarkTheme"
+          >
+            <q-item-section avatar>
+              <q-icon :name="getIcon" />
+            </q-item-section>
+            <q-item-section>
+              Mode sombre
+            </q-item-section>
+          </q-item>
 
-            <q-separator />
-            <q-item
-              v-ripple
-              :to="{ name: 'home' }"
-              exact
-              clickable
-            >
-              <q-item-section avatar>
-                <q-icon name="mdi-exit-to-app" />
-              </q-item-section>
-              <q-item-section>
-                Retour au site
-              </q-item-section>
-            </q-item>
-          </div>
-        </q-list>
-      </q-scroll-area>
+          <q-separator />
+          <q-item
+            v-ripple
+            :to="{ name: 'home' }"
+            exact
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="mdi-exit-to-app" />
+            </q-item-section>
+            <q-item-section>
+              Retour au site
+            </q-item-section>
+          </q-item>
+        </div>
+      </q-list>
     </q-drawer>
 
     <q-page-container>
