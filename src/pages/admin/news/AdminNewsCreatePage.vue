@@ -75,8 +75,8 @@
         <section-title text="Ajouter une image" />
         <q-card-section class="q-pt-none row items-start">
           <firebase-uploader
-            class="col-12 col-md-5 q-mr-lg"
             ref="newsUploader"
+            class="col-12 col-md-5 q-mr-lg"
             color="admin-primary"
             path="news/public_temp"
             accept="image/*"
