@@ -1,89 +1,164 @@
 import { Notify } from 'quasar';
 import { auth, db, storage } from '../boot/firebase';
 import { Group } from '../js/Group';
-
+import { Laterality } from '../js/Laterality';
+import { Gender } from '../js/Gender';
+import { Weapons } from '../js/Weapons';
 
 export default {
   namespaced: false,
   state: {
     members: [],
     membersActive: [],
-    membersInactive: []
+    membersInactive: [],
+    accounts: []
   },
 
   mutations: {
+    // <editor-fold desc="setMembers" defaultstate="collapsed">
     setMembers(state, { members }) {
       state.members = members;
-      state.membersActive = members.filter((user) => user.isActive || user.isAdmin);
-      state.membersInactive = members.filter((user) => !user.isActive && !user.isAdmin);
+      state.membersActive = members.filter((user) => user.isActive);
+      state.membersInactive = members.filter((user) => !user.isActive);
     },
+    // </editor-fold>
 
-    setMemberAdmin(state, member) {
-      const index = state.members.indexOf(member);
-      state.members[index].isAdmin = true;
+    // <editor-fold desc="setAccounts" defaultstate="collapsed">
+    setAccounts(state, { members, subUsers }) {
+      members.forEach((member) => {
+        let subUsersName = '';
+        const filterRes = subUsers.filter((sub) => sub.parentUid === member.uid);
+        member.subUsers = filterRes;
+        filterRes.forEach((sub) => {
+          if (subUsersName !== '') {
+            subUsersName = `${subUsersName} - ${sub.firstName} ${sub.lastName}`;
+          } else {
+            subUsersName = `${sub.firstName} ${sub.lastName}`;
+          }
+        });
+        member.subUsersName = subUsersName;
+      });
+      state.accounts = members;
     },
+    // </editor-fold>
 
-    removeMemberAdmin(state, member) {
-      const index = state.members.indexOf(member);
-      state.members[index].isAdmin = false;
+    // <editor-fold desc="setAccountAdmin" defaultstate="collapsed">
+    setAccountAdmin(state, { member, value }) {
+      const index = state.accounts.indexOf(member);
+      state.accounts[index].isAdmin = value;
     },
+    // </editor-fold>
 
-    activateMember(state, member) {
-      const index = state.members.indexOf(member);
+    // <editor-fold desc="activateMemberState" defaultstate="collapsed">
+    activateMemberState(state, member) {
+      let index = state.members.indexOf(member);
       state.members[index].isActive = true;
-    },
+      state.membersActive.push(state.members[index]);
 
-    changePaidState(state, { member, newPayments }) {
-      const index = state.members.indexOf(member);
-      state.members[index].payments = newPayments;
+      index = state.membersInactive.indexOf(member);
+      state.membersInactive.splice(index, 1);
     },
+    // </editor-fold>
 
-    changeRelationState(state, { member, newRelation }) {
-      const index = state.members.indexOf(member);
-      state.members[index].relationEmergency = newRelation;
-    },
-
-    deactivateMember(state, { member }) {
+    // <editor-fold desc="deactivateMemberState" defaultstate="collapsed">
+    deactivateMemberState(state, member) {
       let index = state.members.indexOf(member);
       state.members[index].isActive = false;
+      state.membersInactive.push(state.members[index]);
 
       index = state.membersActive.indexOf(member);
-      if (index > -1) {
-        state.membersActive.splice(index, 1);
-      }
-      state.membersInactive = [...state.membersInactive, member];
+      state.membersActive.splice(index, 1);
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changePaidState" defaultstate="collapsed">
+    changePaidState(state, { member, newPayments }) {
+      const oldMember = state.members.find((m) => m.uid === member.uid && m.parentUid === member.parentUid);
+      oldMember.payments = newPayments;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changePaidState" defaultstate="collapsed">
+    removeMemberState(state, { member }) {
+      let index = state.members.indexOf(member);
+      state.members.splice(index, 1);
+
+      index = state.membersInactive.indexOf(member);
+      state.membersInactive.splice(index, 1);
     }
+    // </editor-fold>
   },
 
   actions: {
+    // <editor-fold desc="createSubUser" defaultstate="collapsed">
+    async createSubUser(_, { uid, data }) {
+      let newUid;
+      await db.collection('users')
+        .doc(uid)
+        .collection('subUsers')
+        .add(data)
+        .then((res) => {
+          newUid = res.id;
+        })
+        .catch((err) => {
+          console.log('Error while adding profil : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+      return newUid;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="fetchMembers" defaultstate="collapsed">
     fetchMembers({ commit }) {
-      db.collection('users').get()
+      return db.collectionGroup('subUsers')
+        .get()
         .then((querySnapshot) => {
           const collector = [];
           querySnapshot.forEach((item) => {
-            collector.push({ uid: item.id, ...item.data() });
+            const parentUid = item.ref.parent.parent.id;
+            const uid = item.id;
+            collector.push({ parentUid, uid, ...item.data() });
           });
           return collector;
         })
         .then((members) => members.map((member) => {
           member.birthDate = member.birthDate.toDate();
+          member.certificateDate = member.certificateDate?.toDate();
           member.group = Group.from(member.birthDate);
+          member.gender = Gender.from(member.gender);
+          member.laterality = Laterality.from(member.laterality);
+          member.weapons = Weapons.from(member.weapons);
+          member.presence.absent = member.presence.absent.map((d) => d.toDate());
+          member.presence.here = member.presence.here.map((d) => d.toDate());
+          member.presence.late = member.presence.late.map((d) => d.toDate());
           return member;
         }))
         .then((members) => Promise.all(members.map(async (member) => {
           await storage.ref()
-            .child(`profile_pics/${member.uid}`)
+            .child(`profile_pics/${member.parentUid}/${member.uid}`)
             .getDownloadURL()
             .then((url) => { member.memberAvatar = url; })
-            .catch(() => { member.memberAvatar = ''; });
+            .catch(() => { member.memberAvatar = undefined; });
           return member;
         })))
         .then((members) => Promise.all(members.map(async (member) => {
           await storage.ref()
-            .child(`certificates/${member.uid}`)
+            .child(`certificates/${member.parentUid}/${member.uid}`)
             .getDownloadURL()
             .then((url) => { member.medicalCertificate = url; })
             .catch(() => { member.medicalCertificate = undefined; });
+          return member;
+        })))
+        .then((members) => Promise.all(members.map(async (member) => {
+          await storage.ref()
+            .child(`cerfa/${member.parentUid}/${member.uid}`)
+            .getDownloadURL()
+            .then((url) => { member.cerfa = url; })
+            .catch(() => { member.cerfa = undefined; });
           return member;
         })))
         .then((members) => {
@@ -98,13 +173,52 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
-    setAdmin({ commit }, { member }) {
+    // <editor-fold desc="fetchAccounts" defaultstate="collapsed">
+    fetchAccounts({ commit }) {
+      db.collectionGroup('subUsers')
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((item) => {
+            const parentUid = item.ref.parent.parent.id;
+            const uid = item.id;
+            collector.push({ parentUid, uid, ...item.data() });
+          });
+          return collector;
+        }).then((subUsers) => {
+          db.collection('users')
+            .get()
+            .then((querySnapshot) => {
+              const collector = [];
+              querySnapshot.forEach((item) => {
+                collector.push({ uid: item.id, ...item.data() });
+              });
+              return collector;
+            })
+            .then((members) => {
+              commit('setAccounts', { members, subUsers });
+            })
+            .catch((err) => {
+              console.error('Error while fetching account list', err);
+              Notify.create({
+                message: `Une erreur s'est produite: ${err}`,
+                color: 'negative',
+                position: 'top-left'
+              });
+            });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="setAdmin" defaultstate="collapsed">
+    setAdmin({ commit }, { member, value }) {
       db.collection('users')
         .doc(member.uid)
-        .update({ isAdmin: true })
+        .update({ isAdmin: value })
         .then(() => {
-          commit('setMemberAdmin', member);
+          commit('setAccountAdmin', { member, value });
         })
         .catch((err) => {
           console.log('Error while setting Admin : ', err);
@@ -115,30 +229,17 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
-    removeAdmin({ commit }, { member }) {
-      db.collection('users')
-        .doc(member.uid)
-        .update({ isAdmin: false })
-        .then(() => {
-          commit('removeMemberAdmin', member);
-        })
-        .catch((err) => {
-          console.log('Error while removing Admin : ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'top-left'
-          });
-        });
-    },
-
+    // <editor-fold desc="activateAccount" defaultstate="collapsed">
     activateAccount({ commit }, { member }) {
       db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
         .doc(member.uid)
         .update({ isActive: true })
         .then(() => {
-          commit('activateMember', member);
+          commit('activateMemberState', member);
         })
         .catch((err) => {
           console.log('Error while activating account : ', err);
@@ -149,75 +250,168 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
-    // eslint-disable-next-line no-unused-vars
-    changePassword({ commit }, { newPassword }) {
-      const user = auth.currentUser;
-      user.updatePassword(newPassword)
+    // <editor-fold desc="deactivateAccount" defaultstate="collapsed">
+    deactivateAccount({ commit }, { member }) {
+      db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
+        .doc(member.uid)
+        .update({ isActive: false })
         .then(() => {
-          Notify.create({
-            message: 'Le mot de passe a été mis à jours',
-            color: 'positive',
-            position: 'top'
-          });
+          commit('deactivateMemberState', member);
         })
         .catch((err) => {
-          switch (err.code) {
-            case 'auth/invalid-user-token':
-            case 'auth/requires-recent-login':
-              Notify.create({
-                message: 'Vous n\'êtes pas connecté',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/network-request-failed':
-              Notify.create({
-                message: 'Problème de réseau, vérifier votre connexion',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/too-many-requests':
-              Notify.create({
-                message: 'Erreur : trop de requête',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/user-token-expired':
-              Notify.create({
-                message: 'Erreur : reconnectez-vous',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'auth/operation-not-allowed':
-              Notify.create({
-                message: 'Erreur : Opération interdite, contactez un administrateur',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            case 'Thrown if a method is called with incorrect arguments.':
-              Notify.create({
-                message: 'Erreur : Le mot de passe saisie est invalide',
-                color: 'negative',
-                position: 'top'
-              });
-              break;
-            default:
-              Notify.create({
-                message: 'Une erreur inconnu est survenue',
-                color: 'negative',
-                position: 'top'
-              });
-          }
+          console.log('Error while deactivating account : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
         });
     },
+    // </editor-fold>
 
-    // eslint-disable-next-line no-unused-vars
-    changeEmail({ commit }, { newEmail }) {
+    // <editor-fold desc="changeEmail" defaultstate="collapsed">
+    changeEmail(_, { newEmail, parentUid, uid }) {
+      db.collection('users')
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .update({ email: newEmail })
+        .catch((err) => {
+          console.log('Error while updating email: ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changeAddress" defaultstate="collapsed">
+    changeAddress(_, { uid, parentUid, newAddress }) {
+      db.collection('users')
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .update({ address: newAddress })
+        .catch((err) => {
+          console.log('Error while updating address: ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changePhone" defaultstate="collapsed">
+    changePhone(_, { uid, parentUid, newPhone }) {
+      db.collection('users')
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .update({ phone: newPhone })
+        .catch((err) => {
+          console.log('Error while updating phone : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changePaidInfo" defaultstate="collapsed">
+    changePaidInfo({ commit }, { member, newPayments }) {
+      db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
+        .doc(member.uid)
+        .update({ payments: newPayments })
+        .then(() => {
+          commit('changePaidState', { member, newPayments });
+        })
+        .catch((err) => {
+          console.log('Error while changing paid information : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="deactivateMembers" defaultstate="collapsed">
+    deactivateMembers({ commit }, { members }) {
+      members.forEach((member) => {
+        db.collection('users')
+          .doc(member.parentUid)
+          .collection('subUsers')
+          .doc(member.uid)
+          .update({ isActive: false })
+          .then(() => {
+            commit('deactivateMemberState', { member });
+          })
+          .catch((err) => {
+            console.log('Error while deactivate : ', err);
+            Notify.create({
+              message: `Une erreur s'est produite: ${err}`,
+              color: 'negative',
+              position: 'top-left'
+            });
+          });
+      });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changeEmergency" defaultstate="collapsed">
+    changeEmergency(_, { uid, parentUid, newEmergency }) {
+      db.collection('users')
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .update({ emergency: newEmergency })
+        .catch((err) => {
+          console.log('Error while changing relation information : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="removeMember" defaultstate="collapsed">
+    removeMember({ commit }, { uid, parentUid, member }) {
+      db.collection('users')
+        .doc(parentUid)
+        .collection('subUsers')
+        .doc(uid)
+        .delete()
+        .then(() => {
+          commit('removeMemberState', { member });
+        })
+        .catch((err) => {
+          console.log('Error while changing relation information : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="changeLoginEmail" defaultstate="collapsed">
+    changeLoginEmail(_, { newEmail }) {
       const user = auth.currentUser;
       user.updateEmail(newEmail)
         .then(() => {
@@ -232,7 +426,8 @@ export default {
             case 'auth/invalid-user-token':
             case 'auth/requires-recent-login':
               Notify.create({
-                message: 'Vous n\'êtes pas connecté',
+                message: 'Erreur, déconnectez-vous et reconnectez vous, puis recommencez',
+                caption: 'Avec l\'ancien email',
                 color: 'negative',
                 position: 'top'
               });
@@ -293,90 +488,74 @@ export default {
           });
         });
     },
+    // </editor-fold>
 
-    // eslint-disable-next-line no-unused-vars
-    changeAddress({ commit }, { member, newAddress }) {
-      db.collection('users')
-        .doc(member.uid)
-        .update({ address: newAddress })
-        .catch((err) => {
-          console.log('Error while updating address: ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'top-left'
-          });
-        });
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    changePhone({ commit }, { member, newPhone, newPhoneEmergency }) {
-      db.collection('users')
-        .doc(member.uid)
-        .update({ phone: newPhone, phoneEmergency: newPhoneEmergency })
-        .catch((err) => {
-          console.log('Error while updating phone : ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'top-left'
-          });
-        });
-    },
-
-    changePaidInfo({ commit }, { member, newPayments }) {
-      db.collection('users')
-        .doc(member.uid)
-        .update({ payments: newPayments })
+    // <editor-fold desc="changePassword" defaultstate="collapsed">
+    changePassword(_, { newPassword }) {
+      const user = auth.currentUser;
+      user.updatePassword(newPassword)
         .then(() => {
-          commit('changePaidState', { member, newPayments });
+          Notify.create({
+            message: 'Le mot de passe a été mis à jours',
+            color: 'positive',
+            position: 'top'
+          });
         })
         .catch((err) => {
-          console.log('Error while changing paid information : ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'top-left'
-          });
-        });
-    },
-
-    deactivateMembers({ commit }, { members }) {
-      members.forEach((member) => {
-        if (member.isAdmin === false) {
-          db.collection('users')
-            .doc(member.uid)
-            .update({ isActive: false })
-            .then(() => {
-              commit('deactivateMember', { member });
-            })
-            .catch((err) => {
-              console.log('Error while deactivate : ', err);
+          switch (err.code) {
+            case 'auth/invalid-user-token':
+            case 'auth/requires-recent-login':
               Notify.create({
-                message: `Une erreur s'est produite: ${err}`,
+                message: 'Erreur, déconnectez-vous et reconnectez vous',
+                caption: 'Avec l\'ancien email',
                 color: 'negative',
-                position: 'top-left'
+                position: 'top'
               });
-            });
-        }
-      });
-    },
-
-    changeRelationEmergency({ commit }, { member, newRelation }) {
-      db.collection('users')
-        .doc(member.uid)
-        .update({ relationEmergency: newRelation })
-        .then(() => {
-          commit('changeRelationState', { member, newRelation });
-        })
-        .catch((err) => {
-          console.log('Error while changing relation information : ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'top-left'
-          });
+              break;
+            case 'auth/network-request-failed':
+              Notify.create({
+                message: 'Problème de réseau, vérifier votre connexion',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/too-many-requests':
+              Notify.create({
+                message: 'Erreur : trop de requête',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/user-token-expired':
+              Notify.create({
+                message: 'Erreur : reconnectez-vous',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'auth/operation-not-allowed':
+              Notify.create({
+                message: 'Erreur : Opération interdite, contactez un administrateur',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            case 'Thrown if a method is called with incorrect arguments.':
+              Notify.create({
+                message: 'Erreur : Le mot de passe saisie est invalide',
+                color: 'negative',
+                position: 'top'
+              });
+              break;
+            default:
+              Notify.create({
+                message: 'Une erreur inconnu est survenue',
+                color: 'negative',
+                position: 'top'
+              });
+          }
         });
     }
+    // </editor-fold>
   }
 };

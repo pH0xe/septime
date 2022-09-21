@@ -1,6 +1,5 @@
 import { date } from 'quasar';
 
-
 export const Group = {
   VETERANS4: 'Vétérans 4',
   VETERANS3: 'Vétérans 3',
@@ -54,5 +53,92 @@ const from = (birth) => {
   return Group.VETERANS4;
 };
 
+const groupOptions = [
+  { value: Group.VETERANS4, label: Group.VETERANS4 },
+  { value: Group.VETERANS3, label: Group.VETERANS3 },
+  { value: Group.VETERANS2, label: Group.VETERANS2 },
+  { value: Group.VETERANS1, label: Group.VETERANS1 },
+  { value: Group.SENIORS, label: Group.SENIORS },
+  { value: Group.M20, label: Group.M20 },
+  { value: Group.M17, label: Group.M17 },
+  { value: Group.M15, label: Group.M15 },
+  { value: Group.M13, label: Group.M13 },
+  { value: Group.M11, label: Group.M11 },
+  { value: Group.M9, label: Group.M9 },
+  { value: Group.M7, label: Group.M7 },
+  { value: Group.M5, label: Group.M5 }
+];
+
+const groupList = [
+  Group.VETERANS4,
+  Group.VETERANS3,
+  Group.VETERANS2,
+  Group.VETERANS1,
+  Group.SENIORS,
+  Group.M20,
+  Group.M17,
+  Group.M15,
+  Group.M13,
+  Group.M11,
+  Group.M9,
+  Group.M7,
+  Group.M5
+];
+
+const adultGroup = [
+  Group.VETERANS4,
+  Group.VETERANS3,
+  Group.VETERANS2,
+  Group.VETERANS1,
+  Group.SENIORS
+];
+
+const getBadgeColorFor = (group) => {
+  switch (group) {
+    case Group.M5:
+      return 'GRAY 9';
+    case Group.M7:
+      return 'purple';
+    case Group.M9:
+      return 'indigo';
+    case Group.M11:
+      return 'light-blue';
+    case Group.M13:
+      return 'cyan-6';
+    case Group.M15:
+      return 'orange';
+    case Group.M17:
+      return 'brown';
+    case Group.M20:
+      return 'blue-grey';
+    case Group.SENIORS:
+      return 'teal-7';
+    case Group.VETERANS1:
+    case Group.VETERANS2:
+    case Group.VETERANS3:
+    case Group.VETERANS4:
+      return 'grey';
+    default:
+      return 'null';
+  }
+};
+
+const getSmallest = (groups) => {
+  if (groups.includes(Group.M5)) return 'M5+';
+  if (groups.includes(Group.M7)) return 'M7+';
+  if (groups.includes(Group.M9)) return 'M9+';
+  if (groups.includes(Group.M11)) return 'M11+';
+  if (groups.includes(Group.M13)) return 'M13+';
+  if (groups.includes(Group.M15)) return 'M15+';
+  if (groups.includes(Group.M17)) return 'M17+';
+  if (groups.includes(Group.M20)) return 'M20+';
+  return 'Adultes';
+};
+
 Group.from = from;
+Group.groupOptions = groupOptions;
+Group.getBadgeColorFor = getBadgeColorFor;
+Group.getSmallest = getSmallest;
+Group.groupList = groupList;
+Group.adultGroup = adultGroup;
 Object.freeze(Group);

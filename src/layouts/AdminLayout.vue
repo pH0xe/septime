@@ -23,43 +23,158 @@
       show-if-above
       :mini="miniState"
       bordered
-      content-class="bg-grey-3"
+      :content-class="$q.dark.isActive ? 'bg-grey-10' : 'bg-grey-3'"
       @mouseover="toggleMini"
       @mouseout="toggleMini"
     >
-      <q-scroll-area class="fit">
-        <q-list padding>
-          <!-- Members -->
-          <q-item
-            v-ripple
-            :to="{ name: 'admin_members' }"
-            clickable
+      <q-list
+        padding
+      >
+        <div>
+          <!-- <editor-fold desc="Members" defaultstate="collapsed"> -->
+          <q-expansion-item
+            icon="mdi-account-group"
+            label="Membres"
             active-class="text-admin-primary"
           >
-            <q-item-section avatar>
-              <q-icon name="mdi-account-group" />
-            </q-item-section>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_members_list' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-details" />
+              </q-item-section>
 
-            <q-item-section>
-              Membres
-            </q-item-section>
-          </q-item>
-          <!-- Attendance -->
-          <q-item
-            v-ripple
-            :to="{ name: 'admin_presence' }"
-            clickable
+              <q-item-section>
+                Listes des membres
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_members_create' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-plus" />
+              </q-item-section>
+
+              <q-item-section>
+                Ajouter un membres
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Presence" defaultstate="collapsed"> -->
+          <q-expansion-item
+            icon="mdi-fencing"
+            label="Entrainements"
             active-class="text-admin-primary"
           >
-            <q-item-section avatar>
-              <q-icon name="mdi-sword" />
-            </q-item-section>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_presence_planning' }"
+              :inset-level="1"
+              clickable
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-calendar-clock" />
+              </q-item-section>
 
-            <q-item-section>
-              Entraînements
-            </q-item-section>
-          </q-item>
-          <!-- Equipment -->
+              <q-item-section>
+                Planning
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_presence_create' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-plus" />
+              </q-item-section>
+
+              <q-item-section>
+                Nouvel entrainement
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_presence_result' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-format-list-bulleted" />
+              </q-item-section>
+
+              <q-item-section>
+                Détails des absences
+              </q-item-section>
+            </q-item>
+            <q-expansion-item
+              icon="mdi-list-status"
+              label="Présence"
+              active-class="text-admin-primary"
+              :header-inset-level="1"
+            >
+              <q-item
+                v-ripple
+                :to="{ name: 'admin_presence_details', params: { when: 'today' } }"
+                clickable
+                :inset-level="2"
+                active-class="text-admin-primary"
+              >
+                <q-item-section avatar>
+                  <q-icon name="mdi-checkbox-marked-outline" />
+                </q-item-section>
+
+                <q-item-section>
+                  Aujourd'hui
+                </q-item-section>
+              </q-item>
+              <q-item
+                v-ripple
+                :to="{ name: 'admin_presence_details', params: { when: 'futur' } }"
+                clickable
+                :inset-level="2"
+                active-class="text-admin-primary"
+              >
+                <q-item-section avatar>
+                  <q-icon name="mdi-checkbox-marked-outline" />
+                </q-item-section>
+
+                <q-item-section>
+                  Futur
+                </q-item-section>
+              </q-item>
+              <q-item
+                v-ripple
+                :to="{ name: 'admin_presence_details', params: { when: 'past' } }"
+                clickable
+                :inset-level="2"
+                active-class="text-admin-primary"
+              >
+                <q-item-section avatar>
+                  <q-icon name="mdi-checkbox-marked-outline" />
+                </q-item-section>
+
+                <q-item-section>
+                  Passé
+                </q-item-section>
+              </q-item>
+            </q-expansion-item>
+          </q-expansion-item>
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Equipment" defaultstate="collapsed"> -->
           <q-item
             v-ripple
             :to="{ name: 'admin_equipment' }"
@@ -74,8 +189,8 @@
               Matériels
             </q-item-section>
           </q-item>
-
-          <!-- Events -->
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Event" defaultstate="collapsed"> -->
           <q-item
             v-ripple
             :to="{ name: 'admin_events' }"
@@ -90,8 +205,9 @@
               Événements
             </q-item-section>
           </q-item>
+          <!-- </editor-fold> -->
 
-          <!-- News -->
+          <!-- <editor-fold desc="News" defaultstate="collapsed"> -->
           <q-expansion-item
             icon="mdi-newspaper-variant"
             label="Actualités"
@@ -131,43 +247,94 @@
               </q-item-section>
             </q-item>
           </q-expansion-item>
-
-          <!-- Settings -->
-          <q-item
-            v-ripple
-            :to="{ name: 'admin_settings' }"
-            clickable
+          <!-- </editor-fold> -->
+          <!-- <editor-fold desc="Settings" defaultstate="collapsed"> -->
+          <q-expansion-item
+            icon="mdi-cog"
+            label="Paramètres"
             active-class="text-admin-primary"
           >
-            <q-item-section avatar>
-              <q-icon name="mdi-settings" />
-            </q-item-section>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_settings_club' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-group" />
+              </q-item-section>
 
+              <q-item-section>
+                Le bureau
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_settings_register' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-plus" />
+              </q-item-section>
+
+              <q-item-section>
+                Inscription
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-ripple
+              :to="{ name: 'admin_settings_permission' }"
+              clickable
+              :inset-level="1"
+              active-class="text-admin-primary"
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-account-check" />
+              </q-item-section>
+
+              <q-item-section>
+                Administrateurs
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
+          <!-- </editor-fold> -->
+        </div>
+
+        <q-space style="height: 50px;" />
+        <div>
+          <q-separator />
+          <q-item
+            v-ripple
+            clickable
+            @click="toggleDarkTheme"
+          >
+            <q-item-section avatar>
+              <q-icon :name="getIcon" />
+            </q-item-section>
             <q-item-section>
-              Paramètres
+              Mode sombre
             </q-item-section>
           </q-item>
 
-
-          <!-- Button back to home page -->
-          <div class="fixed-bottom">
-            <q-separator />
-            <q-item
-              v-ripple
-              :to="{ name: 'home' }"
-              exact
-              clickable
-            >
-              <q-item-section avatar>
-                <q-icon name="mdi-exit-to-app" />
-              </q-item-section>
-              <q-item-section>
-                Retour au site
-              </q-item-section>
-            </q-item>
-          </div>
-        </q-list>
-      </q-scroll-area>
+          <q-separator />
+          <q-item
+            v-ripple
+            :to="{ name: 'home' }"
+            exact
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="mdi-exit-to-app" />
+            </q-item-section>
+            <q-item-section>
+              Retour au site
+            </q-item-section>
+          </q-item>
+        </div>
+      </q-list>
     </q-drawer>
 
     <q-page-container>
@@ -177,12 +344,20 @@
 </template>
 
 <script lang="js">
+import { Utils } from '../js/Utils';
+
 export default {
   name: 'AdminLayout',
   data: () => ({
     drawer: false,
     miniState: true
   }),
+
+  computed: {
+    getIcon() {
+      return this.$q.dark.isActive ? 'mdi-weather-night' : 'mdi-white-balance-sunny';
+    }
+  },
 
   methods: {
     toggleMini() {
@@ -191,7 +366,17 @@ export default {
 
     toggleDrawer() {
       this.drawer = !this.drawer;
+    },
+
+    toggleDarkTheme() {
+      Utils.toggleDarkTheme(this);
     }
   }
 };
 </script>
+
+<style lang="scss">
+  .page-padded {
+    margin: 2%;
+  }
+</style>

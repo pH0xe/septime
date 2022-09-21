@@ -1,13 +1,12 @@
-import { Notify, date as quasarDate } from 'quasar';
+import { Notify, date } from 'quasar';
 import { db } from '../boot/firebase';
-
 
 export default {
   namespaced: false,
   state: {
     trainings: [],
-    currentUserTrainings: [],
-    maxID: null
+    trainingsPlanning: [],
+    trainingsClean: []
   },
 
   getters: {
@@ -17,61 +16,95 @@ export default {
   },
 
   mutations: {
+    // <editor-fold desc="setTrainings" defaultstate="collapsed">
     setTrainings(state, { trainings }) {
-      state.trainings = trainings;
-      let max = 0;
+      const trainingsToStore = [];
       trainings.forEach((training) => {
-        if (max < training.internalId) max = training.internalId;
+        let currentDate = date.buildDate({
+          year: training.period.start.getFullYear(),
+          month: training.period.start.getMonth() + 1,
+          date: training.period.start.getDate() + training.day,
+          hours: 0,
+          minutes: 0,
+          seconds: 0
+        });
+        while (currentDate <= training.period.end) {
+          trainingsToStore.push({
+            date: currentDate,
+            ...training
+          });
+
+          currentDate = date.addToDate(currentDate, { days: 7 });
+        }
       });
-      state.maxID = max;
+      state.trainings = trainingsToStore;
     },
-    setCurrentUserTrainings(state, { trainings }) {
-      state.currentUserTrainings = trainings;
-    },
+    // </editor-fold>
 
-    updateStudent(state, { training }) {
-      const updatedTraining = state.trainings.find((item) => training.uid === item.uid);
-      updatedTraining.students = training.students;
-    },
+    // <editor-fold desc="setTrainingsPlanning" defaultstate="collapsed">
+    setTrainingsPlanning(state, { trainings }) {
+      let id = 0;
+      const trainingsToStore = [];
+      trainings.forEach((training) => {
+        let currentDate = date.buildDate({
+          year: training.period.start.getFullYear(),
+          month: training.period.start.getMonth() + 1,
+          date: training.period.start.getDate() + training.day,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0
+        });
+        while (currentDate <= training.period.end) {
+          const start = {
+            dateTime: date.clone(currentDate),
+            timeZone: 'Europe/Paris'
+          };
 
-    deleteTrainingState(state, { training }) {
-      const index = state.trainings.indexOf(training);
-      delete state.trainings[index];
+          const end = {
+            dateTime: date.clone(currentDate),
+            timeZone: 'Europe/Paris'
+          };
+          start.dateTime = date.adjustDate(start.dateTime, { hours: training.timetable.start.hour, minutes: training.timetable.start.minute });
+          end.dateTime = date.adjustDate(end.dateTime, { hours: training.timetable.end.hour, minutes: training.timetable.end.minute });
+
+          start.dateTime = start.dateTime.toISOString();
+          end.dateTime = end.dateTime.toISOString();
+
+          if (!training.excludedDates.includes(currentDate.toISOString())) {
+            trainingsToStore.push({
+              date: currentDate,
+              id,
+              start,
+              end,
+              ...training
+            });
+            id += 1;
+          }
+          currentDate = date.addToDate(currentDate, { days: 7 });
+        }
+      });
+      state.trainingsPlanning = trainingsToStore;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="setTrainingsClean" defaultstate="collapsed">
+    setTrainingsClean(state, { trainings }) {
+      state.trainingsClean = trainings;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="createTrainingState" defaultstate="collapsed">
+    createTrainingState(state, { training }) {
+      state.trainings.push(training);
     }
+    // </editor-fold>
   },
 
   actions: {
+    // <editor-fold desc="fetchTrainings" defaultstate="collapsed">
     fetchTrainings({ commit }) {
-      return db.collection('trainings').get()
-        .then((querySnapshot) => {
-          const collector = [];
-          querySnapshot.forEach((item) => {
-            collector.push({ uid: item.id, ...item.data() });
-          });
-          return collector;
-        }).then((trainings) => trainings.map((training) => {
-          training.startDate = training.startDate.toDate();
-          training.endDate = training.endDate.toDate();
-          return training;
-        }))
-        .then((trainings) => {
-          commit('setTrainings', { trainings });
-        })
-        .catch((err) => {
-          console.error('Error while fetching trainings list', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'bottom'
-          });
-        });
-    },
-
-    fetchCurrentUserTrainings({ commit }, { uid }) {
       return db.collection('trainings')
-        .where('students', 'array-contains', { isPresent: 'here', uid })
-        .orderBy('startDate').startAt(new Date(new Date().getTime()))
-        .limit(3)
         .get()
         .then((querySnapshot) => {
           const collector = [];
@@ -81,106 +114,167 @@ export default {
           return collector;
         })
         .then((trainings) => trainings.map((training) => {
-          training.startDate = training.startDate.toDate();
-          training.endDate = training.endDate.toDate();
+          training.period.start = training.period?.start.toDate();
+          training.period.end = training.period?.end.toDate();
+          training.excludedDates = training.excludedDates.map((d) => {
+            d = d.toDate();
+            return d;
+          });
           return training;
         }))
         .then((trainings) => {
-          commit('setCurrentUserTrainings', { trainings });
+          commit('setTrainings', { trainings });
         })
         .catch((err) => {
           console.error('Error while fetching trainings list', err);
           Notify.create({
             message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
             color: 'negative',
             position: 'bottom'
           });
         });
     },
+    // </editor-fold>
 
-    updateStudentPresence({ commit }, { training }) {
+    // <editor-fold desc="fetchTrainingsPlanning" defaultstate="collapsed">
+    fetchTrainingsPlanning({ commit }) {
+      return db.collection('trainings')
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((item) => {
+            collector.push({ uid: item.id, ...item.data() });
+          });
+          return collector;
+        })
+        .then((trainings) => trainings.map((training) => {
+          training.period.start = training.period?.start.toDate();
+          training.period.end = training.period?.end.toDate();
+          training.excludedDates = training.excludedDates.map((d) => {
+            d = d.toDate().toISOString();
+            return d;
+          });
+          return training;
+        }))
+        .then((trainings) => trainings.map((training) => {
+          training.summary = training.group.toString();
+          training.color = 'green-10';
+          return training;
+        }))
+        .then((trainings) => {
+          commit('setTrainingsPlanning', { trainings });
+        })
+        .catch((err) => {
+          console.error('Error while fetching trainings list', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
+            color: 'negative',
+            position: 'bottom'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="fetchTrainingsClean" defaultstate="collapsed">
+    fetchTrainingsClean({ commit }) {
+      return db.collection('trainings')
+        .get()
+        .then((querySnapshot) => {
+          const collector = [];
+          querySnapshot.forEach((item) => {
+            collector.push({ uid: item.id, ...item.data() });
+          });
+          return collector;
+        })
+        .then((trainings) => trainings.map((training) => {
+          training.period.start = training.period?.start.toDate();
+          training.period.end = training.period?.end.toDate();
+          training.excludedDates = training.excludedDates.map((d) => d.toDate());
+          return training;
+        }))
+        .then((trainings) => {
+          commit('setTrainingsClean', { trainings });
+        })
+        .catch((err) => {
+          console.error('Error while fetching trainings list', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
+            color: 'negative',
+            position: 'bottom'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="updateTraining" defaultstate="collapsed">
+    updateTraining(_, { training }) {
+      const { uid } = training;
+      delete training.uid;
+      return db.collection('trainings')
+        .doc(uid)
+        .set(training)
+        .catch((err) => {
+          console.log('Error while updating training : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
+            color: 'negative',
+            position: 'bottom'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="updateStudentPresence" defaultstate="collapsed">
+    updateStudentPresence(_, { members }) {
+      members.forEach((member) => db.collection('users')
+        .doc(member.parentUid)
+        .collection('subUsers')
+        .doc(member.uid)
+        .update({ presence: member.presence })
+        .catch((err) => {
+          console.log('Error while changing presence : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            color: 'negative',
+            position: 'top-left'
+          });
+        }));
+      return true;
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="createTraining" defaultstate="collapsed">
+    createTraining({ commit }, { training }) {
+      return db.collection('trainings')
+        .add(training)
+        .then(() => {
+          commit('createTrainingState', { training });
+        })
+        .catch((err) => {
+          console.log('Error while creating training : ', err);
+          Notify.create({
+            message: `Une erreur s'est produite: ${err}`,
+            caption: 'Contactez un administrateur pour plus d\'information',
+            icon: 'mdi-alert',
+            color: 'negative',
+            position: 'bottom'
+          });
+        });
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="deleteTraining" defaultstate="collapsed">
+    deleteTraining(_, { training }) {
       return db.collection('trainings').doc(training.uid)
-        .update({ students: training.students })
-        .then(() => {
-          commit('updateStudent', { training });
-        })
-        .catch((err) => {
-          console.error('Error while updating presence: ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'bottom'
-          });
-        });
-    },
-
-    updateStudents({ commit }, {
-      trainings, newStudents, newGroup, newStartHour, newStartMinute, newEndHour, newEndMinute
-    }) {
-      trainings.forEach((training) => {
-        const newStartDate = quasarDate.adjustDate(training.startDate,
-          {
-            hours: newStartHour,
-            minutes: newStartMinute
-          });
-        const newEndDate = quasarDate.adjustDate(training.endDate,
-          {
-            hours: newEndHour,
-            minutes: newEndMinute
-          });
-        db.collection('trainings')
-          .doc(training.uid)
-          .update({
-            students: newStudents,
-            group: newGroup,
-            startDate: newStartDate,
-            endDate: newEndDate
-          })
-          .then(() => {
-            commit('updateStudent', { training });
-          })
-          .catch((err) => {
-            console.error('Error while updating student list: ', err);
-            Notify.create({
-              message: `Une erreur s'est produite: ${err}`,
-              color: 'negative',
-              position: 'bottom'
-            });
-          });
-      });
-    },
-
-    createMultipleTraining(_, { trainings }) {
-      const batch = db.batch();
-
-      trainings.forEach((training) => {
-        batch.set(db.collection('trainings').doc(), training);
-      });
-
-      return batch.commit()
-        .then(() => {
-          Notify.create({
-            message: 'Entrainement créé avec succès',
-            color: 'positive',
-            position: 'bottom'
-          });
-        })
-        .catch((err) => {
-          console.error('Error while creating training: ', err);
-          Notify.create({
-            message: `Une erreur s'est produite: ${err}`,
-            color: 'negative',
-            position: 'bottom'
-          });
-        });
-    },
-
-    deleteTraining({ commit }, { training }) {
-      db.collection('trainings').doc(training.uid)
         .delete()
-        .then(() => {
-          commit('deleteTrainingState', { training });
-        })
         .catch((err) => {
           console.log('Error while deleting training : ', err);
           Notify.create({
@@ -190,5 +284,6 @@ export default {
           });
         });
     }
+    // </editor-fold>
   }
 };

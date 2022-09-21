@@ -81,7 +81,7 @@ export default {
     updateNews({ commit }, {
       news, newTitle, newText, newType
     }) {
-      db.collection('news').doc(news.uid)
+      return db.collection('news').doc(news.uid)
         .update({ title: newTitle, text: newText, type: newType })
         .then(() => {
           commit('updateNewsState', {

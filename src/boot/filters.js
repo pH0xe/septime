@@ -1,6 +1,5 @@
 import { date } from 'quasar';
 
-
 export default ({ Vue }) => {
   Vue.filter('uppercase', (value) => {
     if (!value) return '';
@@ -16,4 +15,9 @@ export default ({ Vue }) => {
   }));
 
   Vue.filter('dateHM', (value) => date.formatDate(value, 'HH:mm'));
+
+  Vue.filter('dateFull', (value) => date.formatDate(value, 'dddd DD MMMM YYYY', {
+    days: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+    months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+  }));
 };

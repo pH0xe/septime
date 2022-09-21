@@ -144,6 +144,19 @@
           >
             {{ footerLink.label }}
           </router-link>
+
+          <div>
+            <q-toggle
+              :value="$q.dark.isActive"
+              :class="$q.platform.is.mobile ? '' : 'bottom-left'"
+              color="accent"
+              icon-color="black"
+              checked-icon="mdi-weather-night"
+              unchecked-icon="mdi-white-balance-sunny"
+              @input="toggleDarkTheme"
+            />
+          </div>
+
           <div>
             <a
               :href="githubLink"
@@ -163,34 +176,35 @@
 </template>
 
 <script lang="js">
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import { version as appVersion } from '../../package.json';
 
 import { auth } from '../boot/firebase';
-import NavbarLinks from '../components/NavbarLinks.vue';
-import NavbarAccount from '../components/NavbarAccount';
-import FooterImage from '../components/footerImage';
+import NavbarLinks from '../components/all/layout/NavbarLinks.vue';
+import NavbarAccount from '../components/all/layout/NavbarAccount';
+import FooterImage from '../components/all/layout/footerImage';
 import partners from '../js/partners';
+import { Utils } from '../js/Utils';
 
 const footerLinks = [
   {
     id: 0,
-    link: { name: 'contact', params: { to: 'legalNotice' } },
+    link: { name: 'contact_tcu' },
     label: 'Mentions légales'
   },
   {
     id: 1,
-    link: { name: 'contact', params: { to: 'webmasterContact' } },
+    link: { name: 'contact_webmaster' },
     label: '● Contact webmaster'
   },
   {
     id: 2,
-    link: { name: 'contact', params: { to: 'clubContact' } },
+    link: { name: 'contact_club' },
     label: '● Contact Cercle d\'escrime de Moirans'
   },
   {
     id: 3,
-    link: { name: 'contact', params: { to: 'access' } },
+    link: { name: 'contact_access' },
     label: '● Accès Cercle d\'escrime de Moirans'
   }
 ];
@@ -271,6 +285,12 @@ export default {
   },
 
   methods: {
+    ...mapActions(['adminCreateAccount']),
+
+    toggleDarkTheme() {
+      Utils.toggleDarkTheme(this);
+    },
+
     onClickBannerMailDismiss() {
       this.bannerMail.show = false;
     },
@@ -374,6 +394,11 @@ export default {
     position: absolute;
     bottom: 0;
     right: 0;
+  }
+  .bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   .bigger {

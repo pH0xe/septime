@@ -19,6 +19,9 @@ export default {
     }, (error) => {
       console.error(error);
     });
+    const result = JSON.parse(localStorage.getItem('darkMode'));
+    if (result == null) this.$q.dark.set('auto');
+    else this.$q.dark.set(result);
   },
 
   meta: {
