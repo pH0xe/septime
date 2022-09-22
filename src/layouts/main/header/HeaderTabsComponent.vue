@@ -4,7 +4,7 @@
       v-for="(link, index) in links"
       :key="index"
       :icon="link.icon"
-      :to="{ name: link.name }"
+      :to="{ name: link.routeName }"
       :label="mobile ? '' : link.label"
       exact
       replace
@@ -29,17 +29,17 @@ export default defineComponent({
       new LinkModel({
         icon: 'mdi-home',
         label: 'Accueil',
-        name: 'home',
+        routeName: 'home',
       }),
       new LinkModel({
         icon: 'mdi-newspaper',
         label: 'Actualités',
-        name: 'news',
+        routeName: 'news',
       }),
       new LinkModel({
         icon: 'mdi-information-variant',
         label: 'Infos pratiques',
-        name: 'infos',
+        routeName: 'infos',
       }),
     ];
 
