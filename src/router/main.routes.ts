@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 
 export const mainRoutes: RouteRecordRaw[] = [
-  { path: '', name: 'home', component: () => import('pages/IndexPage.vue') },
+  { path: '', name: 'home', component: () => import('pages/HomePage.vue') },
   {
     path: 'news',
     name: 'news',
