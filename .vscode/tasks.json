@@ -12,7 +12,6 @@
             "presentation": {
                 "reveal": "always"
             },
-            "group": "build"
         }
     ]
 }
