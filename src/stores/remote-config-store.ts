@@ -21,7 +21,7 @@ export const useRemoteConfigStore = defineStore('remoteConfig', {
 
     appVersion(): Promise<string> {
       if (this.appVersionState === '') {
-        const cachedVersion = getValue(remoteConfig, 'app_version').asString();
+        const cachedVersion = getValue(remoteConfig, 'app_version')?.asString();
         if (cachedVersion === '') {
           return this.fetchAppVersion();
         }
