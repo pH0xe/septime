@@ -5,8 +5,6 @@ Outil de gestion du club d'escrime de Moirans
 ## Version de developpement en ligne
 Disponible [ici](https://septime-dev.web.app).
 
-Compte administrateur: `notgayifitsricardo@ricardo.org` / `123456789`.
-
 ## Installation
 
 > **Note importante: Toutes les commandes cités supposent que le dossier courant soit la racine du projet !**
